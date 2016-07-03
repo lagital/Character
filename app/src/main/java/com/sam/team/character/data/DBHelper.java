@@ -1,14 +1,10 @@
 package com.sam.team.character.data;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
-
-import com.sam.team.character.BuildConfig;
 
 /**
  * Created by pborisenko on 5/13/2016.
