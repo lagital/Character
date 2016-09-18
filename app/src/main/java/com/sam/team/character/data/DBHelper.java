@@ -20,11 +20,15 @@ public class DBHelper extends SQLiteOpenHelper {
     private static final String REAL_TYPE = " REAL";
     private static final String BLOB_TYPE = " BLOB";
     private static final String SEP = ",";
+    private static final String NOT_NULL = " NOT NULL";
+    private static final String FOREIGN_KEY = "FOREIGN KEY";
+    private static final String REFERENCES = " REFERENCES";
 
     private static final String SQL_CREATE_SYSTEM_TABLE =
             "CREATE TABLE " + SystemColumns.TABLE_NAME + " (" +
                     SystemColumns._ID                   + " INTEGER PRIMARY KEY," +
-                    SystemColumns.NAME                  + TEXT_TYPE +
+                    SystemColumns.NAME                  + TEXT_TYPE + SEP +
+                    SystemColumns.COPYRIGHT             + TEXT_TYPE +
                     " )";
 
     private static final String SQL_CREATE_CATEGORY_TABLE =
@@ -32,22 +36,29 @@ public class DBHelper extends SQLiteOpenHelper {
                     CategoryColumns._ID                 + " INTEGER PRIMARY KEY," +
                     CategoryColumns.NAME                + TEXT_TYPE + SEP +
                     CategoryColumns.DESCRIPTION         + TEXT_TYPE + SEP +
-                    CategoryColumns.SYSTEM__OID         + INT_TYPE  +
+                    genSQLRelationLine(
+                            CategoryColumns.SYSTEM__OID,
+                            SystemColumns.TABLE_NAME,
+                            SystemColumns._ID) + NOT_NULL + SEP +
+                    CategoryColumns.SYSTEM__OID         + INT_TYPE  + SEP +
+                    CategoryColumns.SEQV_NUM            + INT_TYPE  +
                     " )";
 
     private static final String SQL_CREATE_ATTRIBUTE_TABLE =
             "CREATE TABLE " + AttributeColumns.TABLE_NAME + " (" +
                     AttributeColumns._ID                + " INTEGER PRIMARY KEY," +
                     AttributeColumns.NAME               + TEXT_TYPE + SEP +
-                    AttributeColumns.SEQV_NUMBER        + INT_TYPE  + SEP +
                     AttributeColumns.TYPE               + INT_TYPE  + SEP +
                     AttributeColumns.TEXT               + TEXT_TYPE + SEP +
                     AttributeColumns.NUMERIC            + REAL_TYPE + SEP +
-                    AttributeColumns.CALCULATION_RULES  + TEXT_TYPE + SEP +
+                    genSQLRelationLine(
+                            AttributeColumns.ATTRIBUTE__OID,
+                            AttributeColumns.TABLE_NAME,
+                            AttributeColumns._ID) + SEP +
                     AttributeColumns.ATTRIBUTE__OID     + INT_TYPE  + SEP +
                     AttributeColumns.CATEGORY__OID      + INT_TYPE  + SEP +
-                    AttributeColumns.IS_PREDEFINED      + INT_TYPE  + SEP +
-                    AttributeColumns.IS_TEMPLATE        + INT_TYPE  +
+                    AttributeColumns.IS_TEMPLATE        + INT_TYPE  + SEP +
+                    AttributeColumns.SEQV_NUM           + INT_TYPE  +
                     " )";
 
     private static final String SQL_CREATE_ATTR_VALUE_TABLE =
@@ -56,7 +67,10 @@ public class DBHelper extends SQLiteOpenHelper {
                     AttrValueColumns.TEXT               + TEXT_TYPE + SEP +
                     AttrValueColumns.NUMERIC            + REAL_TYPE + SEP +
                     AttrValueColumns.TYPE               + INT_TYPE  + SEP +
-                    AttrValueColumns.ATTRIBUTE__OID     + INT_TYPE  +
+                    AttrValueColumns.ATTRIBUTE__OID     + INT_TYPE  + SEP +
+                    AttrValueColumns.ATTR_VALUE__OID    + INT_TYPE  + SEP +
+                    AttrValueColumns.CALCULATION_RULES  + TEXT_TYPE + SEP +
+                    AttrValueColumns.SEQV_NUM           + INT_TYPE  +
                     " )";
 
     private static final String SQL_CREATE_CHARACTER_TABLE =
@@ -114,6 +128,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static abstract class SystemColumns implements BaseColumns {
         public static final String TABLE_NAME   = "system";
         public static final String NAME         = "name";
+        public static final String COPYRIGHT    = "copyright";
     }
 
     private static abstract class CategoryColumns implements BaseColumns {
@@ -121,6 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String NAME         = "name";
         public static final String DESCRIPTION  = "description";
         public static final String SYSTEM__OID  = "system__oid";
+        public static final String SEQV_NUM     = "seqv_num";
     }
 
     private static abstract class AttributeColumns implements BaseColumns {
@@ -129,20 +145,21 @@ public class DBHelper extends SQLiteOpenHelper {
         public static final String CATEGORY__OID        = "category__oid";
         public static final String ATTRIBUTE__OID       = "attribute__oid";
         public static final String TYPE                 = "type";
-        public static final String SEQV_NUMBER          = "seqv_number";
-        public static final String CALCULATION_RULES    = "calculation_rules";
         public static final String TEXT                 = "text";
         public static final String NUMERIC              = "numeric";
-        public static final String IS_PREDEFINED        = "is_predefined";
         public static final String IS_TEMPLATE          = "is_template";
+        public static final String SEQV_NUM             = "seqv_num";
     }
 
     private static abstract class AttrValueColumns implements BaseColumns {
-        public static final String TABLE_NAME       = "attr_value";
-        public static final String TEXT             = "text";
-        public static final String NUMERIC          = "numeric";
-        public static final String ATTRIBUTE__OID   = "attribute__oid";
-        public static final String TYPE             = "type";
+        public static final String TABLE_NAME           = "attr_value";
+        public static final String TEXT                 = "text";
+        public static final String NUMERIC              = "numeric";
+        public static final String ATTRIBUTE__OID       = "attribute__oid";
+        public static final String ATTR_VALUE__OID      = "attr_value__oid";
+        public static final String TYPE                 = "type";
+        public static final String CALCULATION_RULES    = "calculation_rules";
+        public static final String SEQV_NUM             = "seqv_num";
     }
 
     private static abstract class CharacterColumns implements BaseColumns {
@@ -153,6 +170,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     /*-----------API-----------*/
+
+    public static String genSQLRelationLine (String column_from, String table_to, String table_to_column) {
+        return FOREIGN_KEY + "(" + column_from +  ")" + REFERENCES + table_to + "(" + table_to_column + ")";
+    }
 
     /*
     public void insertMissedCall (SQLiteDatabase db, String number, String dateTime, CallType type) {
