@@ -13,6 +13,12 @@ public class Character {
     private Bitmap avatar;
     private ArrayList<Attribute> attributeList;
 
+    public Character (String name, Bitmap avatar, ArrayList<Attribute> attrList) {
+        this.name = name;
+        this.avatar = avatar;
+        this.attributeList = attrList;
+    }
+
     public String getName() {
         return name;
     }

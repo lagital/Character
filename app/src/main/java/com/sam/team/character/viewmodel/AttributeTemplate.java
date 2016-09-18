@@ -11,6 +11,12 @@ public class AttributeTemplate {
     private ArrayList<String> calculationRules;
     private AttrType attributeType;
 
+    public AttributeTemplate (String title, ArrayList<String> calcRules, AttrType attrType) {
+        this.title = title;
+        this.calculationRules = calcRules;
+        this.attributeType = attrType;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -40,7 +46,6 @@ public class AttributeTemplate {
     }
 
     public enum AttrType {
-        INTEGER,
         DOUBLE,
         STRING,
         ICON

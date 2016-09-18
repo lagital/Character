@@ -12,6 +12,19 @@ public class System {
     private ArrayList<Character> characterList;
     private ArrayList<CategoryTemplate> categoryTemplateList;
 
+    public System (String title, Integer version, ArrayList<Character> characterList,
+                   ArrayList<CategoryTemplate> categoryTemplateList) {
+        this.title = title;
+        this.version = version != null ? version : 1;
+        this.characterList = characterList;
+        this.categoryTemplateList = categoryTemplateList;
+    }
+
+    public System (String title, Integer version) {
+        this.title = title;
+        this.version = version != null ? version : 1;
+    }
+
     public String getTitle() {
         return title;
     }
