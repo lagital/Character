@@ -1,4 +1,4 @@
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.viewmodel_bkp;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,6 @@
 package com.sam.team.character.design;
 
 import android.app.Application;
-import android.database.sqlite.SQLiteDatabase;
-
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
 import com.samsara.team.samsaralib.core.SamsaraCore;
@@ -12,9 +10,6 @@ import com.samsara.team.samsaralib.core.SamsaraCore;
  */
 public class ApplicationMain extends Application{
 
-    public static SQLiteDatabase WRITE_DB;
-    public static SQLiteDatabase READ_DB;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,13 +17,5 @@ public class ApplicationMain extends Application{
         if (BuildConfig.DEBUG) {
             SamsaraCore.setLocale(this, null, R.string.locale);
         }
-    }
-
-    public static void setWriteDb (SQLiteDatabase db) {
-        WRITE_DB = db;
-    }
-
-    public static void setReadDb (SQLiteDatabase db) {
-        READ_DB = db;
     }
 }

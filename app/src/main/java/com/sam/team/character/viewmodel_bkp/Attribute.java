@@ -1,8 +1,8 @@
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.viewmodel_bkp;
 
 import android.graphics.Bitmap;
 
-import com.sam.team.character.viewmodel.AttributeTemplate.AttrType;
+import com.sam.team.character.viewmodel_bkp.AttributeTemplate.AttrType;
 import java.util.ArrayList;
 
 /**

@@ -1,4 +1,4 @@
-package com.sam.team.character.vaizeModel;
+package com.sam.team.character.viewmodel;
 
 import java.util.ArrayList;
 
