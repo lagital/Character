@@ -5,6 +5,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.sam.team.character"
         minSdkVersion 16
@@ -24,6 +28,7 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
     compile 'com.android.support:cardview-v7:23.3.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.github.lagital:SamsaraLib:1.0.7'
