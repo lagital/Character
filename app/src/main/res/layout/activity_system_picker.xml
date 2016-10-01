@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:id="@+id/layout"
     tools:context="com.sam.team.character.design.ActivitySystemPicker">
 
     <RelativeLayout
@@ -32,33 +33,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/systems_list">
+
         </android.support.v7.widget.RecyclerView>
 
     </android.support.v4.widget.NestedScrollView>
 
-    <LinearLayout
+    <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_weight="0.5"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical|center_horizontal">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/fab_main"
+        android:src="@android:drawable/ic_input_add"
+        style="@style/floating_action_button"
+        app:layout_anchor="@id/layout"
+        app:layout_anchorGravity="bottom|right|end"/>
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/fab_add_system"
-            android:src="@android:drawable/ic_input_add"
-            style="@style/floating_action_button"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_compass"
+        android:visibility="invisible"
+        app:fabSize="mini" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/fab_load_system"
-            android:src="@android:drawable/ic_menu_upload"
-            style="@style/floating_action_button"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_load"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_menu_myplaces"
+        android:visibility="invisible"
+        app:fabSize="mini" />
 
-    </LinearLayout>
 
 </LinearLayout>
