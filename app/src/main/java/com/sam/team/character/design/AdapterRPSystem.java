@@ -3,6 +3,7 @@ package com.sam.team.character.design;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +17,14 @@ import java.util.ArrayList;
  * Created by pborisenko on 9/26/2016.
  */
 
-public class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPSystemItem> {
+class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPSystemItem> {
+
+    private static final String TAG = "AdapterRPSystem";
 
     private ArrayList<RPSystem> systems;
     private Context context;
 
-    public AdapterRPSystem (Context context, ArrayList<RPSystem> systems) {
+    AdapterRPSystem (Context context, ArrayList<RPSystem> systems) {
         this.systems = systems;
     }
 
@@ -33,12 +36,13 @@ public class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolderRPSystemItem holder, int position) {
+    public void onBindViewHolder(ViewHolderRPSystemItem holder, final int position) {
         holder.binding.setSystem(systems.get(position));
-        holder.binding.setClick(new RPSystemClickHandler() {
+        holder.binding.setClick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: going inside the system
+                Log.d(TAG, "Click on system item " + Integer.toString(position));
             }
         });
     }
@@ -48,11 +52,11 @@ public class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHo
         return systems.size();
     }
 
-    public class ViewHolderRPSystemItem extends RecyclerView.ViewHolder {
+    class ViewHolderRPSystemItem extends RecyclerView.ViewHolder {
 
         RpsystemItemBinding binding;
 
-        public ViewHolderRPSystemItem(View v) {
+        ViewHolderRPSystemItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }

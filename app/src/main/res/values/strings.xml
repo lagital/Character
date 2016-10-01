@@ -4,16 +4,16 @@
     <string name="app_name">Character</string>
 
     <!-- Activity Character -->
-    <string name="large_text">"Material is the metaphor."</string>
 
     <!-- Activity System Picker -->
-    <string name="db_validation_dialog">Loading. Please wait&#8230;</string>
-    <string name="db_validation_dialog_title"></string>
     <string name="system_picker_title">Choose system</string>
+    <string name="fab_add_system_dscr">Create a system</string>
+    <string name="fab_load_system_dscr">Load a system</string>
+
+    <!-- Toolbar Actions -->
+    <string name="action_settings">Settings</string>
 
     <!-- DEBUG -->
     <string name="locale">EN</string>
 
-    <!-- Toolbar Actions -->
-    <string name="action_settings">Settings</string>
 </resources>

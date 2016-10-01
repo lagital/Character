@@ -28,14 +28,12 @@ public class ActivitySystemPicker extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         ArrayList<RPSystem> rpsl = new ArrayList<>();
+
         /*debug*/
         if (BuildConfig.DEBUG) {
-            RPSystem rps1 = new RPSystem("TEST", "1.0");
-            RPSystem rps2 = new RPSystem("TEST", "1.0");
-            RPSystem rps3 = new RPSystem("TEST", "1.0");
-            rpsl.add(rps1);
-            rpsl.add(rps2);
-            rpsl.add(rps3);
+            for (int i = 0; i < 15; i++) {
+                rpsl.add(new RPSystem("TEST", Integer.toString(i)));
+            }
         }
         /*debug*/
 
