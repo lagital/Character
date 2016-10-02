@@ -9,6 +9,8 @@
     <string name="system_picker_title">Choose system</string>
     <string name="fab_add_system_dscr">Create a system</string>
     <string name="fab_load_system_dscr">Load a system</string>
+    <string name="system_item_share_icon">Share</string>
+    <string name="system_item_edit_icon">Edit</string>
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>

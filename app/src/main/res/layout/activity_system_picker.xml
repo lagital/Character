@@ -1,61 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:id="@+id/layout"
-    tools:context="com.sam.team.character.design.ActivitySystemPicker">
+    android:id="@+id/container"
+    tools:context="com.sam.team.character.design.ActivitySystemPicker"
+    android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3">
+        android:layout_height="wrap_content"
+        app:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/system_picker_title"
-            android:layout_centerInParent="true"
-            android:id="@+id/system_picker_title"
-            android:textSize="@dimen/text_headline_type" />
-
-    </RelativeLayout>
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/systems_list_scroll"
-        android:layout_weight="1">
-
-        <android.support.v7.widget.RecyclerView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/systems_list">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="enterAlways"
+            app:elevation="4dp"/>
 
-        </android.support.v7.widget.RecyclerView>
+    </android.support.design.widget.AppBarLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:id="@+id/systems_list"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    </android.support.v7.widget.RecyclerView>
+
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:id="@+id/fab_main"
+        android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/ic_input_add"
         style="@style/floating_action_button"
-        app:layout_anchor="@id/layout"
-        app:layout_anchorGravity="bottom|right|end"/>
+        android:layout_gravity="end|bottom"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_compass"
+        android:layout_marginRight="68dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="68dp"
+        android:src="@android:drawable/ic_menu_edit"
         android:visibility="invisible"
+        android:layout_gravity="end|bottom"
         app:fabSize="mini" />
 
     <android.support.design.widget.FloatingActionButton
@@ -63,10 +60,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_myplaces"
+        android:layout_marginRight="88dp"
+        android:layout_marginEnd="88dp"
+        android:layout_marginBottom="24dp"
+        android:src="@android:drawable/ic_menu_upload"
         android:visibility="invisible"
         app:fabSize="mini" />
 
-
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>

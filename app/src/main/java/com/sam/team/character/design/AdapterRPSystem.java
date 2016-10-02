@@ -38,11 +38,25 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
     @Override
     public void onBindViewHolder(ViewHolderRPSystemItem holder, final int position) {
         holder.binding.setSystem(systems.get(position));
-        holder.binding.setClick(new View.OnClickListener() {
+        holder.binding.setCardclick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //TODO: going inside the system
-                Log.d(TAG, "Click on system item " + Integer.toString(position));
+                Log.d(TAG, "Click on system " + Integer.toString(position));
+            }
+        });
+        holder.binding.setShareclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: sharing the system
+                Log.d(TAG, "Sharing system " + Integer.toString(position));
+            }
+        });
+        holder.binding.setEditclick(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //TODO: editing the system
+                Log.d(TAG, "Edit system " + Integer.toString(position));
             }
         });
     }

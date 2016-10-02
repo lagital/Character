@@ -1,20 +1,26 @@
 package com.sam.team.character.design;
 
+import android.content.DialogInterface;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel2.RPSystem;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class ActivitySystemPicker extends AppCompatActivity {
     private static final String TAG = "ActivitySystemPicker";
@@ -25,8 +31,9 @@ public class ActivitySystemPicker extends AppCompatActivity {
     private FloatingActionButton mMainFAB;
     private FloatingActionButton mAddMiniFAB;
     private FloatingActionButton mLoadMiniFAB;
-    private FrameLayout.LayoutParams addLayoutParams;
-    private FrameLayout.LayoutParams loadLayoutParams;
+    private CoordinatorLayout.LayoutParams addLayoutParams;
+    private CoordinatorLayout.LayoutParams loadLayoutParams;
+    private Toolbar mToolbar;
 
     Animation miniFABShow;
     Animation miniFABHide;
@@ -35,6 +42,9 @@ public class ActivitySystemPicker extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_system_picker);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.systems_list);
         mLayoutManager = new LinearLayoutManager(this);
@@ -47,19 +57,51 @@ public class ActivitySystemPicker extends AppCompatActivity {
         mAddMiniFAB = (FloatingActionButton) findViewById(R.id.fab_add);
         mLoadMiniFAB = (FloatingActionButton) findViewById(R.id.fab_load);
 
-        addLayoutParams = (FrameLayout.LayoutParams) mAddMiniFAB.getLayoutParams();
-        loadLayoutParams = (FrameLayout.LayoutParams) mLoadMiniFAB.getLayoutParams();
+        addLayoutParams = (CoordinatorLayout.LayoutParams) mAddMiniFAB.getLayoutParams();
+        loadLayoutParams = (CoordinatorLayout.LayoutParams) mLoadMiniFAB.getLayoutParams();
 
         mMainFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mAddMiniFAB.isClickable()) {
-                    animateMiniFAB(mAddMiniFAB, true, addLayoutParams, 1.7, 0.25);
-                    animateMiniFAB(mLoadMiniFAB, true, loadLayoutParams, 1.5, 1.5);
-                } else {
-                    animateMiniFAB(mAddMiniFAB, false, addLayoutParams, 1.7, 0.25);
-                    animateMiniFAB(mLoadMiniFAB, false, loadLayoutParams, 1.5, 1.5);
-                }
+                    animateMiniFAB(mAddMiniFAB, mAddMiniFAB.isClickable(), addLayoutParams, 0.99, 0);
+                    animateMiniFAB(mLoadMiniFAB, mLoadMiniFAB.isClickable(), loadLayoutParams, 0.7, 0.7);
+            }
+        });
+
+        mAddMiniFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final LinearLayout l = (LinearLayout) View.inflate(ActivitySystemPicker.this,
+                        R.layout.dialog_new_system, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySystemPicker.this);
+                builder.setView(l);
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText name = (EditText) l.findViewById(R.id.name);
+                        EditText version = (EditText) l.findViewById(R.id.version);
+                        String e_name = name.getText().toString();
+                        String e_version = version.getText().toString();
+                        if (!e_name.isEmpty()) {
+                            RPSystem rps = new RPSystem(e_name, e_version);
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        mLoadMiniFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: system import
             }
         });
 
@@ -78,12 +120,8 @@ public class ActivitySystemPicker extends AppCompatActivity {
     }
 
     private void animateMiniFAB(FloatingActionButton miniFAB, Boolean hide,
-                                FrameLayout.LayoutParams params, double posWidth, double posHeight) {
-            params.rightMargin = params.rightMargin + (hide ? -1 : 1) * ((int) (miniFAB.getWidth() * posWidth));
-            params.bottomMargin = params.bottomMargin + (hide ? -1 : 1) * ((int) (miniFAB.getHeight() * posHeight));
-            miniFAB.setLayoutParams(params);
-
-            miniFAB.startAnimation(hide ? miniFABHide : miniFABShow);
-            miniFAB.setClickable(!hide);
+                                CoordinatorLayout.LayoutParams params, double posWidth, double posHeight) {
+        miniFAB.startAnimation(hide ? miniFABHide : miniFABShow);
+        miniFAB.setClickable(!hide);
     }
 }
