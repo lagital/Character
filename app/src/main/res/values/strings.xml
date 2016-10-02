@@ -11,8 +11,9 @@
     <string name="fab_load_system_dscr">Load a system</string>
     <string name="system_item_share_icon">Share</string>
     <string name="system_item_edit_icon">Edit</string>
+    <string name="new_system_dialog_title">New system</string>
     <string name="new_system_empty_name">Name is empty</string>
-    <string name="new_system_dflt_name">System name</string>
+    <string name="new_system_dflt_name">Name</string>
     <string name="new_system_dflt_version">1.0</string>
 
     <!-- Toolbar Actions -->
