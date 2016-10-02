@@ -14,13 +14,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel2.RPSystem;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 
 public class ActivitySystemPicker extends AppCompatActivity {
     private static final String TAG = "ActivitySystemPicker";
@@ -73,19 +73,35 @@ public class ActivitySystemPicker extends AppCompatActivity {
             public void onClick(View v) {
                 final LinearLayout l = (LinearLayout) View.inflate(ActivitySystemPicker.this,
                         R.layout.dialog_new_system, null);
+                final EditText name = (EditText) l.findViewById(R.id.name);
+                final EditText version = (EditText) l.findViewById(R.id.version);
+                name.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (name.getText().toString().equalsIgnoreCase(
+                                getResources().getString(R.string.new_system_dflt_name))) {
+                            name.setText("");
+                        }
+                    }
+                });
+
+                version.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (name.getText().toString().equalsIgnoreCase(
+                                getResources().getString(R.string.new_system_dflt_version))) {
+                            name.setText("");
+                        }
+                    }
+                });
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(ActivitySystemPicker.this);
                 builder.setView(l);
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        EditText name = (EditText) l.findViewById(R.id.name);
-                        EditText version = (EditText) l.findViewById(R.id.version);
-                        String e_name = name.getText().toString();
-                        String e_version = version.getText().toString();
-                        if (!e_name.isEmpty()) {
-                            RPSystem rps = new RPSystem(e_name, e_version);
-                        }
+                        // do nothing
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -94,7 +110,34 @@ public class ActivitySystemPicker extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-                builder.show();
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        EditText name = (EditText) l.findViewById(R.id.name);
+                        EditText version = (EditText) l.findViewById(R.id.version);
+                        String e_name = name.getText().toString();
+                        String e_version = version.getText().toString();
+                        RPSystem rps;
+                        if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
+                                getResources().getString(R.string.new_system_dflt_name))) {
+                            if (e_version.isEmpty() || e_version.equalsIgnoreCase(
+                                    getResources().getString(R.string.new_system_dflt_version))) {
+                                rps = new RPSystem(e_name);
+                            }
+                            rps = new RPSystem(e_name, e_version);
+                            //TODO: going to system creation
+                        } else {
+                            Toast.makeText(ActivitySystemPicker.this,
+                                    getResources().getString(R.string.new_system_empty_name),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
 

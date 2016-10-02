@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:text="@string/new_system_dflt_name"
         />
 
     <EditText
@@ -15,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
+        android:text="@string/new_system_dflt_version"
         />
 
 </LinearLayout>
