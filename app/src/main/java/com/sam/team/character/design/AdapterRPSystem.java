@@ -1,6 +1,7 @@
 package com.sam.team.character.design;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +27,7 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
 
     AdapterRPSystem (Context context, ArrayList<RPSystem> systems) {
         this.systems = systems;
+        this.context = context;
     }
 
     @Override
@@ -55,8 +57,10 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
         holder.binding.setEditclick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: editing the system
                 Log.d(TAG, "Edit system " + Integer.toString(position));
+                Intent intent = new Intent(context, ActivityEditSystem.class);
+                intent.putExtra(ActivityEditSystem.SYSTEM_PARCELABLE_EXTRA, systems.get(position));
+                context.startActivity(intent);
             }
         });
     }

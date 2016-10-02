@@ -128,20 +128,18 @@ public class ActivitySystemPicker extends AppCompatActivity {
                         EditText version = (EditText) l.findViewById(R.id.version);
                         String e_name = name.getText().toString();
                         String e_version = version.getText().toString();
-                        RPSystem rps;
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_system_dflt_name))) {
 
                             Intent intent = new Intent(ActivitySystemPicker.this, ActivityEditSystem.class);
-                            intent.putExtra(ActivityEditSystem.SYSTEM_NAME_EXTRA, e_name);
 
                             if (e_version.isEmpty() || e_version.equalsIgnoreCase(
                                     getResources().getString(R.string.new_system_dflt_version))) {
-                                intent.putExtra(ActivityEditSystem.SYSTEM_VERSION_EXTRA,
-                                        ActivityEditSystem.SYSTEM_VERSION_DFLT_EXTRA);
+                                intent.putExtra(ActivityEditSystem.SYSTEM_PARCELABLE_EXTRA,
+                                        new RPSystem(e_name, ActivityEditSystem.SYSTEM_VERSION_DFLT_EXTRA));
                             } else {
-                                intent.putExtra(ActivityEditSystem.SYSTEM_VERSION_EXTRA,
-                                        e_version);
+                                intent.putExtra(ActivityEditSystem.SYSTEM_PARCELABLE_EXTRA,
+                                        new RPSystem(e_name, e_version));
                             }
                             startActivity(intent);
                         } else {
