@@ -50,7 +50,7 @@
         android:layout_marginRight="68dp"
         android:layout_marginEnd="68dp"
         android:layout_marginBottom="68dp"
-        android:src="@android:drawable/ic_menu_edit"
+        android:src="@android:drawable/ic_menu_preferences"
         android:visibility="invisible"
         android:layout_gravity="end|bottom"
         app:fabSize="mini" />

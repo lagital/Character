@@ -59,7 +59,7 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
             public void onClick(View view) {
                 Log.d(TAG, "Edit system " + Integer.toString(position));
                 Intent intent = new Intent(context, ActivityEditSystem.class);
-                intent.putExtra(ActivityEditSystem.SYSTEM_PARCELABLE_EXTRA, systems.get(position));
+                intent.putExtra(ActivitySystemPicker.SYSTEM_PARCELABLE_EXTRA, systems.get(position));
                 context.startActivity(intent);
             }
         });

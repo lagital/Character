@@ -26,7 +26,11 @@ import com.sam.team.character.viewmodel2.RPSystem;
 import java.util.ArrayList;
 
 public class ActivitySystemPicker extends AppCompatActivity {
+
     private static final String TAG = "ActivitySystemPicker";
+
+    public static final String SYSTEM_VERSION_DFLT_EXTRA = "SYSTEM_VERSION_EXTRA";
+    public static final String SYSTEM_PARCELABLE_EXTRA = "SYSTEM_PARCELABLE_EXTRA";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -135,10 +139,10 @@ public class ActivitySystemPicker extends AppCompatActivity {
 
                             if (e_version.isEmpty() || e_version.equalsIgnoreCase(
                                     getResources().getString(R.string.new_system_dflt_version))) {
-                                intent.putExtra(ActivityEditSystem.SYSTEM_PARCELABLE_EXTRA,
-                                        new RPSystem(e_name, ActivityEditSystem.SYSTEM_VERSION_DFLT_EXTRA));
+                                intent.putExtra(SYSTEM_PARCELABLE_EXTRA,
+                                        new RPSystem(e_name, SYSTEM_VERSION_DFLT_EXTRA));
                             } else {
-                                intent.putExtra(ActivityEditSystem.SYSTEM_PARCELABLE_EXTRA,
+                                intent.putExtra(SYSTEM_PARCELABLE_EXTRA,
                                         new RPSystem(e_name, e_version));
                             }
                             startActivity(intent);

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/container"
-    tools:context="com.sam.team.character.design.ActivitySystemPicker"
+    tools:context="com.sam.team.character.design.ActivityEditSystem"
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        android:id="@+id/systems_list"
+        android:id="@+id/elements_list"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     </android.support.v7.widget.RecyclerView>
 
@@ -42,29 +42,5 @@
         android:src="@android:drawable/ic_input_add"
         style="@style/floating_action_button"
         android:layout_gravity="end|bottom"/>
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="68dp"
-        android:layout_marginEnd="68dp"
-        android:layout_marginBottom="68dp"
-        android:src="@android:drawable/ic_menu_edit"
-        android:visibility="invisible"
-        android:layout_gravity="end|bottom"
-        app:fabSize="mini" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_load"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginRight="88dp"
-        android:layout_marginEnd="88dp"
-        android:layout_marginBottom="24dp"
-        android:src="@android:drawable/ic_menu_upload"
-        android:visibility="invisible"
-        app:fabSize="mini" />
 
 </android.support.design.widget.CoordinatorLayout>

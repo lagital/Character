@@ -3,18 +3,25 @@
     <!-- Application -->
     <string name="app_name">Character</string>
 
-    <!-- Activity Character -->
+    <!-- Activity Element Picker -->
+    <string name="element_picker_title">Pages</string>
+    <string name="new_element_dialog_title">New game</string>
+    <string name="new_element_empty_name">Title is empty</string>
+    <string name="new_element_dflt_name">Title</string>
 
     <!-- Activity System Picker -->
-    <string name="system_picker_title">Choose system</string>
-    <string name="fab_add_system_dscr">Create a system</string>
-    <string name="fab_load_system_dscr">Load a system</string>
+    <string name="system_picker_title">Games</string>
+    <string name="fab_add_system_dscr">Create a game</string>
+    <string name="fab_load_system_dscr">Load a game</string>
     <string name="system_item_share_icon">Share</string>
     <string name="system_item_edit_icon">Edit</string>
-    <string name="new_system_dialog_title">New system</string>
-    <string name="new_system_empty_name">Name is empty</string>
-    <string name="new_system_dflt_name">Name</string>
+    <string name="new_system_dialog_title">New game</string>
+    <string name="new_system_empty_name">Title is empty</string>
+    <string name="new_system_dflt_name">Title</string>
     <string name="new_system_dflt_version">1.0</string>
+
+    <!-- Activity Edit System -->
+    <string name="edit_system_title">Edit</string>
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>

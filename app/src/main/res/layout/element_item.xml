@@ -2,18 +2,15 @@
 
 <layout>
     <data>
-        <import type="com.sam.team.character.viewmodel2.RPSystem"/>
+        <import type="com.sam.team.character.viewmodel2.Element"/>
         <variable
-            name="system"
-            type="RPSystem" />
+            name="element"
+            type="Element" />
         <variable
             name="cardclick"
             type="android.view.View.OnClickListener" />
         <variable
             name="editclick"
-            type="android.view.View.OnClickListener" />
-        <variable
-            name="shareclick"
             type="android.view.View.OnClickListener" />
     </data>
 
@@ -29,21 +26,13 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="@dimen/text_display1_type"
-            android:text="@{system.name + ' ' + system.version}"/>
+            android:text="@{element.name}"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="end">
-
-            <ImageButton
-                android:id="@+id/btn_share"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@android:drawable/ic_menu_share"
-                android:contentDescription="@string/system_item_share_icon"
-                android:onClick="@{shareclick}"/>
 
             <ImageButton
                 android:id="@+id/btn_edit"
