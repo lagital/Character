@@ -21,7 +21,10 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
+import com.sam.team.character.viewmodel2.Element;
+import com.sam.team.character.viewmodel2.Field;
 import com.sam.team.character.viewmodel2.RPSystem;
+import com.sam.team.character.viewmodel2.Session;
 
 import java.util.ArrayList;
 
@@ -29,8 +32,6 @@ public class ActivitySystemPicker extends AppCompatActivity {
 
     private static final String TAG = "ActivitySystemPicker";
 
-    public static final String SYSTEM_VERSION_DFLT_EXTRA = "SYSTEM_VERSION_EXTRA";
-    public static final String SYSTEM_PARCELABLE_EXTRA = "SYSTEM_PARCELABLE_EXTRA";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -135,15 +136,13 @@ public class ActivitySystemPicker extends AppCompatActivity {
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_system_dflt_name))) {
 
-                            Intent intent = new Intent(ActivitySystemPicker.this, ActivityEditSystem.class);
+                            Intent intent = new Intent(ActivitySystemPicker.this, ActivityElementPicker.class);
 
-                            if (e_version.isEmpty() || e_version.equalsIgnoreCase(
-                                    getResources().getString(R.string.new_system_dflt_version))) {
-                                intent.putExtra(SYSTEM_PARCELABLE_EXTRA,
-                                        new RPSystem(e_name, SYSTEM_VERSION_DFLT_EXTRA));
+                            if (e_version.isEmpty()) {
+                                Session.getInstance().setCurrentSystem(new RPSystem(e_name,
+                                        getResources().getString(R.string.new_system_dflt_version)));
                             } else {
-                                intent.putExtra(SYSTEM_PARCELABLE_EXTRA,
-                                        new RPSystem(e_name, e_version));
+                                Session.getInstance().setCurrentSystem(new RPSystem(e_name, e_version));
                             }
                             startActivity(intent);
                         } else {
@@ -165,13 +164,17 @@ public class ActivitySystemPicker extends AppCompatActivity {
 
         ArrayList<RPSystem> rpsl = new ArrayList<>();
 
-        /*debug*/
+        /* DEBUG */
         if (BuildConfig.DEBUG) {
-            for (int i = 0; i < 5; i++) {
-                rpsl.add(new RPSystem("TEST", Integer.toString(i)));
-            }
+            RPSystem rps = new RPSystem("Game", "1.0");
+            Element e = new Element("Jon Snow", "CHARACTER");
+            e.addField(new Field("Main", "Name"));
+            e.addField(new Field("Main", "Surname"));
+            e.addField(new Field("Main", "Knowledge"));
+            rps.addElement(e);
+            rpsl.add(rps);
         }
-        /*debug*/
+        /* DEBUG */
 
         mAdapter = new AdapterRPSystem(this, rpsl);
         mRecyclerView.setAdapter(mAdapter);

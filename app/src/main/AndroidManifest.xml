@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sam.team.character">
+    package="com.sam.team.character"
+    android:installLocation="preferExternal">
 
     <application
         android:allowBackup="true"
@@ -18,8 +19,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".design.ActivityEditSystem"
+            android:name=".design.ActivityElementPicker"
             android:label="@string/element_picker_title"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".design.ActivityEditElement"
+            android:label="@string/edit_element_title"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

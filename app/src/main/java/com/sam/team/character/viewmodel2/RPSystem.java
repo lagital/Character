@@ -3,10 +3,8 @@ package com.sam.team.character.viewmodel2;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
@@ -15,7 +13,7 @@ import java.util.TreeMap;
  *
  * @author Vaize
  */
-public class RPSystem extends BaseObservable implements Parcelable {
+public class RPSystem extends BaseObservable {
 
     private static final String TAG = "RPSystem";
 
@@ -91,6 +89,16 @@ public class RPSystem extends BaseObservable implements Parcelable {
         }
     }
 
+    public ArrayList<Element> getElements () {
+        ArrayList<Element> el = new ArrayList<>();
+        for (TreeMap<String, Element> tm : elements.values()) {
+            for (String s : tm.keySet()) {
+                el.add(tm.get(s));
+            }
+        }
+            return el;
+    }
+
     //work with types
     public Set getTypes() {
         return elements.keySet();
@@ -102,37 +110,5 @@ public class RPSystem extends BaseObservable implements Parcelable {
         } else {
             return null;
         }
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    // object into Parcel
-    public void writeToParcel(Parcel parcel, int flags) {
-        Log.d(TAG, "writeToParcel");
-        parcel.writeString(name);
-        parcel.writeString(version);
-        parcel.writeMap(elements);
-    }
-
-    public static final Parcelable.Creator<RPSystem> CREATOR = new Parcelable.Creator<RPSystem>() {
-        // object from Parcel
-        public RPSystem createFromParcel(Parcel in) {
-            Log.d(TAG, "createFromParcel");
-            return new RPSystem(in);
-        }
-
-        public RPSystem[] newArray(int size) {
-            return new RPSystem[size];
-        }
-    };
-
-    // constructor from Parcel
-    private RPSystem(Parcel parcel) {
-        Log.d(TAG, "RPSystem from Parcel");
-        name = parcel.readString();
-        version = parcel.readString();
-        parcel.readMap(elements, ClassLoader.getSystemClassLoader());
     }
 }

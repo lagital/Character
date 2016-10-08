@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.sam.team.character.databinding.RpsystemItemBinding;
 import com.sam.team.character.viewmodel2.RPSystem;
+import com.sam.team.character.viewmodel2.Session;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,7 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
             public void onClick(View view) {
                 //TODO: going inside the system
                 Log.d(TAG, "Click on system " + Integer.toString(position));
+                Session.getInstance().setCurrentSystem(systems.get(position));
             }
         });
         holder.binding.setShareclick(new View.OnClickListener() {
@@ -52,14 +54,15 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
             public void onClick(View view) {
                 //TODO: sharing the system
                 Log.d(TAG, "Sharing system " + Integer.toString(position));
+                Session.getInstance().setCurrentSystem(systems.get(position));
             }
         });
         holder.binding.setEditclick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Edit system " + Integer.toString(position));
-                Intent intent = new Intent(context, ActivityEditSystem.class);
-                intent.putExtra(ActivitySystemPicker.SYSTEM_PARCELABLE_EXTRA, systems.get(position));
+                Session.getInstance().setCurrentSystem(systems.get(position));
+                Intent intent = new Intent(context, ActivityElementPicker.class);
                 context.startActivity(intent);
             }
         });

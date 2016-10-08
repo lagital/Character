@@ -1,6 +1,7 @@
 package com.sam.team.character.design;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,8 +25,8 @@ class AdapterElement extends RecyclerView.Adapter<AdapterElement.ViewHolderEleme
     private ArrayList<Element> elements;
     private Context context;
 
-    AdapterElement (Context context, ArrayList<Element> systems) {
-        this.elements = systems;
+    AdapterElement (Context context, ArrayList<Element> elements) {
+        this.elements = elements;
         this.context = context;
     }
 
@@ -50,7 +51,10 @@ class AdapterElement extends RecyclerView.Adapter<AdapterElement.ViewHolderEleme
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "Edit element " + Integer.toString(position));
-                // TODO: changing element
+                Intent intent = new Intent(context, ActivityEditElement.class);
+                intent.putExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA, elements.get(position).getName());
+                intent.putExtra(ActivityElementPicker.ELEMENT_TYPE_EXTRA, elements.get(position).getType());
+                context.startActivity(intent);
             }
         });
     }

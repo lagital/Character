@@ -2,19 +2,16 @@ package com.sam.team.character.viewmodel2;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
 
-import java.util.Collection;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
  *
  * @author Vaize
  */
-public class Element extends BaseObservable implements Parcelable {
+public class Element extends BaseObservable {
 
     private static final String TAG = "Element";
 
@@ -78,9 +75,9 @@ public class Element extends BaseObservable implements Parcelable {
         return fields.get(category).get(name);
     }
 
-    public Collection getFieldsByCategory(String type) {
+    public SortedMap<String, Field> getFieldsByCategory(String type) {
         if (fields.containsKey(type)) {
-            return fields.get(type).values();
+            return fields.get(type).subMap(type, type);
         } else {
             return null;
         }
@@ -97,37 +94,5 @@ public class Element extends BaseObservable implements Parcelable {
         } else {
             return null;
         }
-    }
-
-    public int describeContents() {
-        return 0;
-    }
-
-    // object into Parcel
-    public void writeToParcel(Parcel parcel, int flags) {
-        Log.d(TAG, "writeToParcel");
-        parcel.writeString(name);
-        parcel.writeString(type);
-        parcel.writeMap(fields);
-    }
-
-    public static final Parcelable.Creator<Element> CREATOR = new Parcelable.Creator<Element>() {
-        // object from Parcel
-        public Element createFromParcel(Parcel in) {
-            Log.d(TAG, "createFromParcel");
-            return new Element(in);
-        }
-
-        public Element[] newArray(int size) {
-            return new Element[size];
-        }
-    };
-
-    // constructor from Parcel
-    private Element(Parcel parcel) {
-        Log.d(TAG, "Element from Parcel");
-        name = parcel.readString();
-        type = parcel.readString();
-        parcel.readMap(fields, ClassLoader.getSystemClassLoader());
     }
 }
