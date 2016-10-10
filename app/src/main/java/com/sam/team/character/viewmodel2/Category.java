@@ -50,6 +50,10 @@ public class Category extends BaseObservable implements ParentObject {
         }
     }
 
+    public ArrayList<Field> getFields() {
+        return fields;
+    }
+
     @Override
     public List<Object> getChildObjectList() {
         return new ArrayList<Object>(fields);

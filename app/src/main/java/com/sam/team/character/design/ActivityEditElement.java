@@ -128,8 +128,8 @@ public class ActivityEditElement extends AppCompatActivity{
                 Element e = Session.getInstance().
                         getCurrentSystem().
                         getElement(
-                                intent.getStringExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA),
-                                intent.getStringExtra(ActivityElementPicker.ELEMENT_TYPE_EXTRA));
+                                intent.getStringExtra(ActivityElementPicker.ELEMENT_TYPE_EXTRA),
+                                intent.getStringExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA));
 
                 for (Object c : e.getCategories()) {
                     cl.add(new Category(c.toString(), e));
@@ -137,7 +137,7 @@ public class ActivityEditElement extends AppCompatActivity{
             }
         }
 
-        mAdapter = new AdapterCategories(this, cl);
+        mAdapter = new AdapterCategory(this, cl);
         mRecyclerView.setAdapter(mAdapter);
     }
 

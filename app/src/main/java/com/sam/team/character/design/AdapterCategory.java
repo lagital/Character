@@ -1,17 +1,17 @@
 package com.sam.team.character.design;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.adapters.CheckedTextViewBindingAdapter;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bignerdranch.expandablerecyclerview.Adapter.ExpandableRecyclerAdapter;
+import com.sam.team.character.R;
 import com.sam.team.character.databinding.CategoryItemBinding;
-import com.sam.team.character.databinding.ElementItemBinding;
 import com.sam.team.character.databinding.FieldItemBinding;
 import com.sam.team.character.viewmodel2.Category;
 
@@ -21,16 +21,27 @@ import java.util.ArrayList;
  * Created by pborisenko on 9/26/2016.
  */
 
-class AdapterCategories extends RecyclerView.Adapter<AdapterCategories.ViewHolderCategoryItem> {
+class AdapterCategory extends RecyclerView.Adapter<AdapterCategory.ViewHolderCategoryItem> {
 
     private static final String TAG = "AdapterCategories";
 
     private ArrayList<Category> categories;
     private Context context;
 
-    AdapterCategories (Context context, ArrayList<Category> categories) {
+    private ArrayList<RecyclerView.LayoutManager> categoryLayoutManagers;
+    private ArrayList<AdapterField> categoryAdapters;
+
+    public AdapterCategory(Context context, ArrayList<Category> categories) {
         this.categories = categories;
         this.context = context;
+
+        categoryLayoutManagers = new ArrayList<>();
+        categoryAdapters = new ArrayList<>();
+
+        for (int i = 0; i < categories.size(); i++) {
+            categoryLayoutManagers.add(new LinearLayoutManager(context));
+            categoryAdapters.add(new AdapterField(context, categories.get(i).getFields()));
+        }
     }
 
     @Override
@@ -57,21 +68,14 @@ class AdapterCategories extends RecyclerView.Adapter<AdapterCategories.ViewHolde
                 // TODO: changing category
             }
         });
+
+        holder.binding.fieldList.setLayoutManager(categoryLayoutManagers.get(position));
+        holder.binding.fieldList.setAdapter(categoryAdapters.get(position));
     }
 
     @Override
     public int getItemCount() {
         return categories.size();
-    }
-
-    class ViewHolderFieldItem extends RecyclerView.ViewHolder {
-
-        FieldItemBinding binding;
-
-        ViewHolderFieldItem(View v) {
-            super(v);
-            binding = DataBindingUtil.bind(v);
-        }
     }
 
     class ViewHolderCategoryItem extends RecyclerView.ViewHolder {
