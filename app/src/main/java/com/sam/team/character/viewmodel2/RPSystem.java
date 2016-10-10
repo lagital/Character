@@ -78,7 +78,7 @@ public class RPSystem extends BaseObservable {
     }
 
     public Element getElement(String type, String name) {
-        return elements.get(type).get(name);
+        return elements.get(name).get(type);
     }
 
     public Collection getElementsByType(String type) {
