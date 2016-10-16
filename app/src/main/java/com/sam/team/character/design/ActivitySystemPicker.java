@@ -13,8 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -40,9 +38,7 @@ public class ActivitySystemPicker extends AppCompatActivity {
     private FloatingActionButton mAddMiniFAB;
     private FloatingActionButton mLoadMiniFAB;
     private Toolbar mToolbar;
-
-    Animation miniFABShow;
-    Animation miniFABHide;
+    private ArrayList<RPSystem> systems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +52,6 @@ public class ActivitySystemPicker extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        miniFABShow = AnimationUtils.loadAnimation(this, R.anim.mini_fab_show);
-        miniFABHide = AnimationUtils.loadAnimation(this, R.anim.mini_fab_hide);
-
         mMainFAB = (FloatingActionButton) findViewById(R.id.fab_main);
         mAddMiniFAB = (FloatingActionButton) findViewById(R.id.fab_add);
         mLoadMiniFAB = (FloatingActionButton) findViewById(R.id.fab_load);
@@ -66,10 +59,12 @@ public class ActivitySystemPicker extends AppCompatActivity {
         mMainFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    animateMiniFAB(mAddMiniFAB, mAddMiniFAB.isClickable());
-                    animateMiniFAB(mLoadMiniFAB, mLoadMiniFAB.isClickable());
+                    animateMiniFAB(mAddMiniFAB, mAddMiniFAB.getVisibility());
+                    animateMiniFAB(mLoadMiniFAB, mAddMiniFAB.getVisibility());
             }
         });
+
+        systems = new ArrayList<>();
 
         mAddMiniFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,15 +130,20 @@ public class ActivitySystemPicker extends AppCompatActivity {
                         String e_version = version.getText().toString();
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_system_dflt_name))) {
+                            if (e_version.isEmpty()) {
+                                RPSystem rps = new RPSystem(e_name,
+                                        getResources().getString(R.string.new_system_dflt_version));
+                                systems.add(rps);
+                                mAdapter.notifyDataSetChanged();
+                                Session.getInstance().setCurrentSystem(rps);
+                            } else {
+                                RPSystem rps = new RPSystem(e_name, e_version);
+                                systems.add(rps);
+                                mAdapter.notifyDataSetChanged();
+                                Session.getInstance().setCurrentSystem(rps);
+                            }
 
                             Intent intent = new Intent(ActivitySystemPicker.this, ActivityElementPicker.class);
-
-                            if (e_version.isEmpty()) {
-                                Session.getInstance().setCurrentSystem(new RPSystem(e_name,
-                                        getResources().getString(R.string.new_system_dflt_version)));
-                            } else {
-                                Session.getInstance().setCurrentSystem(new RPSystem(e_name, e_version));
-                            }
                             startActivity(intent);
                         } else {
                             Toast.makeText(ActivitySystemPicker.this,
@@ -162,26 +162,27 @@ public class ActivitySystemPicker extends AppCompatActivity {
             }
         });
 
-        ArrayList<RPSystem> rpsl = new ArrayList<>();
-
         /* DEBUG */
         if (BuildConfig.DEBUG) {
             RPSystem rps = new RPSystem("Game", "1.0");
             Element e = new Element("Jon Snow", "CHARACTER");
             e.addField(new Field("Main", "Name"));
             e.addField(new Field("Main", "Surname"));
-            e.addField(new Field("Main", "Knowledge"));
+            e.addField(new Field("Sub", "Knowledge"));
             rps.addElement(e);
-            rpsl.add(rps);
+            systems.add(rps);
         }
         /* DEBUG */
 
-        mAdapter = new AdapterRPSystem(this, rpsl);
+        mAdapter = new AdapterRPSystem(this, systems);
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void animateMiniFAB(FloatingActionButton miniFAB, Boolean hide) {
-        miniFAB.startAnimation(hide ? miniFABHide : miniFABShow);
-        miniFAB.setClickable(!hide);
+    private void animateMiniFAB(FloatingActionButton miniFAB, Integer visibility) {
+        if (visibility == View.VISIBLE) {
+            miniFAB.hide();
+        } else {
+            miniFAB.show();
+        }
     }
 }

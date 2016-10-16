@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * @author Vaize
  */
 
-public class Field extends BaseObservable {
-//public class Field extends BaseObservable {
+public class Field extends BaseObservable implements ListItem {
 
     private static final String TAG = "Field";
+    public static final int TYPE_FIELD = 1;
 
     private String category, name;
     private ArrayList<String> values, calcRules;
@@ -80,5 +80,10 @@ public class Field extends BaseObservable {
 
     public int describeContents() {
         return 0;
+    }
+
+    @Override
+    public int getType() {
+        return TYPE_FIELD;
     }
 }

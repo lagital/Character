@@ -2,10 +2,15 @@ package com.sam.team.character.viewmodel2;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.logging.FileHandler;
 
 /**
  *
@@ -52,15 +57,20 @@ public class Element extends BaseObservable {
 
     //work with fields
     public void addField(Field field) {
-        if (field.getCategory() == null || field.getName() == null) return;
+        if (field.getCategory() == null || field.getName() == null) {
+            Log.d(TAG, "Incorrect field format");
+            return;
+        }
         if (!fields.containsKey(field.getCategory())) {
             TreeMap<String, Field> temp = new TreeMap<String, Field>();
             temp.put(field.getName(), field);
             fields.put(field.getCategory(), temp);
+            Log.d(TAG, "Field with new category");
         } else {
             TreeMap<String, Field> temp = fields.get(field.getCategory());
             temp.put(field.getName(), field);
             fields.put(field.getCategory(), temp);
+            Log.d(TAG, "Field with old category");
         }
     }
 
@@ -75,16 +85,20 @@ public class Element extends BaseObservable {
         return fields.get(category).get(name);
     }
 
-    public SortedMap<String, Field> getFieldsByCategory(String type) {
-        if (fields.containsKey(type)) {
-            return fields.get(type).subMap(type, type);
+    public ArrayList<Field> getFieldsByCategory(String category) {
+        ArrayList<Field> l = new ArrayList<>();
+        if (fields.containsKey(category)) {
+            for (Map.Entry<String, Field> entry : fields.get(category).entrySet()) {
+                l.add(entry.getValue());
+            }
+            return l;
         } else {
             return null;
         }
     }
 
     //work with cetegories
-    public Set getCategories() {
+    public Set<String> getCategories() {
         return fields.keySet();
     }
 

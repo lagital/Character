@@ -3,6 +3,7 @@ package com.sam.team.character.design;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -43,9 +45,6 @@ public class ActivityElementPicker extends AppCompatActivity {
     private FloatingActionButton mMainFAB;
     private Toolbar mToolbar;
 
-    Animation miniFABShow;
-    Animation miniFABHide;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +52,11 @@ public class ActivityElementPicker extends AppCompatActivity {
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.elements_list);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        miniFABShow = AnimationUtils.loadAnimation(this, R.anim.mini_fab_show);
-        miniFABHide = AnimationUtils.loadAnimation(this, R.anim.mini_fab_hide);
 
         mMainFAB = (FloatingActionButton) findViewById(R.id.fab_main);
 
@@ -117,6 +114,7 @@ public class ActivityElementPicker extends AppCompatActivity {
 
                             Element e = new Element(e_name, "Character");
                             Session.getInstance().getCurrentSystem().addElement(e);
+                            mAdapter.notifyDataSetChanged();
                             intent.putExtra(ELEMENT_NAME_EXTRA, e.getName());
                             intent.putExtra(ELEMENT_TYPE_EXTRA, e.getType());
                             startActivity(intent);
@@ -134,8 +132,14 @@ public class ActivityElementPicker extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void animateMiniFAB(FloatingActionButton miniFAB, Boolean hide) {
-        miniFAB.startAnimation(hide ? miniFABHide : miniFABShow);
-        miniFAB.setClickable(!hide);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            // Respond to the action bar's Up/Home button
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

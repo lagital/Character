@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sam.team.character.databinding.ElementItemBinding;
+import com.sam.team.character.databinding.ItemElementBinding;
 import com.sam.team.character.viewmodel2.Element;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ class AdapterElement extends RecyclerView.Adapter<AdapterElement.ViewHolderEleme
     @Override
     public ViewHolderElementItem onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ElementItemBinding binding = ElementItemBinding.inflate(inflater, parent, false);
+        ItemElementBinding binding = ItemElementBinding.inflate(inflater, parent, false);
         return new ViewHolderElementItem(binding.getRoot());
     }
 
@@ -66,7 +66,7 @@ class AdapterElement extends RecyclerView.Adapter<AdapterElement.ViewHolderEleme
 
     class ViewHolderElementItem extends RecyclerView.ViewHolder {
 
-        ElementItemBinding binding;
+        ItemElementBinding binding;
 
         ViewHolderElementItem(View v) {
             super(v);

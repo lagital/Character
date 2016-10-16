@@ -12,7 +12,7 @@
         <activity
             android:name=".design.ActivitySystemPicker"
             android:label="@string/system_picker_title"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -25,6 +25,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sam.team.character.design.ActivitySystemPicker" />
         </activity>
         <activity
             android:name=".design.ActivityEditElement"
@@ -33,6 +36,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.sam.team.character.design.ActivityElementPicker" />
         </activity>
     </application>
 

@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sam.team.character.databinding.RpsystemItemBinding;
+import com.sam.team.character.databinding.ItemRpsystemBinding;
 import com.sam.team.character.viewmodel2.RPSystem;
 import com.sam.team.character.viewmodel2.Session;
 
@@ -34,7 +34,7 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
     @Override
     public ViewHolderRPSystemItem onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        RpsystemItemBinding binding = RpsystemItemBinding.inflate(inflater, parent, false);
+        ItemRpsystemBinding binding = ItemRpsystemBinding.inflate(inflater, parent, false);
         return new ViewHolderRPSystemItem(binding.getRoot());
     }
 
@@ -75,7 +75,7 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
 
     class ViewHolderRPSystemItem extends RecyclerView.ViewHolder {
 
-        RpsystemItemBinding binding;
+        ItemRpsystemBinding binding;
 
         ViewHolderRPSystemItem(View v) {
             super(v);
