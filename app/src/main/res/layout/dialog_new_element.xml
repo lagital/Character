@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="@color/colorSecondary"
-        android:text="@string/new_system_dflt_name"
+        android:textColor="@color/colorSecondaryText"
+        android:text="@string/new_element_dflt_name"
         />
 
     <!--EditText
@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorSecondaryText"
         android:text="@string/new_system_dflt_version"
         /-->
 

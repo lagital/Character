@@ -17,24 +17,26 @@ public class RPSystem extends BaseObservable {
 
     private static final String TAG = "RPSystem";
 
-    private String name, version;
+    private String name, version, copyright;
     private TreeMap<String, TreeMap<String, Element>> elements;
 
     //constructors
     public RPSystem() {
-        name = version = null;
+        name = version = copyright= null;
         elements = new TreeMap<String, TreeMap<String, Element>>();
     }
 
     public RPSystem(String name) {
         this.name = name;
         version = null;
+        copyright = null;
         elements = new TreeMap<String, TreeMap<String, Element>>();
     }
 
-    public RPSystem(String name, String version) {
+    public RPSystem(String name, String version, String copyright) {
         this.name = name;
         this.version = version;
+        this.copyright = copyright;
         elements = new TreeMap<String, TreeMap<String, Element>>();
     }
 
@@ -54,6 +56,15 @@ public class RPSystem extends BaseObservable {
     @Bindable
     public String getVersion() {
         return version;
+    }
+
+    //work with copyright
+    public void setCopyright(String name) {
+        this.copyright = copyright;
+    }
+    @Bindable
+    public String getCopyright() {
+        return copyright;
     }
 
     //work with elements

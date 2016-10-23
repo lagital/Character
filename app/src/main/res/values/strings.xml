@@ -11,20 +11,21 @@
     <string name="system_item_edit_icon">Edit</string>
     <string name="new_system_dialog_title">New game</string>
     <string name="new_system_empty_name">Title is empty</string>
-    <string name="new_system_dflt_name">Title</string>
+    <string name="new_system_dflt_name">Title*</string>
     <string name="new_system_dflt_version">1.0</string>
+    <string name="new_system_dflt_copyright">Copyright</string>
 
     <!-- Activity Element Picker -->
     <string name="element_picker_title">Pages</string>
-    <string name="new_element_dialog_title">New game</string>
+    <string name="new_element_dialog_title">New page</string>
     <string name="new_element_empty_name">Title is empty</string>
-    <string name="new_element_dflt_name">Title</string>
+    <string name="new_element_dflt_name">Title*</string>
 
     <!-- Activity Edit Element -->
     <string name="edit_element_title">Page</string>
     <string name="new_category_dialog_title">New category</string>
     <string name="new_category_empty_name">Title is empty</string>
-    <string name="new_category_dflt_name">Category</string>
+    <string name="new_category_dflt_name">Section name*</string>
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>

@@ -12,7 +12,8 @@
         <activity
             android:name=".design.ActivitySystemPicker"
             android:label="@string/system_picker_title"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,7 +22,8 @@
         <activity
             android:name=".design.ActivityElementPicker"
             android:label="@string/element_picker_title"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
@@ -32,7 +34,8 @@
         <activity
             android:name=".design.ActivityEditElement"
             android:label="@string/edit_element_title"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/text_display1_type"
             android:text="@{system.name + ' ' + system.version}"/>
 

@@ -43,6 +43,8 @@ public class ActivityEditElement extends AppCompatActivity{
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mMainFAB;
     private Toolbar mToolbar;
+    /* Categories and fields: */
+    private ArrayList<ListItem> items;
 
     Animation miniFABShow;
     Animation miniFABHide;
@@ -78,7 +80,7 @@ public class ActivityEditElement extends AppCompatActivity{
                                 getResources().getString(R.string.new_category_dflt_name))) {
                             name.setText("");
                             name.setTextColor(ContextCompat.
-                                    getColor(ActivityEditElement.this, R.color.colorPrimary));
+                                    getColor(ActivityEditElement.this, R.color.colorPrimaryText));
                             Log.d(TAG, "Fill category name");
                         }
                         return false;
@@ -101,7 +103,7 @@ public class ActivityEditElement extends AppCompatActivity{
                     }
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
                 {
@@ -113,6 +115,7 @@ public class ActivityEditElement extends AppCompatActivity{
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_category_dflt_name))) {
                             //TODO: list updating
+                            dialog.cancel();
                         } else {
                             Toast.makeText(ActivityEditElement.this,
                                     getResources().getString(R.string.new_category_empty_name),
@@ -123,10 +126,8 @@ public class ActivityEditElement extends AppCompatActivity{
             }
         });
 
-
         Intent intent = getIntent();
-        ArrayList<ListItem> li;
-        li = new ArrayList<>();
+        items = new ArrayList<>();
 
         if (intent != null) {
             if (intent.hasExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA) &&
@@ -138,17 +139,15 @@ public class ActivityEditElement extends AppCompatActivity{
                                 intent.getStringExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA));
 
                 for (String s : e.getCategories()) {
-                    li.add(new Category(s, e));
-                    Log.d(TAG, "Category " + s + " has been added");
+                    items.add(new Category(s, e));
                     for (Field f : e.getFieldsByCategory(s)) {
-                        li.add(f);
-                        Log.d(TAG, "Field " + f.getName() + " has been added");
+                        items.add(f);
                     }
                 }
             }
         }
 
-        mAdapter = new AdapterCategoryField(this, li);
+        mAdapter = new AdapterCategoryField(this, items);
         mRecyclerView.setAdapter(mAdapter);
     }
 

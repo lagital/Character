@@ -1,7 +1,6 @@
 package com.sam.team.character.design;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
@@ -15,22 +14,16 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel2.Element;
-import com.sam.team.character.viewmodel2.RPSystem;
 import com.sam.team.character.viewmodel2.Session;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+
 
 public class ActivityElementPicker extends AppCompatActivity {
 
@@ -44,6 +37,7 @@ public class ActivityElementPicker extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mMainFAB;
     private Toolbar mToolbar;
+    private ArrayList<Element> elements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +67,7 @@ public class ActivityElementPicker extends AppCompatActivity {
                                 getResources().getString(R.string.new_element_dflt_name))) {
                             name.setText("");
                             name.setTextColor(ContextCompat.
-                                    getColor(ActivityElementPicker.this, R.color.colorPrimary));
+                                    getColor(ActivityElementPicker.this, R.color.colorPrimaryText));
                             Log.d(TAG, "Fill element name");
                         }
                         return false;
@@ -96,7 +90,7 @@ public class ActivityElementPicker extends AppCompatActivity {
                     }
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
                 {
@@ -107,17 +101,12 @@ public class ActivityElementPicker extends AppCompatActivity {
                         String e_name = name.getText().toString();
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_element_dflt_name))) {
-
-                            Intent intent = new Intent(ActivityElementPicker.this, ActivityEditElement.class);
-
-                            //TODO: fix type filling
-
                             Element e = new Element(e_name, "Character");
                             Session.getInstance().getCurrentSystem().addElement(e);
+                            elements.clear();
+                            elements.addAll(Session.getInstance().getCurrentSystem().getElements());
                             mAdapter.notifyDataSetChanged();
-                            intent.putExtra(ELEMENT_NAME_EXTRA, e.getName());
-                            intent.putExtra(ELEMENT_TYPE_EXTRA, e.getType());
-                            startActivity(intent);
+                            dialog.cancel();
                         } else {
                             Toast.makeText(ActivityElementPicker.this,
                                     getResources().getString(R.string.new_element_empty_name),
@@ -128,7 +117,9 @@ public class ActivityElementPicker extends AppCompatActivity {
             }
         });
 
-        mAdapter = new AdapterElement(this, Session.getInstance().getCurrentSystem().getElements());
+        elements = new ArrayList<>();
+        elements.addAll(Session.getInstance().getCurrentSystem().getElements());
+        mAdapter = new AdapterElement(this, elements);
         mRecyclerView.setAdapter(mAdapter);
     }
 

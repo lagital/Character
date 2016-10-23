@@ -26,22 +26,12 @@
                 android:id="@+id/field_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimaryText"
                 android:textSize="@dimen/text_subheading1_type"
                 android:gravity="center_vertical"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:text="@{field.name}"/>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/field_values"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal">
-            </android.support.v7.widget.RecyclerView>
 
         </RelativeLayout>
 

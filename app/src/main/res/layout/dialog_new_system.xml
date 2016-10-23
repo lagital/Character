@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorSecondaryText"
         android:text="@string/new_system_dflt_name"
         />
 
@@ -17,8 +17,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:textColor="@color/colorSecondary"
+        android:textColor="@color/colorSecondaryText"
         android:text="@string/new_system_dflt_version"
+        />
+
+    <EditText
+        android:id="@+id/copyright"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine"
+        android:textColor="@color/colorSecondaryText"
+        android:text="@string/new_system_dflt_copyright"
         />
 
 </LinearLayout>

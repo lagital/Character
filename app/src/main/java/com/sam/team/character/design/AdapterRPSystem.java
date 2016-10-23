@@ -44,7 +44,6 @@ class AdapterRPSystem extends RecyclerView.Adapter<AdapterRPSystem.ViewHolderRPS
         holder.binding.setCardclick(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO: going inside the system
                 Log.d(TAG, "Click on system " + Integer.toString(position));
                 Session.getInstance().setCurrentSystem(systems.get(position));
             }

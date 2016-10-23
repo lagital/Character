@@ -1,7 +1,6 @@
 package com.sam.team.character.design;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -73,6 +72,7 @@ public class ActivitySystemPicker extends AppCompatActivity {
                         R.layout.dialog_new_system, null);
                 final EditText name = (EditText) l.findViewById(R.id.name);
                 final EditText version = (EditText) l.findViewById(R.id.version);
+                final EditText copyright = (EditText) l.findViewById(R.id.copyright);
                 name.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -80,7 +80,7 @@ public class ActivitySystemPicker extends AppCompatActivity {
                                 getResources().getString(R.string.new_system_dflt_name))) {
                             name.setText("");
                             name.setTextColor(ContextCompat.
-                                    getColor(ActivitySystemPicker.this, R.color.colorPrimary));
+                                    getColor(ActivitySystemPicker.this, R.color.colorPrimaryText));
                             Log.d(TAG, "Fill system name");
                         }
                         return false;
@@ -94,8 +94,22 @@ public class ActivitySystemPicker extends AppCompatActivity {
                                 getResources().getString(R.string.new_system_dflt_version))) {
                             version.setText("");
                             version.setTextColor(ContextCompat.
-                                    getColor(ActivitySystemPicker.this, R.color.colorPrimary));
+                                    getColor(ActivitySystemPicker.this, R.color.colorPrimaryText));
                             Log.d(TAG, "Fill version");
+                        }
+                        return false;
+                    }
+                });
+
+                copyright.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        if (copyright.getText().toString().equalsIgnoreCase(
+                                getResources().getString(R.string.new_system_dflt_copyright))) {
+                            copyright.setText("");
+                            copyright.setTextColor(ContextCompat.
+                                    getColor(ActivitySystemPicker.this, R.color.colorPrimaryText));
+                            Log.d(TAG, "Fill copyright");
                         }
                         return false;
                     }
@@ -117,7 +131,7 @@ public class ActivitySystemPicker extends AppCompatActivity {
                     }
                 });
 
-                AlertDialog dialog = builder.create();
+                final AlertDialog dialog = builder.create();
                 dialog.show();
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
                 {
@@ -126,25 +140,28 @@ public class ActivitySystemPicker extends AppCompatActivity {
                     {
                         EditText name = (EditText) l.findViewById(R.id.name);
                         EditText version = (EditText) l.findViewById(R.id.version);
+                        EditText copyright = (EditText) l.findViewById(R.id.copyright);
                         String e_name = name.getText().toString();
                         String e_version = version.getText().toString();
+                        String e_copyright = copyright.getText().toString();
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_system_dflt_name))) {
+                            RPSystem rps;
+
                             if (e_version.isEmpty()) {
-                                RPSystem rps = new RPSystem(e_name,
-                                        getResources().getString(R.string.new_system_dflt_version));
+                                rps = new RPSystem(e_name,
+                                        getResources().getString(R.string.new_system_dflt_version),
+                                        e_copyright);
                                 systems.add(rps);
                                 mAdapter.notifyDataSetChanged();
                                 Session.getInstance().setCurrentSystem(rps);
                             } else {
-                                RPSystem rps = new RPSystem(e_name, e_version);
+                                rps = new RPSystem(e_name, e_version, e_copyright);
                                 systems.add(rps);
-                                mAdapter.notifyDataSetChanged();
-                                Session.getInstance().setCurrentSystem(rps);
                             }
-
-                            Intent intent = new Intent(ActivitySystemPicker.this, ActivityElementPicker.class);
-                            startActivity(intent);
+                            mAdapter.notifyDataSetChanged();
+                            Session.getInstance().setCurrentSystem(rps);
+                            dialog.cancel();
                         } else {
                             Toast.makeText(ActivitySystemPicker.this,
                                     getResources().getString(R.string.new_system_empty_name),
@@ -164,8 +181,8 @@ public class ActivitySystemPicker extends AppCompatActivity {
 
         /* DEBUG */
         if (BuildConfig.DEBUG) {
-            RPSystem rps = new RPSystem("Game", "1.0");
-            Element e = new Element("Jon Snow", "CHARACTER");
+            RPSystem rps = new RPSystem("Game", "1.0", "Bla-bla");
+            Element e = new Element("Character Sheet", "CHARACTER");
             e.addField(new Field("Main", "Name"));
             e.addField(new Field("Main", "Surname"));
             e.addField(new Field("Sub", "Knowledge"));
