@@ -19,6 +19,11 @@ public class Category extends BaseObservable implements ListItem{
         this.element = element;
     }
 
+    // for dummy categories
+    public Category(String name) {
+        this.name = name;
+    }
+
     //work with name
     public void setName(String name) {
         this.name = name;

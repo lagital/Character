@@ -114,7 +114,8 @@ public class ActivityEditElement extends AppCompatActivity{
                         String e_name = name.getText().toString();
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_category_dflt_name))) {
-                            //TODO: list updating
+                            items.add(new Category(e_name));
+                            mAdapter.notifyDataSetChanged();
                             dialog.cancel();
                         } else {
                             Toast.makeText(ActivityEditElement.this,
