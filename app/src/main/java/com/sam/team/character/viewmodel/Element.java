@@ -1,38 +1,38 @@
-package com.sam.team.character.viewmodel2;
+package com.sam.team.character.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.logging.FileHandler;
 
 /**
  *
  * @author Vaize
  */
-public class Element extends BaseObservable {
+public class Element extends BaseObservable implements ListItem{
 
     private static final String TAG = "Element";
 
     private String name, type;
+    private RPSystem rpSystem;
     private TreeMap<String, TreeMap<String, Field>> fields;
 
     //constructors
-    public Element() {
+    public Element(RPSystem system) {
         name = type = null;
-        fields = new TreeMap<String, TreeMap<String, Field>>();
+        this.rpSystem = system;
+        fields = new TreeMap<>();
     }
 
-    public Element(String name, String type) {
+    public Element(String name, String type, RPSystem system) {
         this.name = name;
         this.type = type;
-        fields = new TreeMap<String, TreeMap<String, Field>>();
+        this.rpSystem = system;
+        fields = new TreeMap<>();
     }
 
     //work with name
@@ -109,4 +109,15 @@ public class Element extends BaseObservable {
             return null;
         }
     }
+
+    //work with parent system
+    public RPSystem getRpSystem() {
+        return rpSystem;
+    }
+
+    @Override
+    public int getItemType() {
+        return TYPE_ELEMENT;
+    }
+
 }

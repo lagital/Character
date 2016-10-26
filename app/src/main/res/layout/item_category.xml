@@ -2,7 +2,7 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="com.sam.team.character.viewmodel2.Category"/>
+        <import type="com.sam.team.character.viewmodel.Category"/>
         <variable
             name="category"
             type="Category" />
@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/system_item_edit_icon"
+                    android:contentDescription="@string/system_item_add_icon"
                     android:onClick="@{editclick}"/>
 
                 <ImageButton
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@android:drawable/ic_menu_add"
-                    android:contentDescription="@string/system_item_edit_icon"
+                    android:contentDescription="@string/system_item_add_icon"
                     android:onClick="@{plusclick}"/>
 
             </LinearLayout>

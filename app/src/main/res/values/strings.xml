@@ -8,7 +8,7 @@
     <string name="fab_add_system_dscr">Create a game</string>
     <string name="fab_load_system_dscr">Load a game</string>
     <string name="system_item_share_icon">Share</string>
-    <string name="system_item_edit_icon">Edit</string>
+    <string name="system_item_add_icon">Add page</string>
     <string name="new_system_dialog_title">New game</string>
     <string name="new_system_empty_name">Title is empty</string>
     <string name="new_system_dflt_name">Title*</string>

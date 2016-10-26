@@ -22,11 +22,12 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel2.Category;
-import com.sam.team.character.viewmodel2.Element;
-import com.sam.team.character.viewmodel2.Field;
-import com.sam.team.character.viewmodel2.ListItem;
-import com.sam.team.character.viewmodel2.Session;
+import com.sam.team.character.viewmodel.Category;
+import com.sam.team.character.viewmodel.Element;
+import com.sam.team.character.viewmodel.Field;
+import com.sam.team.character.viewmodel.ListItem;
+import com.sam.team.character.viewmodel.RPSystem;
+import com.sam.team.character.viewmodel.Session;
 
 import java.util.ArrayList;
 
@@ -35,6 +36,9 @@ import java.util.ArrayList;
  */
 
 public class ActivityEditElement extends AppCompatActivity{
+
+    public static final String ELEMENT_NAME_EXTRA = "ELEMENT_NAME_EXTRA";
+    public static final String ELEMENT_TYPE_EXTRA = "ELEMENT_TYPE_EXTRA";
 
     private static final String TAG = "ActivityEditElement";
 
@@ -45,6 +49,8 @@ public class ActivityEditElement extends AppCompatActivity{
     private Toolbar mToolbar;
     /* Categories and fields: */
     private ArrayList<ListItem> items;
+
+    private Element element;
 
     Animation miniFABShow;
     Animation miniFABHide;
@@ -131,20 +137,15 @@ public class ActivityEditElement extends AppCompatActivity{
         items = new ArrayList<>();
 
         if (intent != null) {
-            if (intent.hasExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA) &&
-                    intent.hasExtra(ActivityElementPicker.ELEMENT_TYPE_EXTRA)) {
-                Element e = Session.getInstance().
+            if (intent.hasExtra(ELEMENT_NAME_EXTRA) &&
+                    intent.hasExtra(ELEMENT_TYPE_EXTRA)) {
+                element = Session.getInstance().
                         getCurrentSystem().
                         getElement(
-                                intent.getStringExtra(ActivityElementPicker.ELEMENT_TYPE_EXTRA),
-                                intent.getStringExtra(ActivityElementPicker.ELEMENT_NAME_EXTRA));
+                                intent.getStringExtra(ELEMENT_TYPE_EXTRA),
+                                intent.getStringExtra(ELEMENT_NAME_EXTRA));
 
-                for (String s : e.getCategories()) {
-                    items.add(new Category(s, e));
-                    for (Field f : e.getFieldsByCategory(s)) {
-                        items.add(f);
-                    }
-                }
+                fillList();
             }
         }
 
@@ -161,5 +162,17 @@ public class ActivityEditElement extends AppCompatActivity{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void fillList () {
+        items.clear();
+        if (element != null) {
+            for (String s : element.getCategories()) {
+                items.add(new Category(s, element));
+                for (Field f : element.getFieldsByCategory(s)) {
+                    items.add(f);
+                }
+            }
+        }
     }
 }

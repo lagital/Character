@@ -20,18 +20,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".design.ActivityElementPicker"
-            android:label="@string/element_picker_title"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sam.team.character.design.ActivitySystemPicker" />
-        </activity>
-        <activity
             android:name=".design.ActivityEditElement"
             android:label="@string/edit_element_title"
             android:theme="@style/AppTheme.NoActionBar"
@@ -41,7 +29,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.sam.team.character.design.ActivityElementPicker" />
+                android:value="com.sam.team.character.design.ActivitySystemPicker" />
         </activity>
     </application>
 

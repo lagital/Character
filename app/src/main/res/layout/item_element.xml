@@ -2,7 +2,7 @@
 
 <layout>
     <data>
-        <import type="com.sam.team.character.viewmodel2.Element"/>
+        <import type="com.sam.team.character.viewmodel.Element"/>
         <variable
             name="element"
             type="Element" />
@@ -25,7 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
-            android:textSize="@dimen/text_display1_type"
+            android:textSize="@dimen/text_headline_type"
+            android:layout_gravity="center_vertical"
             android:text="@{element.name}"/>
 
         <LinearLayout
@@ -39,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_preferences"
-                android:contentDescription="@string/system_item_edit_icon"
+                android:contentDescription="@string/edit_element_title"
                 android:onClick="@{editclick}"/>
         </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.sam.team.character.viewmodel2;
+package com.sam.team.character.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -9,7 +9,6 @@ import android.databinding.Bindable;
 
 public class Category extends BaseObservable implements ListItem{
 
-    public static final int TYPE_HEADER = 0;
     private String name;
     private Element element;
 
@@ -41,7 +40,7 @@ public class Category extends BaseObservable implements ListItem{
     }
 
     @Override
-    public int getType() {
-        return TYPE_HEADER;
+    public int getItemType() {
+        return TYPE_CATEGORY;
     }
 }

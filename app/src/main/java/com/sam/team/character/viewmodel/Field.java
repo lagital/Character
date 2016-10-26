@@ -1,10 +1,11 @@
 
-package com.sam.team.character.viewmodel2;
+package com.sam.team.character.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 public class Field extends BaseObservable implements ListItem {
 
     private static final String TAG = "Field";
-    public static final int TYPE_FIELD = 1;
 
     private String category, name;
     private ArrayList<String> values, calcRules;
@@ -83,7 +83,7 @@ public class Field extends BaseObservable implements ListItem {
     }
 
     @Override
-    public int getType() {
+    public int getItemType() {
         return TYPE_FIELD;
     }
 }

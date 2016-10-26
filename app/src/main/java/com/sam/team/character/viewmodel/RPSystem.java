@@ -1,5 +1,5 @@
 
-package com.sam.team.character.viewmodel2;
+package com.sam.team.character.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -13,7 +13,7 @@ import java.util.TreeMap;
  *
  * @author Vaize
  */
-public class RPSystem extends BaseObservable {
+public class RPSystem extends BaseObservable implements ListItem{
 
     private static final String TAG = "RPSystem";
 
@@ -23,27 +23,28 @@ public class RPSystem extends BaseObservable {
     //constructors
     public RPSystem() {
         name = version = copyright= null;
-        elements = new TreeMap<String, TreeMap<String, Element>>();
+        elements = new TreeMap<>();
     }
 
     public RPSystem(String name) {
         this.name = name;
         version = null;
         copyright = null;
-        elements = new TreeMap<String, TreeMap<String, Element>>();
+        elements = new TreeMap<>();
     }
 
     public RPSystem(String name, String version, String copyright) {
         this.name = name;
         this.version = version;
         this.copyright = copyright;
-        elements = new TreeMap<String, TreeMap<String, Element>>();
+        elements = new TreeMap<>();
     }
 
     //work with name
     public void setName(String name) {
         this.name = name;
     }
+
     @Bindable
     public String getName() {
         return name;
@@ -53,13 +54,14 @@ public class RPSystem extends BaseObservable {
     public void setVersion(String version) {
         this.version = version;
     }
+
     @Bindable
     public String getVersion() {
         return version;
     }
 
     //work with copyright
-    public void setCopyright(String name) {
+    public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
     @Bindable
@@ -121,5 +123,10 @@ public class RPSystem extends BaseObservable {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public int getItemType() {
+        return TYPE_SYSTEM;
     }
 }

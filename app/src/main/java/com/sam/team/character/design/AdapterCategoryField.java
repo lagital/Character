@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 
 import com.sam.team.character.databinding.ItemCategoryBinding;
 import com.sam.team.character.databinding.ItemFieldBinding;
-import com.sam.team.character.viewmodel2.Category;
-import com.sam.team.character.viewmodel2.Field;
-import com.sam.team.character.viewmodel2.ListItem;
+import com.sam.team.character.viewmodel.Category;
+import com.sam.team.character.viewmodel.Field;
+import com.sam.team.character.viewmodel.ListItem;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = "AdapterCategories";
+    private static final String TAG = "AdapterCategoryField";
 
     private ArrayList<ListItem> items;
     private Context context;
@@ -36,11 +36,9 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(TAG, "onCreateViewHolder");
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        if (viewType == Category.TYPE_HEADER) {
+        if (viewType == ListItem.TYPE_CATEGORY) {
             ItemCategoryBinding binding = ItemCategoryBinding.inflate(inflater, parent, false);
             return new ViewHolderCategoryItem(binding.getRoot());
         } else {
@@ -52,7 +50,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         int type = getItemViewType(position);
-        if (type == Category.TYPE_HEADER) {
+        if (type == ListItem.TYPE_CATEGORY) {
             Log.d(TAG, "Bind category");
             ViewHolderCategoryItem h = (ViewHolderCategoryItem) holder;
             h.binding.setCategory((Category) items.get(position));
@@ -89,7 +87,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.size();
     }
 
-    class ViewHolderCategoryItem extends RecyclerView.ViewHolder {
+    private class ViewHolderCategoryItem extends RecyclerView.ViewHolder {
 
         ItemCategoryBinding binding;
 
@@ -99,7 +97,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    class ViewHolderFieldItem extends RecyclerView.ViewHolder {
+    private class ViewHolderFieldItem extends RecyclerView.ViewHolder {
 
         ItemFieldBinding binding;
 
@@ -111,6 +109,6 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return items.get(position).getType();
+        return items.get(position).getItemType();
     }
 }

@@ -18,10 +18,11 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel2.Element;
-import com.sam.team.character.viewmodel2.Field;
-import com.sam.team.character.viewmodel2.RPSystem;
-import com.sam.team.character.viewmodel2.Session;
+import com.sam.team.character.viewmodel.Element;
+import com.sam.team.character.viewmodel.Field;
+import com.sam.team.character.viewmodel.ListItem;
+import com.sam.team.character.viewmodel.RPSystem;
+import com.sam.team.character.viewmodel.Session;
 
 import java.util.ArrayList;
 
@@ -37,6 +38,7 @@ public class ActivitySystemPicker extends AppCompatActivity {
     private FloatingActionButton mAddMiniFAB;
     private FloatingActionButton mLoadMiniFAB;
     private Toolbar mToolbar;
+    private ArrayList<ListItem> items;
     private ArrayList<RPSystem> systems;
 
     @Override
@@ -63,6 +65,7 @@ public class ActivitySystemPicker extends AppCompatActivity {
             }
         });
 
+        items = new ArrayList<>();
         systems = new ArrayList<>();
 
         mAddMiniFAB.setOnClickListener(new View.OnClickListener() {
@@ -153,12 +156,12 @@ public class ActivitySystemPicker extends AppCompatActivity {
                                         getResources().getString(R.string.new_system_dflt_version),
                                         e_copyright);
                                 systems.add(rps);
-                                mAdapter.notifyDataSetChanged();
                                 Session.getInstance().setCurrentSystem(rps);
                             } else {
                                 rps = new RPSystem(e_name, e_version, e_copyright);
                                 systems.add(rps);
                             }
+                            fillList();
                             mAdapter.notifyDataSetChanged();
                             Session.getInstance().setCurrentSystem(rps);
                             dialog.cancel();
@@ -182,16 +185,18 @@ public class ActivitySystemPicker extends AppCompatActivity {
         /* DEBUG */
         if (BuildConfig.DEBUG) {
             RPSystem rps = new RPSystem("Game", "1.0", "Bla-bla");
-            Element e = new Element("Character Sheet", "CHARACTER");
+            Element e = new Element("Character Sheet", "CHARACTER", rps);
             e.addField(new Field("Main", "Name"));
             e.addField(new Field("Main", "Surname"));
-            e.addField(new Field("Sub", "Knowledge"));
+            e.addField(new Field("Additional", "Knowledge"));
             rps.addElement(e);
             systems.add(rps);
         }
         /* DEBUG */
 
-        mAdapter = new AdapterRPSystem(this, systems);
+        fillList();
+
+        mAdapter = new AdapterSystemElement(this, items);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -200,6 +205,16 @@ public class ActivitySystemPicker extends AppCompatActivity {
             miniFAB.hide();
         } else {
             miniFAB.show();
+        }
+    }
+
+    private void fillList () {
+        items.clear();
+        for (RPSystem s : systems) {
+            items.add(s);
+            for (Element e : s.getElements()) {
+                items.add(e);
+            }
         }
     }
 }
