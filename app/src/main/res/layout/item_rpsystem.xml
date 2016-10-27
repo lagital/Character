@@ -10,7 +10,7 @@
             name="cardclick"
             type="android.view.View.OnClickListener" />
         <variable
-            name="editclick"
+            name="addclick"
             type="android.view.View.OnClickListener" />
         <variable
             name="shareclick"
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:src="@android:drawable/ic_menu_add"
                 android:contentDescription="@string/system_item_add_icon"
-                android:onClick="@{editclick}"/>
+                android:onClick="@{addclick}"/>
         </LinearLayout>
 
     </RelativeLayout>

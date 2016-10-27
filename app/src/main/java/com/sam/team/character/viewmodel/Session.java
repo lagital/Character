@@ -9,6 +9,7 @@ public class Session {
     private static Session instance;
 
     private RPSystem currentSystem;
+    private Element element;
 
     public static synchronized Session getInstance() {
         if (instance == null) {
@@ -23,5 +24,13 @@ public class Session {
 
     public void setCurrentSystem(RPSystem system) {
         this.currentSystem = system;
+    }
+
+    public void cacheElement (Element element) {
+        this.element = element;
+    }
+
+    public Element getElementFromCache () {
+        return element;
     }
 }

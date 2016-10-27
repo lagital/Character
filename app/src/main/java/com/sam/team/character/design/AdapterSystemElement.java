@@ -2,12 +2,13 @@ package com.sam.team.character.design;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -33,11 +34,11 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "AdapterSystemElement";
 
     private ArrayList<ListItem> items;
-    private Context context;
+    private FragmentSystemPicker fragment;
 
-    AdapterSystemElement(Context context, ArrayList<ListItem> items) {
+    AdapterSystemElement(FragmentSystemPicker fragment, ArrayList<ListItem> items) {
         this.items = items;
-        this.context = context;
+        this.fragment = fragment;
     }
 
     @Override
@@ -78,17 +79,30 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Session.getInstance().setCurrentSystem((RPSystem) items.get(position));
                 }
             });
-            h.binding.setEditclick(new View.OnClickListener() {
+            h.binding.setAddclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit system " + Integer.toString(position));
                     Session.getInstance().setCurrentSystem((RPSystem) items.get(position));
 
-                    final LinearLayout l = (LinearLayout) View.inflate(context,
+                    final LinearLayout l = (LinearLayout) View.inflate(fragment.getActivity(),
                             R.layout.dialog_new_element, null);
                     final EditText name = (EditText) l.findViewById(R.id.name);
+                    name.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            if (name.getText().toString().equalsIgnoreCase(
+                                    fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
+                                name.setText("");
+                                name.setTextColor(ContextCompat.
+                                        getColor(fragment.getActivity(), R.color.colorPrimaryText));
+                                Log.d(TAG, "Fill element name");
+                            }
+                            return false;
+                        }
+                    });
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getActivity());
                     builder.setView(l);
                     builder.setTitle(R.string.new_element_dflt_name);
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -114,14 +128,15 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             EditText name = (EditText) l.findViewById(R.id.name);
                             String e_name = name.getText().toString();
                             if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
-                                    context.getResources().getString(R.string.new_element_dflt_name))) {
+                                    fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
                                 // TODO: work with type
                                 Session.getInstance().getCurrentSystem().addElement(
                                         new Element(e_name, "Test", Session.getInstance().getCurrentSystem()));
+                                fragment.fillList();
                                 dialog.cancel();
                             } else {
-                                Toast.makeText(context,
-                                        context.getResources().getString(R.string.new_element_empty_name),
+                                Toast.makeText(fragment.getActivity(),
+                                        fragment.getActivity().getResources().getString(R.string.new_element_empty_name),
                                         Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -144,10 +159,9 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     Log.d(TAG, "Edit element " + Integer.toString(position));
                     Session.getInstance().setCurrentSystem(((Element) items.get(position)).getRpSystem());
-                    Intent intent = new Intent(context, ActivityEditElement.class);
-                    intent.putExtra(ActivityEditElement.ELEMENT_NAME_EXTRA, ((Element) items.get(position)).getName());
-                    intent.putExtra(ActivityEditElement.ELEMENT_TYPE_EXTRA, ((Element) items.get(position)).getType());
-                    context.startActivity(intent);
+                    Session.getInstance().cacheElement((Element) items.get(position));
+                    ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
+                            .FragmentType.EDIT_ELEMENT);
                 }
             });
         }

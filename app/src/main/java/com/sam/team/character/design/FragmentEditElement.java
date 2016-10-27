@@ -1,10 +1,9 @@
 package com.sam.team.character.design;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.NavUtils;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -26,57 +24,45 @@ import com.sam.team.character.viewmodel.Category;
 import com.sam.team.character.viewmodel.Element;
 import com.sam.team.character.viewmodel.Field;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.RPSystem;
 import com.sam.team.character.viewmodel.Session;
 
 import java.util.ArrayList;
 
 /**
- * Created by pborisenko on 10/8/2016.
+ * Created by pborisenko on 10/27/2016.
  */
 
-public class ActivityEditElement extends AppCompatActivity{
+public class FragmentEditElement extends Fragment {
 
-    public static final String ELEMENT_NAME_EXTRA = "ELEMENT_NAME_EXTRA";
-    public static final String ELEMENT_TYPE_EXTRA = "ELEMENT_TYPE_EXTRA";
-
-    private static final String TAG = "ActivityEditElement";
+    private static final String TAG = "FragmentEditElement";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mMainFAB;
-    private Toolbar mToolbar;
     /* Categories and fields: */
     private ArrayList<ListItem> items;
 
     private Element element;
 
-    Animation miniFABShow;
-    Animation miniFABHide;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_element);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_edit_element, null);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_element_title);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.categories_list);
-        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.categories_list);
+        mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        miniFABShow = AnimationUtils.loadAnimation(this, R.anim.mini_fab_show);
-        miniFABHide = AnimationUtils.loadAnimation(this, R.anim.mini_fab_hide);
-
-        mMainFAB = (FloatingActionButton) findViewById(R.id.fab_main);
+        mMainFAB = (FloatingActionButton) view.findViewById(R.id.fab_main);
 
         mMainFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final LinearLayout l = (LinearLayout) View.inflate(ActivityEditElement.this,
+                final LinearLayout l = (LinearLayout) View.inflate(getActivity(),
                         R.layout.dialog_new_category, null);
                 final EditText name = (EditText) l.findViewById(R.id.name);
                 name.setOnTouchListener(new View.OnTouchListener() {
@@ -86,14 +72,14 @@ public class ActivityEditElement extends AppCompatActivity{
                                 getResources().getString(R.string.new_category_dflt_name))) {
                             name.setText("");
                             name.setTextColor(ContextCompat.
-                                    getColor(ActivityEditElement.this, R.color.colorPrimaryText));
+                                    getColor(getActivity(), R.color.colorPrimaryText));
                             Log.d(TAG, "Fill category name");
                         }
                         return false;
                     }
                 });
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ActivityEditElement.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(l);
                 builder.setTitle(R.string.new_category_dialog_title);
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -124,7 +110,7 @@ public class ActivityEditElement extends AppCompatActivity{
                             mAdapter.notifyDataSetChanged();
                             dialog.cancel();
                         } else {
-                            Toast.makeText(ActivityEditElement.this,
+                            Toast.makeText(getActivity(),
                                     getResources().getString(R.string.new_category_empty_name),
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -133,35 +119,17 @@ public class ActivityEditElement extends AppCompatActivity{
             }
         });
 
-        Intent intent = getIntent();
         items = new ArrayList<>();
+        element = Session.getInstance().getElementFromCache();
+        fillList();
 
-        if (intent != null) {
-            if (intent.hasExtra(ELEMENT_NAME_EXTRA) &&
-                    intent.hasExtra(ELEMENT_TYPE_EXTRA)) {
-                element = Session.getInstance().
-                        getCurrentSystem().
-                        getElement(
-                                intent.getStringExtra(ELEMENT_TYPE_EXTRA),
-                                intent.getStringExtra(ELEMENT_NAME_EXTRA));
-
-                fillList();
-            }
-        }
-
-        mAdapter = new AdapterCategoryField(this, items);
+        mAdapter = new AdapterCategoryField(getActivity(), items);
         mRecyclerView.setAdapter(mAdapter);
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            // Respond to the action bar's Up/Home button
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+
+
+
+        return view;
     }
 
     private void fillList () {
