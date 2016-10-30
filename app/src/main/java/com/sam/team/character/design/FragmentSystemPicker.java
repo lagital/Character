@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +24,7 @@ import com.sam.team.character.viewmodel.Element;
 import com.sam.team.character.viewmodel.Field;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.RPSystem;
-import com.sam.team.character.viewmodel.Session;
+import com.sam.team.character.viewmodel.Context;
 
 import java.util.ArrayList;
 
@@ -162,13 +161,13 @@ public class FragmentSystemPicker extends Fragment{
                                         getResources().getString(R.string.new_system_dflt_version),
                                         e_copyright);
                                 systems.add(rps);
-                                Session.getInstance().setCurrentSystem(rps);
+                                Context.getInstance().setCurrentSystem(rps);
                             } else {
                                 rps = new RPSystem(e_name, e_version, e_copyright);
                                 systems.add(rps);
                             }
                             fillList();
-                            Session.getInstance().setCurrentSystem(rps);
+                            Context.getInstance().setCurrentSystem(rps);
                             dialog.cancel();
                         } else {
                             Toast.makeText(getActivity(),
@@ -189,11 +188,18 @@ public class FragmentSystemPicker extends Fragment{
 
         /* DEBUG */
         if (BuildConfig.DEBUG) {
+            int i;
             RPSystem rps = new RPSystem("Game", "1.0", "Bla-bla");
             Element e = new Element("Character Sheet", "CHARACTER", rps);
-            e.addField(new Field("Main", "Name"));
-            e.addField(new Field("Main", "Surname"));
-            e.addField(new Field("Additional", "Knowledge"));
+            e.addField(new Field("Main", "Name", Field.FieldType.SHORT_TEXT));
+            e.addField(new Field("Main", "Surname", Field.FieldType.SHORT_TEXT));
+            e.addField(new Field("Additional", "Knowledge", Field.FieldType.LONG_TEXT));
+            Field f = new Field("Additional", "Power", Field.FieldType.NUMERIC);
+            i = f.addValue("Test1");
+            i = f.addValue("Test2");
+            i = f.addValue("Test3");
+            f.setRule(i, "Test");
+            e.addField(f);
             rps.addElement(e);
             systems.add(rps);
         }

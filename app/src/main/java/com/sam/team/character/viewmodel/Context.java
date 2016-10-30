@@ -4,16 +4,16 @@ package com.sam.team.character.viewmodel;
  * Created by pborisenko on 10/8/2016.
  */
 
-public class Session {
+public class Context {
 
-    private static Session instance;
+    private static Context instance;
 
     private RPSystem currentSystem;
     private Element element;
 
-    public static synchronized Session getInstance() {
+    public static synchronized Context getInstance() {
         if (instance == null) {
-            instance = new Session();
+            instance = new Context();
         }
         return instance;
     }

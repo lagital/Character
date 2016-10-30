@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.sam.team.character.R;
 import com.sam.team.character.databinding.ItemCategoryBinding;
 import com.sam.team.character.databinding.ItemFieldBinding;
 import com.sam.team.character.viewmodel.Category;
 import com.sam.team.character.viewmodel.Field;
 import com.sam.team.character.viewmodel.ListItem;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -57,8 +59,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             h.binding.setPlusclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: add field
-                    Log.d(TAG, "Click on category " + Integer.toString(position));
+                    Log.d(TAG, "Add field " + Integer.toString(position));
                 }
             });
             h.binding.setEditclick(new View.OnClickListener() {
@@ -68,7 +69,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     // TODO: changing category
                 }
             });
-        } else {
+        } else if (type == ListItem.TYPE_FIELD)  {
             Log.d(TAG, "Bind field");
             ViewHolderFieldItem h = (ViewHolderFieldItem) holder;
             h.binding.setField((Field) items.get(position));
@@ -79,6 +80,39 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     // TODO: changing field
                 }
             });
+
+            switch (((Field) items.get(position)).getType()) {
+                case SHORT_TEXT: {
+                    h.binding.icon0.setImageResource(R.drawable.ic_title_black_24dp);
+                }
+                case LONG_TEXT: {
+                    h.binding.icon0.setImageResource(R.drawable.ic_text_fields_black_24dp);
+                }
+                case NUMERIC: {
+                    for (int i = 0; i < ((Field) items.get(position)).getValues().size(); i++) {
+                        int resource;
+                        if (((Field) items.get(position)).getRule(i) != null) {
+                            resource = R.drawable.ic_functions_black_24dp;
+                        } else {
+                            resource = R.drawable.ic_looks_one_black_24dp;
+                        }
+
+                        switch (i) {
+                            case 0: {
+                                h.binding.icon0.setImageResource(resource);
+                            }
+                            case 1: {
+                                h.binding.icon1.setImageResource(resource);
+                                h.binding.icon1.setVisibility(View.VISIBLE);
+                            }
+                            case 2: {
+                                h.binding.icon2.setImageResource(resource);
+                                h.binding.icon2.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

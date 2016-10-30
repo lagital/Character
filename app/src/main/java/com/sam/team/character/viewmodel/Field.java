@@ -3,6 +3,9 @@ package com.sam.team.character.viewmodel;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.graphics.drawable.Drawable;
+
+import com.sam.team.character.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +22,12 @@ public class Field extends BaseObservable implements ListItem {
     private String category, name;
     private ArrayList<String> values, calcRules;
 
-    public Field() {
-        category = name = null;
-        values = new ArrayList();
-        calcRules = new ArrayList();
-    }
-    public Field(String category, String name) {
+    private FieldType type;
+
+    public Field(String category, String name, FieldType type) {
         this.category = category;
         this.name = name;
+        this.type = type;
         values = new ArrayList();
         calcRules = new ArrayList();
     }
@@ -40,7 +41,11 @@ public class Field extends BaseObservable implements ListItem {
 
     public void setCategory(String category) { this.category = category; }
 
-    public void addValue(String value) { values.add(value); }
+    public int addValue(String value) {
+        values.add(value);
+        calcRules.add(null);
+        return (values.size() - 1); //id
+    }
 
     public void setValue(int id, String value) { values.set(id, value); }
 
@@ -64,8 +69,6 @@ public class Field extends BaseObservable implements ListItem {
 
     public void removeValue(String value) { values.remove(value); }
 
-    public void addRule(String rule) { calcRules.add(rule); }
-
     public void setRule(int id, String rule) { calcRules.set(id, rule); }
 
     public String getRule(int id) { return calcRules.get(id); }
@@ -85,5 +88,21 @@ public class Field extends BaseObservable implements ListItem {
     @Override
     public int getItemType() {
         return TYPE_FIELD;
+    }
+
+    public FieldType getType() {
+        return type;
+    }
+
+    public String getTypeStr() {
+        return type.name();
+    }
+
+
+
+    public enum FieldType {
+        SHORT_TEXT,
+        LONG_TEXT,
+        NUMERIC
     }
 }

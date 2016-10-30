@@ -1,6 +1,5 @@
 package com.sam.team.character.design;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
@@ -21,7 +20,7 @@ import com.sam.team.character.databinding.ItemRpsystemBinding;
 import com.sam.team.character.viewmodel.Element;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.RPSystem;
-import com.sam.team.character.viewmodel.Session;
+import com.sam.team.character.viewmodel.Context;
 
 import java.util.ArrayList;
 
@@ -68,7 +67,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Click on system " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem((RPSystem) items.get(position));
+                    Context.getInstance().setCurrentSystem((RPSystem) items.get(position));
                 }
             });
             h.binding.setShareclick(new View.OnClickListener() {
@@ -76,14 +75,14 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     //TODO: sharing the system
                     Log.d(TAG, "Sharing system " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem((RPSystem) items.get(position));
+                    Context.getInstance().setCurrentSystem((RPSystem) items.get(position));
                 }
             });
             h.binding.setAddclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit system " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem((RPSystem) items.get(position));
+                    Context.getInstance().setCurrentSystem((RPSystem) items.get(position));
 
                     final LinearLayout l = (LinearLayout) View.inflate(fragment.getActivity(),
                             R.layout.dialog_new_element, null);
@@ -130,8 +129,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                     fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
                                 // TODO: work with type
-                                Session.getInstance().getCurrentSystem().addElement(
-                                        new Element(e_name, "Test", Session.getInstance().getCurrentSystem()));
+                                Context.getInstance().getCurrentSystem().addElement(
+                                        new Element(e_name, "Test", Context.getInstance().getCurrentSystem()));
                                 fragment.fillList();
                                 dialog.cancel();
                             } else {
@@ -158,8 +157,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit element " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem(((Element) items.get(position)).getRpSystem());
-                    Session.getInstance().cacheElement((Element) items.get(position));
+                    Context.getInstance().setCurrentSystem(((Element) items.get(position)).getRpSystem());
+                    Context.getInstance().cacheElement((Element) items.get(position));
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_ELEMENT);
                 }

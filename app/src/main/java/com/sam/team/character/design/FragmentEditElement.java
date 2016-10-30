@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,7 +23,7 @@ import com.sam.team.character.viewmodel.Category;
 import com.sam.team.character.viewmodel.Element;
 import com.sam.team.character.viewmodel.Field;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.Session;
+import com.sam.team.character.viewmodel.Context;
 
 import java.util.ArrayList;
 
@@ -120,7 +119,7 @@ public class FragmentEditElement extends Fragment {
         });
 
         items = new ArrayList<>();
-        element = Session.getInstance().getElementFromCache();
+        element = Context.getInstance().getElementFromCache();
         fillList();
 
         mAdapter = new AdapterCategoryField(getActivity(), items);
