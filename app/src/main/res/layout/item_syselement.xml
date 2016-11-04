@@ -2,10 +2,10 @@
 
 <layout>
     <data>
-        <import type="com.sam.team.character.viewmodel.Element"/>
+        <import type="com.sam.team.character.viewmodel.SysElement"/>
         <variable
             name="element"
-            type="Element" />
+            type="SysElement" />
         <variable
             name="cardclick"
             type="android.view.View.OnClickListener" />

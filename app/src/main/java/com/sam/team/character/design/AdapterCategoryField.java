@@ -9,13 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sam.team.character.R;
-import com.sam.team.character.databinding.ItemCategoryBinding;
-import com.sam.team.character.databinding.ItemFieldBinding;
-import com.sam.team.character.viewmodel.Category;
-import com.sam.team.character.viewmodel.Field;
-import com.sam.team.character.viewmodel.ListItem;
+import com.sam.team.character.databinding.ItemSyscategoryBinding;
+import com.sam.team.character.databinding.ItemSysfieldBinding;
+import com.sam.team.character.viewmodel.SysCategory;
+import com.sam.team.character.viewmodel.SysField;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -41,11 +39,11 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if (viewType == ListItem.TYPE_CATEGORY) {
-            ItemCategoryBinding binding = ItemCategoryBinding.inflate(inflater, parent, false);
-            return new ViewHolderCategoryItem(binding.getRoot());
+            ItemSyscategoryBinding binding = ItemSyscategoryBinding.inflate(inflater, parent, false);
+            return new ViewHolderSysCategoryItem(binding.getRoot());
         } else {
-            ItemFieldBinding binding = ItemFieldBinding.inflate(inflater, parent, false);
-            return new ViewHolderFieldItem(binding.getRoot());
+            ItemSysfieldBinding binding = ItemSysfieldBinding.inflate(inflater, parent, false);
+            return new ViewHolderSysFieldItem(binding.getRoot());
         }
     }
 
@@ -54,8 +52,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_CATEGORY) {
             Log.d(TAG, "Bind category");
-            ViewHolderCategoryItem h = (ViewHolderCategoryItem) holder;
-            h.binding.setCategory((Category) items.get(position));
+            ViewHolderSysCategoryItem h = (ViewHolderSysCategoryItem) holder;
+            h.binding.setCategory((SysCategory) items.get(position));
             h.binding.setPlusclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -71,8 +69,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
         } else if (type == ListItem.TYPE_FIELD)  {
             Log.d(TAG, "Bind field");
-            ViewHolderFieldItem h = (ViewHolderFieldItem) holder;
-            h.binding.setField((Field) items.get(position));
+            ViewHolderSysFieldItem h = (ViewHolderSysFieldItem) holder;
+            h.binding.setField((SysField) items.get(position));
             h.binding.setCardclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,7 +79,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
 
-            switch (((Field) items.get(position)).getType()) {
+            switch (((SysField) items.get(position)).getType()) {
                 case SHORT_TEXT: {
                     h.binding.icon0.setImageResource(R.drawable.ic_title_black_24dp);
                 }
@@ -89,9 +87,9 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     h.binding.icon0.setImageResource(R.drawable.ic_text_fields_black_24dp);
                 }
                 case NUMERIC: {
-                    for (int i = 0; i < ((Field) items.get(position)).getValues().size(); i++) {
+                    for (int i = 0; i < ((SysField) items.get(position)).getValues().size(); i++) {
                         int resource;
-                        if (((Field) items.get(position)).getRule(i) != null) {
+                        if (((SysField) items.get(position)).getRule(i) != null) {
                             resource = R.drawable.ic_functions_black_24dp;
                         } else {
                             resource = R.drawable.ic_looks_one_black_24dp;
@@ -121,21 +119,21 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.size();
     }
 
-    private class ViewHolderCategoryItem extends RecyclerView.ViewHolder {
+    private class ViewHolderSysCategoryItem extends RecyclerView.ViewHolder {
 
-        ItemCategoryBinding binding;
+        ItemSyscategoryBinding binding;
 
-        ViewHolderCategoryItem(View v) {
+        ViewHolderSysCategoryItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }
     }
 
-    private class ViewHolderFieldItem extends RecyclerView.ViewHolder {
+    private class ViewHolderSysFieldItem extends RecyclerView.ViewHolder {
 
-        ItemFieldBinding binding;
+        ItemSysfieldBinding binding;
 
-        ViewHolderFieldItem(View v) {
+        ViewHolderSysFieldItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }

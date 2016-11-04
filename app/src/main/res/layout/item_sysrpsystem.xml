@@ -2,10 +2,10 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="com.sam.team.character.viewmodel.RPSystem"/>
+        <import type="com.sam.team.character.viewmodel.SysRPSystem"/>
         <variable
             name="system"
-            type="RPSystem" />
+            type="SysRPSystem" />
         <variable
             name="cardclick"
             type="android.view.View.OnClickListener" />

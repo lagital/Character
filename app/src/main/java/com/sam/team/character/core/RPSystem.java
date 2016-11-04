@@ -1,8 +1,7 @@
 
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,19 +12,12 @@ import java.util.TreeMap;
  *
  * @author Vaize
  */
-public class RPSystem extends BaseObservable implements ListItem{
-
-    private static final String TAG = "RPSystem";
+public class RPSystem<E extends Element> extends BaseObservable {
 
     private String name, version, copyright;
-    private TreeMap<String, TreeMap<String, Element>> elements;
+    private TreeMap<String, TreeMap<String, E>> elements;
 
-    //constructors
-    public RPSystem() {
-        name = version = copyright= null;
-        elements = new TreeMap<>();
-    }
-
+    // character constructor
     public RPSystem(String name) {
         this.name = name;
         version = null;
@@ -33,6 +25,7 @@ public class RPSystem extends BaseObservable implements ListItem{
         elements = new TreeMap<>();
     }
 
+    // system constructor
     public RPSystem(String name, String version, String copyright) {
         this.name = name;
         this.version = version;
@@ -45,7 +38,6 @@ public class RPSystem extends BaseObservable implements ListItem{
         this.name = name;
     }
 
-    @Bindable
     public String getName() {
         return name;
     }
@@ -55,7 +47,6 @@ public class RPSystem extends BaseObservable implements ListItem{
         this.version = version;
     }
 
-    @Bindable
     public String getVersion() {
         return version;
     }
@@ -64,20 +55,20 @@ public class RPSystem extends BaseObservable implements ListItem{
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
-    @Bindable
+
     public String getCopyright() {
         return copyright;
     }
 
     //work with elements
-    public void addElement(Element element) {
+    public void addElement(E element) {
         if (element.getType() == null || element.getName() == null) return;
         if (!elements.containsKey(element.getType())) {
-            TreeMap<String, Element> temp = new TreeMap<String, Element>();
+            TreeMap<String, E> temp = new TreeMap<String, E>();
             temp.put(element.getName(), element);
             elements.put(element.getType(), temp);
         } else {
-            TreeMap<String, Element> temp = elements.get(element.getType());
+            TreeMap<String, E> temp = elements.get(element.getType());
             temp.put(element.getName(), element);
             elements.put(element.getType(), temp);
         }
@@ -85,12 +76,12 @@ public class RPSystem extends BaseObservable implements ListItem{
 
     public void removeElement(String type, String name) {
         if (elements.containsKey(type)) {
-            TreeMap<String, Element> temp = elements.get(type);
+            TreeMap<String, E> temp = elements.get(type);
             if (temp.containsKey(name)) temp.remove(name);
         }
     }
 
-    public Element getElement(String type, String name) {
+    public E getElement(String type, String name) {
         return elements.get(type).get(name);
     }
 
@@ -102,9 +93,9 @@ public class RPSystem extends BaseObservable implements ListItem{
         }
     }
 
-    public ArrayList<Element> getElements () {
-        ArrayList<Element> el = new ArrayList<>();
-        for (TreeMap<String, Element> tm : elements.values()) {
+    public ArrayList<E> getElements () {
+        ArrayList<E> el = new ArrayList<>();
+        for (TreeMap<String, E> tm : elements.values()) {
             for (String s : tm.keySet()) {
                 el.add(tm.get(s));
             }
@@ -123,10 +114,5 @@ public class RPSystem extends BaseObservable implements ListItem{
         } else {
             return null;
         }
-    }
-
-    @Override
-    public int getItemType() {
-        return TYPE_SYSTEM;
     }
 }

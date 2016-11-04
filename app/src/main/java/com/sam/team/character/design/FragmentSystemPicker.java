@@ -20,11 +20,9 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel.Element;
-import com.sam.team.character.viewmodel.Field;
-import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.RPSystem;
-import com.sam.team.character.viewmodel.Context;
+import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysField;
+import com.sam.team.character.viewmodel.SysRPSystem;
 
 import java.util.ArrayList;
 
@@ -44,7 +42,7 @@ public class FragmentSystemPicker extends Fragment{
     private FloatingActionButton mAddMiniFAB;
     private FloatingActionButton mLoadMiniFAB;
     private ArrayList<ListItem> items;
-    private ArrayList<RPSystem> systems;
+    private ArrayList<SysRPSystem> systems;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,16 +152,16 @@ public class FragmentSystemPicker extends Fragment{
                         String e_copyright = copyright.getText().toString();
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_system_dflt_name))) {
-                            RPSystem rps;
+                            SysRPSystem rps;
 
                             if (e_version.isEmpty()) {
-                                rps = new RPSystem(e_name,
+                                rps = new SysRPSystem(e_name,
                                         getResources().getString(R.string.new_system_dflt_version),
                                         e_copyright);
                                 systems.add(rps);
                                 Context.getInstance().setCurrentSystem(rps);
                             } else {
-                                rps = new RPSystem(e_name, e_version, e_copyright);
+                                rps = new SysRPSystem(e_name, e_version, e_copyright);
                                 systems.add(rps);
                             }
                             fillList();
@@ -189,12 +187,12 @@ public class FragmentSystemPicker extends Fragment{
         /* DEBUG */
         if (BuildConfig.DEBUG) {
             int i;
-            RPSystem rps = new RPSystem("Game", "1.0", "Bla-bla");
-            Element e = new Element("Character Sheet", "CHARACTER", rps);
-            e.addField(new Field("Main", "Name", Field.FieldType.SHORT_TEXT));
-            e.addField(new Field("Main", "Surname", Field.FieldType.SHORT_TEXT));
-            e.addField(new Field("Additional", "Knowledge", Field.FieldType.LONG_TEXT));
-            Field f = new Field("Additional", "Power", Field.FieldType.NUMERIC);
+            SysRPSystem rps = new SysRPSystem("Game", "1.0", "Bla-bla");
+            SysElement e = new SysElement("Character Sheet", "CHARACTER", rps);
+            e.addField(new SysField("Main", "Name", SysField.FieldType.SHORT_TEXT, e));
+            e.addField(new SysField("Main", "Surname", SysField.FieldType.SHORT_TEXT, e));
+            e.addField(new SysField("Additional", "Knowledge", SysField.FieldType.LONG_TEXT, e));
+            SysField f = new SysField("Additional", "Power", SysField.FieldType.NUMERIC, e);
             i = f.addValue("Test1");
             i = f.addValue("Test2");
             i = f.addValue("Test3");
@@ -223,9 +221,9 @@ public class FragmentSystemPicker extends Fragment{
 
     public void fillList () {
         items.clear();
-        for (RPSystem s : systems) {
+        for (SysRPSystem s : systems) {
             items.add(s);
-            for (Element e : s.getElements()) {
+            for (SysElement e : s.getElements()) {
                 items.add(e);
             }
         }

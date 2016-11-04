@@ -1,33 +1,28 @@
 
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
-import android.databinding.Bindable;
-import android.graphics.drawable.Drawable;
-
-import com.sam.team.character.R;
-
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author Vaize
  */
 
-public class Field extends BaseObservable implements ListItem {
+public class Field<E extends Element> extends BaseObservable {
 
     private static final String TAG = "Field";
 
     private String category, name;
+    private E element;
     private ArrayList<String> values, calcRules;
-
     private FieldType type;
 
-    public Field(String category, String name, FieldType type) {
+    public Field(String category, String name, FieldType type, E element) {
         this.category = category;
         this.name = name;
         this.type = type;
+        this.element = element;
         values = new ArrayList();
         calcRules = new ArrayList();
     }
@@ -36,7 +31,6 @@ public class Field extends BaseObservable implements ListItem {
 
     public void setName(String name) { this.name = name; }
 
-    @Bindable
     public String getName() { return name; }
 
     public void setCategory(String category) { this.category = category; }
@@ -55,7 +49,6 @@ public class Field extends BaseObservable implements ListItem {
         else return values.get(id);
     }
 
-    @Bindable
     public String getValue() {
         if (values.isEmpty()) return "NaN";
         else return values.get(0); 
@@ -85,11 +78,6 @@ public class Field extends BaseObservable implements ListItem {
         return 0;
     }
 
-    @Override
-    public int getItemType() {
-        return TYPE_FIELD;
-    }
-
     public FieldType getType() {
         return type;
     }
@@ -98,7 +86,9 @@ public class Field extends BaseObservable implements ListItem {
         return type.name();
     }
 
-
+    public E getElement() {
+        return element;
+    }
 
     public enum FieldType {
         SHORT_TEXT,

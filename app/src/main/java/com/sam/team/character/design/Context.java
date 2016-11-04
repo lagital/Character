@@ -1,4 +1,7 @@
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.design;
+
+import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysRPSystem;
 
 /**
  * Created by pborisenko on 10/8/2016.
@@ -8,8 +11,8 @@ public class Context {
 
     private static Context instance;
 
-    private RPSystem currentSystem;
-    private Element element;
+    private SysRPSystem currentSystem;
+    private SysElement element;
 
     public static synchronized Context getInstance() {
         if (instance == null) {
@@ -18,19 +21,19 @@ public class Context {
         return instance;
     }
 
-    public RPSystem getCurrentSystem() {
+    public SysRPSystem getCurrentSystem() {
         return currentSystem;
     }
 
-    public void setCurrentSystem(RPSystem system) {
+    public void setCurrentSystem(SysRPSystem system) {
         this.currentSystem = system;
     }
 
-    public void cacheElement (Element element) {
+    public void cacheElement (SysElement element) {
         this.element = element;
     }
 
-    public Element getElementFromCache () {
+    public SysElement getElementFromCache () {
         return element;
     }
 }

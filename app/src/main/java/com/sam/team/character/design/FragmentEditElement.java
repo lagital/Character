@@ -19,11 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel.Category;
-import com.sam.team.character.viewmodel.Element;
-import com.sam.team.character.viewmodel.Field;
-import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.Context;
+import com.sam.team.character.viewmodel.SysCategory;
+import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysField;
 
 import java.util.ArrayList;
 
@@ -42,7 +40,7 @@ public class FragmentEditElement extends Fragment {
     /* Categories and fields: */
     private ArrayList<ListItem> items;
 
-    private Element element;
+    private SysElement element;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,7 +103,7 @@ public class FragmentEditElement extends Fragment {
                         String e_name = name.getText().toString();
                         if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                 getResources().getString(R.string.new_category_dflt_name))) {
-                            items.add(new Category(e_name));
+                            items.add(new SysCategory(e_name));
                             mAdapter.notifyDataSetChanged();
                             dialog.cancel();
                         } else {
@@ -125,9 +123,6 @@ public class FragmentEditElement extends Fragment {
         mAdapter = new AdapterCategoryField(getActivity(), items);
         mRecyclerView.setAdapter(mAdapter);
 
-
-
-
         return view;
     }
 
@@ -135,8 +130,8 @@ public class FragmentEditElement extends Fragment {
         items.clear();
         if (element != null) {
             for (String s : element.getCategories()) {
-                items.add(new Category(s, element));
-                for (Field f : element.getFieldsByCategory(s)) {
+                items.add(new SysCategory(s, element));
+                for (SysField f : element.getFieldsByCategory(s)) {
                     items.add(f);
                 }
             }

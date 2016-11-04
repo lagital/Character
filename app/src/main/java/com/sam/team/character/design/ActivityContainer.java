@@ -1,19 +1,13 @@
 package com.sam.team.character.design;
 
 import android.os.Bundle;
-import android.support.annotation.IntegerRes;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.graphics.drawable.TintAwareDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.sam.team.character.R;
-
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by pborisenko on 10/27/2016.

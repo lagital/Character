@@ -1,4 +1,4 @@
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
@@ -13,25 +13,24 @@ import java.util.TreeMap;
  *
  * @author Vaize
  */
-public class Element extends BaseObservable implements ListItem{
+public class Element<F extends Field, S extends RPSystem> extends BaseObservable {
 
     private static final String TAG = "Element";
 
     private String name, type;
-    private RPSystem rpSystem;
-    private TreeMap<String, TreeMap<String, Field>> fields;
+    private S system;
+    private TreeMap<String, TreeMap<String, F>> fields;
 
     //constructors
-    public Element(RPSystem system) {
+    public Element(S system) {
         name = type = null;
-        this.rpSystem = system;
         fields = new TreeMap<>();
     }
 
-    public Element(String name, String type, RPSystem system) {
+    public Element(String name, String type, S system) {
         this.name = name;
         this.type = type;
-        this.rpSystem = system;
+        this.system = system;
         fields = new TreeMap<>();
     }
 
@@ -56,18 +55,18 @@ public class Element extends BaseObservable implements ListItem{
     }
 
     //work with fields
-    public void addField(Field field) {
+    public void addField(F field) {
         if (field.getCategory() == null || field.getName() == null) {
             Log.d(TAG, "Incorrect field format");
             return;
         }
         if (!fields.containsKey(field.getCategory())) {
-            TreeMap<String, Field> temp = new TreeMap<String, Field>();
+            TreeMap<String, F> temp = new TreeMap<String, F>();
             temp.put(field.getName(), field);
             fields.put(field.getCategory(), temp);
             Log.d(TAG, "Field with new category");
         } else {
-            TreeMap<String, Field> temp = fields.get(field.getCategory());
+            TreeMap<String, F> temp = fields.get(field.getCategory());
             temp.put(field.getName(), field);
             fields.put(field.getCategory(), temp);
             Log.d(TAG, "Field with old category");
@@ -76,19 +75,19 @@ public class Element extends BaseObservable implements ListItem{
 
     public void removeField(String type, String name) {
         if (fields.containsKey(type)) {
-            TreeMap<String, Field> temp = fields.get(type);
+            TreeMap<String, F> temp = fields.get(type);
             if (temp.containsKey(name)) temp.remove(name);
         }
     }
 
-    public Field getField(String category, String name) {
+    public F getField(String category, String name) {
         return fields.get(category).get(name);
     }
 
-    public ArrayList<Field> getFieldsByCategory(String category) {
-        ArrayList<Field> l = new ArrayList<>();
+    public ArrayList<F> getFieldsByCategory(String category) {
+        ArrayList<F> l = new ArrayList<>();
         if (fields.containsKey(category)) {
-            for (Map.Entry<String, Field> entry : fields.get(category).entrySet()) {
+            for (Map.Entry<String, F> entry : fields.get(category).entrySet()) {
                 l.add(entry.getValue());
             }
             return l;
@@ -110,14 +109,7 @@ public class Element extends BaseObservable implements ListItem{
         }
     }
 
-    //work with parent system
-    public RPSystem getRpSystem() {
-        return rpSystem;
+    public S getSystem() {
+        return system;
     }
-
-    @Override
-    public int getItemType() {
-        return TYPE_ELEMENT;
-    }
-
 }

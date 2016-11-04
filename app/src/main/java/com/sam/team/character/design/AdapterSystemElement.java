@@ -15,12 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sam.team.character.R;
-import com.sam.team.character.databinding.ItemElementBinding;
-import com.sam.team.character.databinding.ItemRpsystemBinding;
-import com.sam.team.character.viewmodel.Element;
-import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.RPSystem;
-import com.sam.team.character.viewmodel.Context;
+import com.sam.team.character.databinding.ItemSyselementBinding;
+import com.sam.team.character.databinding.ItemSysrpsystemBinding;
+import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysRPSystem;
 
 import java.util.ArrayList;
 
@@ -45,15 +43,15 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if (viewType == ListItem.TYPE_SYSTEM) {
-            ItemRpsystemBinding binding = ItemRpsystemBinding.inflate(inflater, parent, false);
-            return new AdapterSystemElement.ViewHolderSystemItem(binding.getRoot());
+            ItemSysrpsystemBinding binding = ItemSysrpsystemBinding.inflate(inflater, parent, false);
+            return new AdapterSystemElement.ViewHolderSysRPSystemItem(binding.getRoot());
         } else if (viewType == ListItem.TYPE_ELEMENT) {
-            ItemElementBinding binding = ItemElementBinding.inflate(inflater, parent, false);
-            return new AdapterSystemElement.ViewHolderElementItem(binding.getRoot());
+            ItemSyselementBinding binding = ItemSyselementBinding.inflate(inflater, parent, false);
+            return new AdapterSystemElement.ViewHolderSysElementItem(binding.getRoot());
         }
 
-        ItemRpsystemBinding binding = ItemRpsystemBinding.inflate(inflater, parent, false);
-        return new ViewHolderSystemItem(binding.getRoot());
+        ItemSysrpsystemBinding binding = ItemSysrpsystemBinding.inflate(inflater, parent, false);
+        return new ViewHolderSysRPSystemItem(binding.getRoot());
     }
 
     @Override
@@ -61,13 +59,13 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_SYSTEM) {
             Log.d(TAG, "Bind system");
-            AdapterSystemElement.ViewHolderSystemItem h = (AdapterSystemElement.ViewHolderSystemItem) holder;
-            h.binding.setSystem((RPSystem) items.get(position));
+            AdapterSystemElement.ViewHolderSysRPSystemItem h = (AdapterSystemElement.ViewHolderSysRPSystemItem) holder;
+            h.binding.setSystem((SysRPSystem) items.get(position));
             h.binding.setCardclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Click on system " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem((RPSystem) items.get(position));
+                    Context.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
                 }
             });
             h.binding.setShareclick(new View.OnClickListener() {
@@ -75,14 +73,14 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     //TODO: sharing the system
                     Log.d(TAG, "Sharing system " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem((RPSystem) items.get(position));
+                    Context.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
                 }
             });
             h.binding.setAddclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit system " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem((RPSystem) items.get(position));
+                    Context.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
 
                     final LinearLayout l = (LinearLayout) View.inflate(fragment.getActivity(),
                             R.layout.dialog_new_element, null);
@@ -130,7 +128,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
                                 // TODO: work with type
                                 Context.getInstance().getCurrentSystem().addElement(
-                                        new Element(e_name, "Test", Context.getInstance().getCurrentSystem()));
+                                        new SysElement(e_name, "Test",
+                                                Context.getInstance().getCurrentSystem()));
                                 fragment.fillList();
                                 dialog.cancel();
                             } else {
@@ -144,8 +143,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
         } else if (type == ListItem.TYPE_ELEMENT) {
             Log.d(TAG, "Bind element");
-            AdapterSystemElement.ViewHolderElementItem h = (AdapterSystemElement.ViewHolderElementItem) holder;
-            h.binding.setElement((Element) items.get(position));
+            AdapterSystemElement.ViewHolderSysElementItem h = (AdapterSystemElement.ViewHolderSysElementItem) holder;
+            h.binding.setElement((SysElement) items.get(position));
             h.binding.setCardclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -157,8 +156,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit element " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem(((Element) items.get(position)).getRpSystem());
-                    Context.getInstance().cacheElement((Element) items.get(position));
+                    Context.getInstance().setCurrentSystem(((SysElement) items.get(position)).getSystem());
+                    Context.getInstance().cacheElement((SysElement) items.get(position));
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_ELEMENT);
                 }
@@ -171,21 +170,21 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.size();
     }
 
-    private class ViewHolderSystemItem extends RecyclerView.ViewHolder {
+    private class ViewHolderSysRPSystemItem extends RecyclerView.ViewHolder {
 
-        ItemRpsystemBinding binding;
+        ItemSysrpsystemBinding binding;
 
-        ViewHolderSystemItem(View v) {
+        ViewHolderSysRPSystemItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }
     }
 
-    private class ViewHolderElementItem extends RecyclerView.ViewHolder {
+    private class ViewHolderSysElementItem extends RecyclerView.ViewHolder {
 
-        ItemElementBinding binding;
+        ItemSyselementBinding binding;
 
-        ViewHolderElementItem(View v) {
+        ViewHolderSysElementItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }
