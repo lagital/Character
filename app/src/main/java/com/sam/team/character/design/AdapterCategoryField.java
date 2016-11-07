@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.sam.team.character.R;
 import com.sam.team.character.databinding.ItemSyscategoryBinding;
 import com.sam.team.character.databinding.ItemSysfieldBinding;
+import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysCategory;
 import com.sam.team.character.viewmodel.SysField;
 
@@ -58,6 +59,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Add field " + Integer.toString(position));
+                    ((ActivityContainer) context).replaceFragment(ActivityContainer
+                            .FragmentType.EDIT_FIELD);
                 }
             });
             h.binding.setEditclick(new View.OnClickListener() {

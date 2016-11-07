@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
+import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
 import com.sam.team.character.viewmodel.SysRPSystem;
@@ -159,13 +160,13 @@ public class FragmentSystemPicker extends Fragment{
                                         getResources().getString(R.string.new_system_dflt_version),
                                         e_copyright);
                                 systems.add(rps);
-                                Context.getInstance().setCurrentSystem(rps);
+                                Session.getInstance().setCurrentSystem(rps);
                             } else {
                                 rps = new SysRPSystem(e_name, e_version, e_copyright);
                                 systems.add(rps);
                             }
                             fillList();
-                            Context.getInstance().setCurrentSystem(rps);
+                            Session.getInstance().setCurrentSystem(rps);
                             dialog.cancel();
                         } else {
                             Toast.makeText(getActivity(),

@@ -2,7 +2,6 @@ package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -14,8 +13,6 @@ import java.util.TreeMap;
  * @author Vaize
  */
 public class Element<F extends Field, S extends RPSystem> extends BaseObservable {
-
-    private static final String TAG = "Element";
 
     private String name, type;
     private S system;
@@ -57,19 +54,16 @@ public class Element<F extends Field, S extends RPSystem> extends BaseObservable
     //work with fields
     public void addField(F field) {
         if (field.getCategory() == null || field.getName() == null) {
-            Log.d(TAG, "Incorrect field format");
             return;
         }
         if (!fields.containsKey(field.getCategory())) {
             TreeMap<String, F> temp = new TreeMap<String, F>();
             temp.put(field.getName(), field);
             fields.put(field.getCategory(), temp);
-            Log.d(TAG, "Field with new category");
         } else {
             TreeMap<String, F> temp = fields.get(field.getCategory());
             temp.put(field.getName(), field);
             fields.put(field.getCategory(), temp);
-            Log.d(TAG, "Field with old category");
         }
     }
 

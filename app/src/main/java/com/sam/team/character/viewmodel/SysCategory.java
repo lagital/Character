@@ -5,7 +5,6 @@ import android.databinding.Bindable;
 
 import com.sam.team.character.core.Element;
 import com.sam.team.character.core.Field;
-import com.sam.team.character.design.ListItem;
 
 /**
  * Created by pborisenko on 10/4/2016.

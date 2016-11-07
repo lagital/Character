@@ -3,7 +3,6 @@ package com.sam.team.character.viewmodel;
 import android.databinding.Bindable;
 
 import com.sam.team.character.core.RPSystem;
-import com.sam.team.character.design.ListItem;
 
 /**
  * Created by pborisenko on 10/31/2016.

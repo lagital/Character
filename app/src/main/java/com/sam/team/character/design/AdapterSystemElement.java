@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.sam.team.character.R;
 import com.sam.team.character.databinding.ItemSyselementBinding;
 import com.sam.team.character.databinding.ItemSysrpsystemBinding;
+import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysRPSystem;
 
@@ -65,7 +66,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Click on system " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
+                    Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
                 }
             });
             h.binding.setShareclick(new View.OnClickListener() {
@@ -73,14 +74,14 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     //TODO: sharing the system
                     Log.d(TAG, "Sharing system " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
+                    Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
                 }
             });
             h.binding.setAddclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit system " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
+                    Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
 
                     final LinearLayout l = (LinearLayout) View.inflate(fragment.getActivity(),
                             R.layout.dialog_new_element, null);
@@ -101,7 +102,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getActivity());
                     builder.setView(l);
-                    builder.setTitle(R.string.new_element_dflt_name);
+                    builder.setTitle(R.string.new_element_dialog_title);
                     builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -127,9 +128,9 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
                                     fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
                                 // TODO: work with type
-                                Context.getInstance().getCurrentSystem().addElement(
+                                Session.getInstance().getCurrentSystem().addElement(
                                         new SysElement(e_name, "Test",
-                                                Context.getInstance().getCurrentSystem()));
+                                                Session.getInstance().getCurrentSystem()));
                                 fragment.fillList();
                                 dialog.cancel();
                             } else {
@@ -143,8 +144,9 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
         } else if (type == ListItem.TYPE_ELEMENT) {
             Log.d(TAG, "Bind element");
+            final SysElement e = (SysElement) items.get(position);
             AdapterSystemElement.ViewHolderSysElementItem h = (AdapterSystemElement.ViewHolderSysElementItem) holder;
-            h.binding.setElement((SysElement) items.get(position));
+            h.binding.setElement(e);
             h.binding.setCardclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -156,8 +158,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit element " + Integer.toString(position));
-                    Context.getInstance().setCurrentSystem(((SysElement) items.get(position)).getSystem());
-                    Context.getInstance().cacheElement((SysElement) items.get(position));
+                    Session.getInstance().setCurrentSystem(e.getSystem());
+                    Session.getInstance().cacheElement(e);
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_ELEMENT);
                 }

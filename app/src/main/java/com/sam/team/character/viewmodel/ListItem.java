@@ -1,4 +1,4 @@
-package com.sam.team.character.design;
+package com.sam.team.character.viewmodel;
 
 /**
  * Created by pborisenko on 10/16/2016.

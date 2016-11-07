@@ -1,9 +1,9 @@
 <resources>
 
     <!-- Application -->
-    <string name="app_name">Character</string>
+    <string name="app_name">RPG Builder</string>
 
-    <!-- Activity System Picker -->
+    <!-- Fragment System Picker -->
     <string name="system_picker_title">Games</string>
     <string name="fab_add_system_dscr">Create a game</string>
     <string name="fab_load_system_dscr">Load a game</string>
@@ -15,18 +15,29 @@
     <string name="new_system_dflt_version">1.0</string>
     <string name="new_system_dflt_copyright">Copyright</string>
 
-    <!-- Activity Element Picker -->
+    <!-- Fragment Element Picker -->
     <string name="element_picker_title">Pages</string>
     <string name="new_element_dialog_title">New page</string>
     <string name="new_element_empty_name">Title is empty</string>
     <string name="new_element_dflt_name">Title*</string>
     <string name="field_type_decription">Field type</string>
 
-    <!-- Activity Edit Element -->
+    <!-- Fragment Edit Element -->
     <string name="edit_element_title">Page</string>
-    <string name="new_category_dialog_title">New category</string>
+    <string name="new_category_dialog_title">New section</string>
     <string name="new_category_empty_name">Title is empty</string>
     <string name="new_category_dflt_name">Section name*</string>
+
+    <!-- Fragment Edit Field -->
+    <string name="edit_field_title">New attribute</string>
+    <string name="edit_field_dflt_name">Name*</string>
+    <string name="edit_field_dflt_type">Type*</string>
+    <string name="edit_field_editable">Editable</string>
+    <string name="edit_field_editable_yes">Yes</string>
+    <string name="edit_field_editable_no">No</string>
+    <string name="edit_field_dflt_value">Value*</string>
+    <string name="edit_field_btn_ok">OK</string>
+    <string name="edit_field_btn_cancel">Cancel</string>
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>

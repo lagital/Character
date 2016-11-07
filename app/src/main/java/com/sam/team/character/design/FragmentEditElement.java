@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sam.team.character.R;
+import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysCategory;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
@@ -117,7 +118,7 @@ public class FragmentEditElement extends Fragment {
         });
 
         items = new ArrayList<>();
-        element = Context.getInstance().getElementFromCache();
+        element = Session.getInstance().getElementFromCache();
         fillList();
 
         mAdapter = new AdapterCategoryField(getActivity(), items);

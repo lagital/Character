@@ -3,7 +3,6 @@ package com.sam.team.character.viewmodel;
 import android.databinding.Bindable;
 
 import com.sam.team.character.core.Element;
-import com.sam.team.character.design.ListItem;
 
 import java.util.ArrayList;
 

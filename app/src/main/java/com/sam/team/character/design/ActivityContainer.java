@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.sam.team.character.R;
@@ -21,6 +22,7 @@ public class ActivityContainer extends AppCompatActivity {
     FragmentManager mFragmentManager;
     FragmentSystemPicker mFragmentSystemPicker;
     FragmentEditElement mFragmentEditElement;
+    FragmentEditField mFragmentEditField;
 
     private Toolbar mToolbar;
 
@@ -47,6 +49,7 @@ public class ActivityContainer extends AppCompatActivity {
         mFragmentManager = getSupportFragmentManager();
         mFragmentSystemPicker = new FragmentSystemPicker();
         mFragmentEditElement = new FragmentEditElement();
+        mFragmentEditField = new FragmentEditField();
 
         if (savedInstanceState == null) {
             // on first run
@@ -64,21 +67,32 @@ public class ActivityContainer extends AppCompatActivity {
 
         if (toFragment != null) {
             switch (toFragment) {
-                case SYSTEM_PICKER: fragmentTransaction.replace(R.id.container,
-                        mFragmentSystemPicker);
-                case EDIT_ELEMENT: fragmentTransaction.replace(R.id.container,
-                        mFragmentEditElement);
+                case SYSTEM_PICKER: {
+                    fragmentTransaction.replace(R.id.container,
+                            mFragmentSystemPicker);
+                    break;
+                }
+                case EDIT_ELEMENT: {
+                    fragmentTransaction.replace(R.id.container,
+                            mFragmentEditElement);
+                    break;
+                }
+                case EDIT_FIELD: {
+                    fragmentTransaction.replace(R.id.container,
+                            mFragmentEditField);
+                    break;
+                }
             }
+
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
-
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
     }
 
     public enum FragmentType {
         SYSTEM_PICKER,
-        EDIT_ELEMENT
+        EDIT_ELEMENT,
+        EDIT_FIELD
     }
 
     @Override
