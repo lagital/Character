@@ -3,6 +3,7 @@ package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
@@ -113,6 +114,107 @@ public class RPSystem<E extends Element> extends BaseObservable {
             return elements.get(type).keySet();
         } else {
             return null;
+        }
+    }
+    
+    //calculation
+    public void calculation(String exp){
+        ArrayList<String> operands = new ArrayList();
+        operands.addAll(Arrays.asList(exp.split("[\\+\\-\\*\\/]")));
+        ArrayList<String> operators = new ArrayList();
+        operators.addAll(Arrays.asList(exp.split("[\\w@:]+")));
+        //delete space (need improve regex)
+        operators.remove(0);
+        //calculcation (need improve)
+        while(operators.size() > 0){
+            if (operators.contains("*")){
+                if (operators.contains("/")){
+                    if (operators.indexOf("*") < operators.indexOf("/")){
+                        int tmp = operators.indexOf("*");
+                        operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) *
+                                                         Double.parseDouble(operands.get(tmp + 1))
+                        ));
+                        operators.remove(tmp);
+                        operands.remove(tmp + 1);
+                        continue; 
+                    } else{
+                        
+                    }
+                } else{
+                    int tmp = operators.indexOf("*");
+                    operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) *
+                                                     Double.parseDouble(operands.get(tmp + 1))
+                    ));
+                    operators.remove(tmp);
+                    operands.remove(tmp + 1);
+                    continue; 
+                }
+            }
+            if (operators.contains("/")){
+                if (operators.contains("*")){
+                    if (operators.indexOf("/") < operators.indexOf("*")){
+                        int tmp = operators.indexOf("/");
+                        operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) /
+                                                         Double.parseDouble(operands.get(tmp + 1))
+                        ));
+                        operators.remove(tmp);
+                        operands.remove(tmp + 1);
+                        continue; 
+                    } else{
+                    }
+                } else{
+                    int tmp = operators.indexOf("/");
+                    operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) /
+                                                     Double.parseDouble(operands.get(tmp + 1))
+                    ));
+                    operators.remove(tmp);
+                    operands.remove(tmp + 1);
+                    continue; 
+                }
+            }
+            if (operators.contains("+")){
+                if (operators.contains("-")){
+                    if (operators.indexOf("+") < operators.indexOf("-")){
+                        int tmp = operators.indexOf("+");
+                        operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
+                                                         Double.parseDouble(operands.get(tmp + 1))
+                        ));
+                        operators.remove(tmp);
+                        operands.remove(tmp + 1);
+                        continue; 
+                    } else{
+                        
+                    }
+                } else{
+                    int tmp = operators.indexOf("+");
+                    operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) +
+                                                     Double.parseDouble(operands.get(tmp + 1))
+                    ));
+                    operators.remove(tmp);
+                    operands.remove(tmp + 1);
+                    continue; 
+                }
+            }
+            if (operators.contains("-")){
+                if (operators.contains("+")){
+                    if (operators.indexOf("-") < operators.indexOf("+")){
+                        int tmp = operators.indexOf("-");
+                        operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
+                                                         Double.parseDouble(operands.get(tmp + 1))
+                        ));
+                        operators.remove(tmp);
+                        operands.remove(tmp + 1);
+                    } 
+                } else{
+                    int tmp = operators.indexOf("-");
+                    operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
+                                                     Double.parseDouble(operands.get(tmp + 1))
+                    ));
+                    operators.remove(tmp);
+                    operands.remove(tmp + 1);
+                }
+            }
+            System.out.println(operands.get(0));
         }
     }
 }
