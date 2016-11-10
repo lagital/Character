@@ -117,14 +117,19 @@ public class RPSystem<E extends Element> extends BaseObservable {
         }
     }
     
-    //calculation
+    //calculation   
     public String calculateExp(String exp){
         ArrayList<String> operands = new ArrayList();
-        operands.addAll(Arrays.asList(exp.split("[\\+\\-\\*\\/)]+[()]*")));
+        operands.addAll(Arrays.asList(exp.split("[\\+\\-\\*\\/)]+[()]*|[()]+")));
         ArrayList<String> operators = new ArrayList();
-        operators.addAll(Arrays.asList(exp.split("[\\w@:]+")));
-        //delete space (need improve regex)
-        operators.remove(0);
+        operators.addAll(Arrays.asList(exp.split("[\\w@:]?")));
+        //delete empty values (need improve regex)
+        while(operands.contains("")){
+  		    operands.remove(operands.indexOf(""));
+  	    }
+  	    while(operators.contains("")){
+  		    operators.remove(operators.indexOf(""));
+  	    }
         //calculcation (need improve)
         while(operators.size() > 0){
             if (operators.contains("*")){
