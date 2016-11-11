@@ -131,86 +131,69 @@ public class RPSystem<E extends Element> extends BaseObservable {
   		    operators.remove(operators.indexOf(""));
   	    }
         //calculcation (need improve)
+        int tmp = 0;
         while(operators.size() > 0){
             if (operators.contains("*")){
                 if (operators.contains("/")){
                     if (operators.indexOf("*") < operators.indexOf("/")){
-                        int tmp = operators.indexOf("*");
+                        tmp = operators.indexOf("*");
                         operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) *
                                                          Double.parseDouble(operands.get(tmp + 1))
                         ));
-                        operators.remove(tmp);
-                        operands.remove(tmp + 1);
-                        continue; 
-                    } else{
-                        int tmp = operators.indexOf("/");
+                    } else {
+                    	tmp = operators.indexOf("/");
                         operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) /
                                                          Double.parseDouble(operands.get(tmp + 1))
                         ));
-                        operators.remove(tmp);
-                        operands.remove(tmp + 1);
-                        continue;
                     }
-                } else{
-                    int tmp = operators.indexOf("*");
+                } else {
+                	tmp = operators.indexOf("*");
                     operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) *
                                                      Double.parseDouble(operands.get(tmp + 1))
                     ));
-                    operators.remove(tmp);
-                    operands.remove(tmp + 1);
-                    continue; 
                 }
-            }
-            if (operators.contains("/")){
-                int tmp = operators.indexOf("/");
-                operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) /
-                                                 Double.parseDouble(operands.get(tmp + 1))
-                ));
-                operators.remove(tmp);
-                operands.remove(tmp + 1);
-                continue; 
-            }
-            if (operators.contains("+")){
-                if (operators.contains("-")){
-                    if (operators.indexOf("+") < operators.indexOf("-")){
-                        int tmp = operators.indexOf("+");
-                        operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) +
-                                                         Double.parseDouble(operands.get(tmp + 1))
-                        ));
-                        operators.remove(tmp);
-                        operands.remove(tmp + 1);
-                        continue;
-                    } else{
-                        int tmp = operators.indexOf("-");
-                        operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
-                                                         Double.parseDouble(operands.get(tmp + 1))
-                        ));
-                        operators.remove(tmp);
-                        operands.remove(tmp + 1);
-                        continue;
-                    }
-                } else{
-                    int tmp = operators.indexOf("+");
-                    operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) +
+            } else {
+            	if (operators.contains("/")){
+            		tmp = operators.indexOf("/");
+                    operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) /
                                                      Double.parseDouble(operands.get(tmp + 1))
                     ));
-                    operators.remove(tmp);
-                    operands.remove(tmp + 1);
-                    continue; 
-                }
+            	} else {
+            		if (operators.contains("+")){
+                		if (operators.contains("-")){
+                			if (operators.indexOf("+") < operators.indexOf("-")){
+                				tmp = operators.indexOf("+");
+                    			operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) +
+                                			                     Double.parseDouble(operands.get(tmp + 1))
+                    			));
+                			} else {
+                				tmp = operators.indexOf("-");
+                    			operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
+                                			                     Double.parseDouble(operands.get(tmp + 1))
+                    			));
+                			}
+                		} else {
+                			tmp = operators.indexOf("+");
+                    		operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) +
+                               			                     Double.parseDouble(operands.get(tmp + 1))
+                    		));
+                		}
+            		} else {
+            			if (operators.contains("-")){
+            				tmp = operators.indexOf("-");
+                    		operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
+                            		                         Double.parseDouble(operands.get(tmp + 1))
+                    		));
+            			}
+            		}
+            	}
             }
-            if (operators.contains("-")){
-                int tmp = operators.indexOf("-");
-                operands.set(tmp, String.valueOf(Double.parseDouble(operands.get(tmp)) -
-                                                 Double.parseDouble(operands.get(tmp + 1))
-                ));
-                operators.remove(tmp);
-                operands.remove(tmp + 1);
-            }
+            operators.remove(tmp);
+            operands.remove(tmp + 1);        
         }
         
         return operands.get(0);
-    }
+	}
     
     public boolean validateExp(String exp){
         return false;
