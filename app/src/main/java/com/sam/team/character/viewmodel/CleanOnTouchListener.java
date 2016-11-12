@@ -18,18 +18,20 @@ public class CleanOnTouchListener implements View.OnTouchListener{
     private static final String TAG = "CleanOnTouchListener";
 
     private EditText editText;
-    private Context context;
+    private Context  context;
+    private Integer  dfltTextRes;
 
-    public CleanOnTouchListener (Context context, EditText editText) {
+    public CleanOnTouchListener (Context context, EditText editText, Integer dfltTextRes) {
         this.editText    = editText;
         this.context     = context;
+        this.dfltTextRes    = dfltTextRes;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        if (editText.getText().toString().equalsIgnoreCase(
-                context.getResources().getString(R.string.new_element_dflt_name))) {
+        if (editText.getText().toString().equals(
+                context.getResources().getString(dfltTextRes))) {
             editText.setText("");
             editText.setTextColor(ContextCompat.
                     getColor(context, R.color.colorPrimaryText));
@@ -37,5 +39,9 @@ public class CleanOnTouchListener implements View.OnTouchListener{
         }
 
         return false;
+    }
+
+    public static Boolean isValidString (Context c, String s, Integer dfltTextRes) {
+        return !(s.equals(c.getResources().getString(dfltTextRes)) || s.equals(""));
     }
 }

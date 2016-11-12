@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.sam.team.character.R;
 import com.sam.team.character.databinding.ItemSyselementBinding;
 import com.sam.team.character.databinding.ItemSysrpsystemBinding;
+import com.sam.team.character.viewmodel.CleanOnTouchListener;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysRPSystem;
@@ -80,25 +81,14 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             h.binding.setAddclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "Edit system " + Integer.toString(position));
+                    Log.d(TAG, "New element for system " + Integer.toString(position));
                     Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
 
                     final LinearLayout l = (LinearLayout) View.inflate(fragment.getActivity(),
                             R.layout.dialog_new_element, null);
                     final EditText name = (EditText) l.findViewById(R.id.name);
-                    name.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            if (name.getText().toString().equalsIgnoreCase(
-                                    fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
-                                name.setText("");
-                                name.setTextColor(ContextCompat.
-                                        getColor(fragment.getActivity(), R.color.colorPrimaryText));
-                                Log.d(TAG, "Fill element name");
-                            }
-                            return false;
-                        }
-                    });
+                    name.setOnTouchListener(new CleanOnTouchListener(fragment.getActivity(), name,
+                            R.string.new_element_dflt_name));
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getActivity());
                     builder.setView(l);
@@ -126,7 +116,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             EditText name = (EditText) l.findViewById(R.id.name);
                             String e_name = name.getText().toString();
                             if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
-                                    fragment.getActivity().getResources().getString(R.string.new_element_dflt_name))) {
+                                    fragment.getActivity().getResources().getString(R.string.new_element_dialog_title))) {
                                 // TODO: work with type
                                 Session.getInstance().getCurrentSystem().addElement(
                                         new SysElement(e_name, "Test",

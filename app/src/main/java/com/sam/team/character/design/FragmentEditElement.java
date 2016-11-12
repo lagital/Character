@@ -4,14 +4,11 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -19,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sam.team.character.R;
+import com.sam.team.character.viewmodel.CleanOnTouchListener;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysCategory;
 import com.sam.team.character.viewmodel.SysElement;
@@ -63,19 +61,8 @@ public class FragmentEditElement extends Fragment {
                 final LinearLayout l = (LinearLayout) View.inflate(getActivity(),
                         R.layout.dialog_new_category, null);
                 final EditText name = (EditText) l.findViewById(R.id.name);
-                name.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (name.getText().toString().equalsIgnoreCase(
-                                getResources().getString(R.string.new_category_dflt_name))) {
-                            name.setText("");
-                            name.setTextColor(ContextCompat.
-                                    getColor(getActivity(), R.color.colorPrimaryText));
-                            Log.d(TAG, "Fill category name");
-                        }
-                        return false;
-                    }
-                });
+                name.setOnTouchListener(new CleanOnTouchListener(getActivity(), name,
+                        R.string.new_category_dflt_name));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(l);

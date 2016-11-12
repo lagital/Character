@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
+import com.sam.team.character.viewmodel.CleanOnTouchListener;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
@@ -80,47 +81,12 @@ public class FragmentSystemPicker extends Fragment{
                 final EditText name = (EditText) l.findViewById(R.id.name);
                 final EditText version = (EditText) l.findViewById(R.id.version);
                 final EditText copyright = (EditText) l.findViewById(R.id.copyright);
-                name.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (name.getText().toString().equalsIgnoreCase(
-                                getResources().getString(R.string.new_system_dflt_name))) {
-                            name.setText("");
-                            name.setTextColor(ContextCompat.
-                                    getColor(getActivity(), R.color.colorPrimaryText));
-                            Log.d(TAG, "Fill system name");
-                        }
-                        return false;
-                    }
-                });
-
-                version.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (version.getText().toString().equalsIgnoreCase(
-                                getResources().getString(R.string.new_system_dflt_version))) {
-                            version.setText("");
-                            version.setTextColor(ContextCompat.
-                                    getColor(getActivity(), R.color.colorPrimaryText));
-                            Log.d(TAG, "Fill version");
-                        }
-                        return false;
-                    }
-                });
-
-                copyright.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        if (copyright.getText().toString().equalsIgnoreCase(
-                                getResources().getString(R.string.new_system_dflt_copyright))) {
-                            copyright.setText("");
-                            copyright.setTextColor(ContextCompat.
-                                    getColor(getActivity(), R.color.colorPrimaryText));
-                            Log.d(TAG, "Fill copyright");
-                        }
-                        return false;
-                    }
-                });
+                name.setOnTouchListener(new CleanOnTouchListener(getActivity(), name,
+                        R.string.new_system_dflt_name));
+                version.setOnTouchListener(new CleanOnTouchListener(getActivity(), version,
+                        R.string.new_system_dflt_version));
+                copyright.setOnTouchListener(new CleanOnTouchListener(getActivity(), copyright,
+                        R.string.new_system_dflt_copyright));
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(l);

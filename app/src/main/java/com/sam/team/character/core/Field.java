@@ -93,6 +93,7 @@ public class Field<E extends Element> extends BaseObservable {
     public enum FieldType {
         SHORT_TEXT,
         LONG_TEXT,
-        NUMERIC
+        NUMERIC,
+        CALCULATED
     }
 }
