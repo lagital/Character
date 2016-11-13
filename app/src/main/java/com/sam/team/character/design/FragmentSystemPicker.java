@@ -4,14 +4,12 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -51,6 +49,8 @@ public class FragmentSystemPicker extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_system_picker, null);
 
+        Log.d(TAG, "onCreateView");
+
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.system_picker_title);
 
@@ -76,6 +76,8 @@ public class FragmentSystemPicker extends Fragment{
         mAddMiniFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "mAddMiniFAB - add new game");
+
                 final LinearLayout l = (LinearLayout) View.inflate(getActivity(),
                         R.layout.dialog_new_system, null);
                 final EditText name = (EditText) l.findViewById(R.id.name);
@@ -147,12 +149,15 @@ public class FragmentSystemPicker extends Fragment{
         mLoadMiniFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "mLoadMiniFAB - load new game");
                 //TODO: system import
             }
         });
 
         /* DEBUG */
         if (BuildConfig.DEBUG) {
+            Log.d(TAG, "fill debug values");
+
             int i;
             SysRPSystem rps = new SysRPSystem("Game", "1.0", "Bla-bla");
             SysElement e = new SysElement("Character Sheet", "CHARACTER", rps);
@@ -187,6 +192,8 @@ public class FragmentSystemPicker extends Fragment{
     }
 
     public void fillList () {
+        Log.d(TAG, "fillList");
+
         items.clear();
         for (SysRPSystem s : systems) {
             items.add(s);
@@ -199,6 +206,8 @@ public class FragmentSystemPicker extends Fragment{
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
+
         super.onCreate(savedInstanceState);
     }
 }

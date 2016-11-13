@@ -32,7 +32,7 @@
     <string name="edit_field_title">New attribute</string>
     <string name="edit_field_dflt_name">Name*</string>
     <string name="edit_field_dflt_type">Choose type</string>
-    <string name="edit_field_editable">Editable</string>
+    <string name="edit_field_editable">Editable:</string>
     <string name="edit_field_editable_yes">Yes</string>
     <string name="edit_field_editable_no">No</string>
     <string name="edit_field_dflt_value">Value*</string>

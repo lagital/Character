@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class FragmentEditElement extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_element, null);
 
+        Log.d(TAG, "onCreateView");
+
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_element_title);
 
@@ -58,6 +61,8 @@ public class FragmentEditElement extends Fragment {
         mMainFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "Main FAB click");
+
                 final LinearLayout l = (LinearLayout) View.inflate(getActivity(),
                         R.layout.dialog_new_category, null);
                 final EditText name = (EditText) l.findViewById(R.id.name);
@@ -115,6 +120,8 @@ public class FragmentEditElement extends Fragment {
     }
 
     private void fillList () {
+        Log.d(TAG, "fillList");
+
         items.clear();
         if (element != null) {
             for (String s : element.getCategories()) {

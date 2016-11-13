@@ -1,5 +1,6 @@
 package com.sam.team.character.design;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 
@@ -25,15 +26,18 @@ class Step {
     }
 
     void enable () {
+        Log.d(TAG, "enable");
         container.setVisibility(View.VISIBLE);
     }
 
     void disable () {
+        Log.d(TAG, "disable");
         setValid(false);
-        container.setVisibility(View.INVISIBLE);
+        container.setVisibility(View.GONE);
     }
 
     void setValid (Boolean v) {
+        Log.d(TAG, "setValid - " + v.toString());
         if (v == valid) {
             return;
         }
@@ -60,6 +64,7 @@ class Step {
     }
 
     void addControlChild (Step s) {
+        Log.d(TAG, "addControlChild");
         this.toControl.add(s);
     }
 }

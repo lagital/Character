@@ -22,9 +22,9 @@ public class CleanOnTouchListener implements View.OnTouchListener{
     private Integer  dfltTextRes;
 
     public CleanOnTouchListener (Context context, EditText editText, Integer dfltTextRes) {
-        this.editText    = editText;
-        this.context     = context;
-        this.dfltTextRes    = dfltTextRes;
+        this.editText = editText;
+        this.context = context;
+        this.dfltTextRes = dfltTextRes;
     }
 
     @Override
@@ -42,6 +42,7 @@ public class CleanOnTouchListener implements View.OnTouchListener{
     }
 
     public static Boolean isValidString (Context c, String s, Integer dfltTextRes) {
+        Log.d(TAG, "isValidString");
         return !(s.equals(c.getResources().getString(dfltTextRes)) || s.equals(""));
     }
 }

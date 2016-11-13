@@ -31,6 +31,8 @@ public class ActivityContainer extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_container);
 
+        Log.d(TAG, "onCreate");
+
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
@@ -83,6 +85,8 @@ public class ActivityContainer extends AppCompatActivity {
                     break;
                 }
             }
+
+            Log.d(TAG, "replaceFragment to " + toFragment.name());
 
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();

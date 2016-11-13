@@ -2,10 +2,13 @@ package com.sam.team.character.design;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.sam.team.character.R;
 import com.sam.team.character.core.Field;
@@ -50,16 +54,17 @@ public class FragmentEditField extends Fragment {
     private Button btnOK;
     private Button btnCancel;
 
-    private Field.FieldType type;
+    private Integer currentTypeInt;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_field, null);
 
+        Log.d(TAG, "onCreateView");
+
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_field_title);
-
 
         /*----------------------------------- NAME STEP -----------------------------------*/
         nameContainer = (LinearLayout) view.findViewById(R.id.stage_name);
@@ -73,6 +78,8 @@ public class FragmentEditField extends Fragment {
 
             public void afterTextChanged(Editable s) {
                 String str = editTextName.getText().toString();
+                Log.d(TAG, "afterTextChanged to " + str);
+
                 if (CleanOnTouchListener.isValidString(FragmentEditField.this.getActivity(), str,
                         R.string.edit_field_dflt_name)) {
                     nameStep.setValid(true);
@@ -84,6 +91,22 @@ public class FragmentEditField extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
+        /*-------------------------------- EDITABLE STEP -----------------------------------*/
+        editableContainer = (LinearLayout) view.findViewById(R.id.stage_editable);
+        checkBoxEditable = (CheckBox) editableContainer.findViewById(R.id.stage_editable_check);
+        radioGroupEditable = (RadioGroup) editableContainer.findViewById(R.id.stage_editable_group);
+        radioButtonEditableYes = (RadioButton) editableContainer.findViewById(R.id.stage_editable_yes);
+        radioButtonEditableNo = (RadioButton) editableContainer.findViewById(R.id.stage_editable_no);
+        final Step editableStep = new Step(checkBoxEditable, editableContainer);
+
+        radioGroupEditable.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Log.d(TAG, "Radio Group - checked changed");
+                editableStep.setValid(true);
+            }
+        });
+
         /*----------------------------------- TYPE STEP -----------------------------------*/
         typeContainer = (LinearLayout) view.findViewById(R.id.stage_type);
         checkBoxType = (CheckBox) typeContainer.findViewById(R.id.stage_type_check);
@@ -92,18 +115,21 @@ public class FragmentEditField extends Fragment {
 
         String[] stringTypes = new String[] {
                 getActivity().getResources().getString(R.string.edit_field_dflt_type),
-                Field.FieldType.SHORT_TEXT.name(),
-                Field.FieldType.LONG_TEXT.name(),
-                Field.FieldType.NUMERIC.name(),
-                Field.FieldType.CALCULATED.name()
+                ApplicationMain.formatCodeToName(Field.FieldType.SHORT_TEXT.name()),
+                ApplicationMain.formatCodeToName(Field.FieldType.LONG_TEXT.name()),
+                ApplicationMain.formatCodeToName(Field.FieldType.NUMERIC.name()),
+                ApplicationMain.formatCodeToName(Field.FieldType.CALCULATED.name())
         };
         pickerType.setMinValue(0);
-        pickerType.setMinValue(4);
+        pickerType.setMaxValue(stringTypes.length - 1);
+        pickerType.setWrapSelectorWheel(false);
         pickerType.setDisplayedValues(stringTypes);
 
         pickerType.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.d(TAG, "Picker - setOnValueChangedListener " + Integer.toString(newVal));
+                currentTypeInt = newVal;
                 if (newVal != 0) {
                     typeStep.setValid(true);
                 } else {
@@ -124,6 +150,8 @@ public class FragmentEditField extends Fragment {
 
             public void afterTextChanged(Editable s) {
                 String str = editTextValue.getText().toString();
+                Log.d(TAG, "Value - afterTextChanged on " + str);
+
                 if (CleanOnTouchListener.isValidString(FragmentEditField.this.getActivity(), str,
                         R.string.edit_field_dflt_value)) {
                     valueStep.setValid(true);
@@ -135,31 +163,6 @@ public class FragmentEditField extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        /*-------------------------------- EDITABLE STEP -----------------------------------*/
-        editableContainer = (LinearLayout) view.findViewById(R.id.stage_editable);
-        checkBoxEditable = (CheckBox) editableContainer.findViewById(R.id.stage_editable_check);
-        radioGroupEditable = (RadioGroup) editableContainer.findViewById(R.id.stage_editable_group);
-        radioButtonEditableYes = (RadioButton) editableContainer.findViewById(R.id.stage_editable_yes);
-        radioButtonEditableNo = (RadioButton) editableContainer.findViewById(R.id.stage_editable_no);
-        final Step editableStep = new Step(checkBoxEditable, editableContainer) {
-            @Override
-            void enable() {
-                if (type != Field.FieldType.CALCULATED) {
-                    super.enable();
-                } else {
-                    radioButtonEditableNo.setChecked(true);
-                    valueStep.enable();
-                }
-            }
-        };
-
-        radioGroupEditable.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                editableStep.setValid(true);
-            }
-        });
-
         /*---------------------------------- BUTTONS --------------------------------------*/
 
         btnOK = (Button) view.findViewById(R.id.btn_ok);
@@ -168,6 +171,7 @@ public class FragmentEditField extends Fragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "btnCancel onClick");
                 FragmentEditField.this.getActivity().onBackPressed();
             }
         });
@@ -175,7 +179,6 @@ public class FragmentEditField extends Fragment {
         /*--------------------------------- RELATIONS -------------------------------------*/
         nameStep.addControlChild(typeStep);
         typeStep.addControlChild(editableStep);
-        typeStep.addControlChild(valueStep);
         editableStep.addControlChild(valueStep);
 
         return view;

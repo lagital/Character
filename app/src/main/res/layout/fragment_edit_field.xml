@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/scroll"
+            android:divider="@drawable/linear_divider"
             android:fitsSystemWindows="true">
 
             <LinearLayout
@@ -35,6 +36,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/edit_field_dflt_name"
                     android:inputType="text"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_headline_type"
                     android:gravity="center_vertical"/>
             </LinearLayout>
 
@@ -42,7 +45,8 @@
                 android:id="@+id/stage_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <CheckBox
                     android:id="@+id/stage_type_check"
@@ -55,14 +59,19 @@
                     android:id="@+id/stage_type_picker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical"/>
+                    android:gravity="center_vertical"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_headline_type"
+                    android:descendantFocusability="blocksDescendants"
+                    android:solidColor="@color/colorAccent"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/stage_editable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <CheckBox
                     android:id="@+id/stage_editable_check"
@@ -70,6 +79,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:clickable="false"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_headline_type"
+                    android:text="@string/edit_field_editable"/>
 
                 <RadioGroup
                     android:id="@+id/stage_editable_group"
@@ -81,10 +97,16 @@
                     <RadioButton
                         android:id="@+id/stage_editable_yes"
                         android:layout_width="match_parent"
+                        android:text="@string/edit_field_editable_yes"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/text_headline_type"
                         android:layout_height="wrap_content"/>
 
                     <RadioButton
                         android:id="@+id/stage_editable_no"
+                        android:text="@string/edit_field_editable_no"
+                        android:textColor="@color/colorPrimaryText"
+                        android:textSize="@dimen/text_headline_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </RadioGroup>
@@ -94,7 +116,8 @@
                 android:id="@+id/stage_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <CheckBox
                     android:id="@+id/stage_value_check"
@@ -108,6 +131,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/edit_field_dflt_value"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="@dimen/text_headline_type"
                     android:inputType="textMultiLine"
                     android:gravity="center_vertical"/>
             </LinearLayout>

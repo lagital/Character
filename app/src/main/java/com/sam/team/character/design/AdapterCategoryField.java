@@ -28,11 +28,9 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<ListItem> items;
     private Context context;
 
-    public AdapterCategoryField(Context context, ArrayList<ListItem> items) {
+    AdapterCategoryField(Context context, ArrayList<ListItem> items) {
         this.items = items;
         this.context = context;
-
-        Log.d(TAG, "Items total:" + Integer.toString(items.size()));
     }
 
     @Override
