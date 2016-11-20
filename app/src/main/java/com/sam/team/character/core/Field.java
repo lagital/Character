@@ -96,4 +96,14 @@ public class Field<E extends Element> extends BaseObservable {
         NUMERIC,
         CALCULATED
     }
+
+    public static FieldType getTypeFromInt (int i) {
+        switch (i) {
+            case 1: return FieldType.SHORT_TEXT;
+            case 2: return FieldType.LONG_TEXT;
+            case 3: return FieldType.NUMERIC;
+            case 4: return FieldType.CALCULATED;
+            default: return FieldType.SHORT_TEXT;
+        }
+    }
 }

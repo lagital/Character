@@ -5,4 +5,9 @@
     <color name="colorAccent">#536DFE</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
+
+    <color name="colorStepDisabled">#BDBDBD</color>
+    <color name="colorStepEnabled">#66BB6A</color>
+
+    <color name="colorFab">#78909C</color>
 </resources>

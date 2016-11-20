@@ -68,7 +68,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     // TODO: changing category
                 }
             });
-        } else if (type == ListItem.TYPE_FIELD)  {
+        } else if (type == ListItem.TYPE_FIELD) {
             Log.d(TAG, "Bind field");
             ViewHolderSysFieldItem h = (ViewHolderSysFieldItem) holder;
             h.binding.setField((SysField) items.get(position));
@@ -82,34 +82,20 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
             switch (((SysField) items.get(position)).getType()) {
                 case SHORT_TEXT: {
-                    h.binding.icon0.setImageResource(R.drawable.ic_title_black_24dp);
+                    h.binding.icon.setImageResource(R.drawable.ic_title_black_24dp);
+                    break;
                 }
                 case LONG_TEXT: {
-                    h.binding.icon0.setImageResource(R.drawable.ic_text_fields_black_24dp);
+                    h.binding.icon.setImageResource(R.drawable.ic_text_fields_black_24dp);
+                    break;
                 }
                 case NUMERIC: {
-                    for (int i = 0; i < ((SysField) items.get(position)).getValues().size(); i++) {
-                        int resource;
-                        if (((SysField) items.get(position)).getRule(i) != null) {
-                            resource = R.drawable.ic_functions_black_24dp;
-                        } else {
-                            resource = R.drawable.ic_looks_one_black_24dp;
-                        }
-
-                        switch (i) {
-                            case 0: {
-                                h.binding.icon0.setImageResource(resource);
-                            }
-                            case 1: {
-                                h.binding.icon1.setImageResource(resource);
-                                h.binding.icon1.setVisibility(View.VISIBLE);
-                            }
-                            case 2: {
-                                h.binding.icon2.setImageResource(resource);
-                                h.binding.icon2.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
+                    h.binding.icon.setImageResource(R.drawable.ic_looks_one_black_24dp);
+                    break;
+                }
+                case CALCULATED: {
+                    h.binding.icon.setImageResource(R.drawable.ic_functions_black_24dp);
+                    break;
                 }
             }
         }

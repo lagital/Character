@@ -1,8 +1,11 @@
 package com.sam.team.character.design;
 
+import android.graphics.Interpolator;
+import android.graphics.drawable.TransitionDrawable;
 import android.util.Log;
 import android.view.View;
-import android.widget.CheckBox;
+
+import com.sam.team.character.R;
 
 import java.util.ArrayList;
 
@@ -14,15 +17,17 @@ class Step {
 
     private static final String TAG = "Step";
 
-    private CheckBox toCheck;
+    private static Integer transitionTime;
+
     private View container;
     private ArrayList<Step> toControl;
     private Boolean valid = false;
+    private TransitionDrawable transition;
 
-    Step (CheckBox toCheck, View container) {
-        this.toCheck   = toCheck;
+    Step (View container) {
         this.container = container;
         toControl = new ArrayList<>();
+        transition = (TransitionDrawable) container.getBackground();
     }
 
     void enable () {
@@ -38,24 +43,27 @@ class Step {
 
     void setValid (Boolean v) {
         Log.d(TAG, "setValid - " + v.toString());
-        if (v == valid) {
-            return;
-        }
+        setValidUI(v);
         valid = v;
         if (v) {
-            if (toCheck != null) {
-                toCheck.setChecked(true);
-            }
             for (Step s : toControl) {
                 s.enable();
             }
         } else {
-            if (toCheck != null) {
-                toCheck.setChecked(false);
-            }
             for (Step s : toControl) {
                 s.disable();
             }
+        }
+    }
+
+    void setValidUI (Boolean v) {
+        if (v == valid) {
+            return;
+        }
+        if (v) {
+            transition.startTransition(250);
+        } else {
+            transition.reverseTransition(250);
         }
     }
 
@@ -66,5 +74,13 @@ class Step {
     void addControlChild (Step s) {
         Log.d(TAG, "addControlChild");
         this.toControl.add(s);
+    }
+
+    public static Integer getTransitionTime() {
+        return transitionTime;
+    }
+
+    public static void setTransitionTime(Integer transitionTime) {
+        Step.transitionTime = transitionTime;
     }
 }

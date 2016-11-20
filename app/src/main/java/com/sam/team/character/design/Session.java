@@ -17,13 +17,13 @@ class Session {
 
     private SysRPSystem currentSystem;
     private SysElement element;
+    private String category;
 
     static synchronized Session getInstance() {
         if (instance == null) {
             Log.d(TAG, "initiate new singleton object");
             instance = new Session();
         }
-        Log.d(TAG, "use existing singleton object");
         return instance;
     }
 
@@ -45,5 +45,15 @@ class Session {
     SysElement getElementFromCache () {
         Log.d(TAG, "getElementFromCache");
         return element;
+    }
+
+    void cacheCategory (String category) {
+        Log.d(TAG, "cacheCategory");
+        this.category = category;
+    }
+
+    String getCategoryFromCache () {
+        Log.d(TAG, "getCategoryFromCache");
+        return category;
     }
 }

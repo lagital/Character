@@ -13,6 +13,7 @@ import java.util.TreeMap;
  *
  * @author Vaize
  */
+
 public class RPSystem<E extends Element> extends BaseObservable {
 
     private String name, version, copyright;
