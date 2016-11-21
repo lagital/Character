@@ -98,7 +98,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/edit_field_dflt_value"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_headline_type"
+                    android:textStyle="italic"
+                    android:fontFamily="sans-serif-thin"
+                    android:textSize="@dimen/text_subheading2_type"
                     android:inputType="textMultiLine"
                     android:gravity="center_vertical"/>
             </LinearLayout>
@@ -117,6 +119,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/edit_field_btn_ok"
                     android:gravity="center_vertical"
+                    android:visibility="invisible"
                     style="?buttonBarButtonStyle"
                     android:animateLayoutChanges="true"/>
 

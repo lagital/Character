@@ -23,12 +23,4 @@ public class ApplicationMain extends Application{
             SamsaraCore.setLocale(this, null, R.string.locale);
         }
     }
-
-    public static String formatCodeToName (String s) {
-        Log.d(TAG, "formatCodeToName");
-
-        // EXAMPLE_STRING => Example String
-        s = s.toLowerCase().replace("_", " ");
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
 }

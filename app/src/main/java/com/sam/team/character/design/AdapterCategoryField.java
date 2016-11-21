@@ -57,6 +57,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Add field " + Integer.toString(position));
+                    Session.getInstance().cacheCategory(((SysCategory) items.get(position)).getName());
                     ((ActivityContainer) context).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_FIELD);
                 }
@@ -79,25 +80,6 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     // TODO: changing field
                 }
             });
-
-            switch (((SysField) items.get(position)).getType()) {
-                case SHORT_TEXT: {
-                    h.binding.icon.setImageResource(R.drawable.ic_title_black_24dp);
-                    break;
-                }
-                case LONG_TEXT: {
-                    h.binding.icon.setImageResource(R.drawable.ic_text_fields_black_24dp);
-                    break;
-                }
-                case NUMERIC: {
-                    h.binding.icon.setImageResource(R.drawable.ic_looks_one_black_24dp);
-                    break;
-                }
-                case CALCULATED: {
-                    h.binding.icon.setImageResource(R.drawable.ic_functions_black_24dp);
-                    break;
-                }
-            }
         }
     }
 

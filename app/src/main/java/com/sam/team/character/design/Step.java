@@ -1,6 +1,8 @@
 package com.sam.team.character.design;
 
 import android.graphics.Interpolator;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +29,9 @@ class Step {
     Step (View container) {
         this.container = container;
         toControl = new ArrayList<>();
-        transition = (TransitionDrawable) container.getBackground();
+        if ( container.getBackground() instanceof LayerDrawable) {
+            transition = (TransitionDrawable) container.getBackground();
+        }
     }
 
     void enable () {

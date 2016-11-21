@@ -8,6 +8,7 @@
     <string name="fab_add_system_dscr">Create a game</string>
     <string name="fab_load_system_dscr">Load a game</string>
     <string name="system_item_share_icon">Share</string>
+    <string name="system_item_version">Version</string>
     <string name="system_item_add_icon">Add page</string>
     <string name="new_system_dialog_title">New game</string>
     <string name="new_system_empty_name">Title is empty</string>
@@ -41,6 +42,12 @@
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>
+
+    <!-- Field Types -->
+    <string name="field_type_short_text">Short Text</string>
+    <string name="field_type_long_text">Long Text</string>
+    <string name="field_type_numeric">Numeric</string>
+    <string name="field_type_calculated">Formula</string>
 
     <!-- DEBUG -->
     <string name="locale">EN</string>

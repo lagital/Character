@@ -1,6 +1,5 @@
 package com.sam.team.character.design;
 
-import android.content.pm.PackageInstaller;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -16,7 +15,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Switch;
-import android.widget.Toast;
 
 import com.sam.team.character.R;
 import com.sam.team.character.core.Field;
@@ -127,10 +125,10 @@ public class FragmentEditField extends Fragment {
 
         String[] stringTypes = new String[] {
                 getActivity().getResources().getString(R.string.edit_field_dflt_type),
-                ApplicationMain.formatCodeToName(Field.FieldType.SHORT_TEXT.name()),
-                ApplicationMain.formatCodeToName(Field.FieldType.LONG_TEXT.name()),
-                ApplicationMain.formatCodeToName(Field.FieldType.NUMERIC.name()),
-                ApplicationMain.formatCodeToName(Field.FieldType.CALCULATED.name())
+                SysField.formatTypeToName(getActivity(), Field.FieldType.SHORT_TEXT),
+                SysField.formatTypeToName(getActivity(), Field.FieldType.LONG_TEXT),
+                SysField.formatTypeToName(getActivity(), Field.FieldType.NUMERIC),
+                SysField.formatTypeToName(getActivity(), Field.FieldType.CALCULATED)
         };
         pickerType.setMinValue(0);
         pickerType.setMaxValue(stringTypes.length - 1);
@@ -192,6 +190,18 @@ public class FragmentEditField extends Fragment {
             }
         });
 
+        final Step btnOKStep = new Step(btnOK) {
+            @Override
+            void enable() {
+                btnOK.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            void disable() {
+                btnOK.setVisibility(View.INVISIBLE);
+            }
+        };
+
         btnCancel = (Button) view.findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +215,7 @@ public class FragmentEditField extends Fragment {
         nameStep.addControlChild(typeStep);
         typeStep.addControlChild(editableStep);
         editableStep.addControlChild(valueStep);
+        valueStep.addControlChild(btnOKStep);
 
         return view;
     }
