@@ -18,10 +18,10 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="8dp"
-        android:paddingEnd="8dp"
-        android:paddingLeft="8dp"
-        android:paddingStart="8dp"
+        android:layout_marginRight="@dimen/card_margin_end"
+        android:layout_marginEnd="@dimen/card_margin_end"
+        android:layout_marginLeft="@dimen/card_margin_start"
+        android:layout_marginStart="@dimen/card_margin_start"
         android:onClick="@{cardclick}"
         >
 
@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/text_headline_type"
+            android:layout_margin="@dimen/card_icons_margin"
             android:layout_gravity="center_vertical"
             android:text="@{element.name}"/>
 
@@ -40,6 +41,7 @@
             android:layout_gravity="end|center_vertical"
             android:src="@drawable/ic_build_black_24dp"
             android:background="@android:color/transparent"
+            android:layout_margin="@dimen/card_icons_margin"
             android:contentDescription="@string/edit_element_title"
             android:onClick="@{editclick}"/>
 

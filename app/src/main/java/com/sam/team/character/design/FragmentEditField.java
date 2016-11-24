@@ -1,12 +1,15 @@
 package com.sam.team.character.design;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,7 +22,12 @@ import android.widget.Switch;
 import com.sam.team.character.R;
 import com.sam.team.character.core.Field;
 import com.sam.team.character.viewmodel.CleanOnTouchListener;
+import com.sam.team.character.viewmodel.SysCategory;
+import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
+
+import org.antlr.v4.codegen.model.CaptureNextToken;
+import org.apache.commons.codec.binary.StringUtils;
 
 /**
  * Created by pborisenko on 11/5/2016.
@@ -165,6 +173,8 @@ public class FragmentEditField extends Fragment {
 
             public void afterTextChanged(Editable s) {
                 String str = editTextValue.getText().toString();
+                Boolean stringValid = true;
+                int dotCounter = 0;
                 Log.d(TAG, "Value - afterTextChanged on " + str);
 
                 if (CleanOnTouchListener.isValidString(FragmentEditField.this.getActivity(), str,
@@ -173,7 +183,43 @@ public class FragmentEditField extends Fragment {
                 } else {
                     valueStep.setValid(false);
                 }
+
+                // select element name
+                if (str.endsWith("@")) {
+                    generateElementMenu(editTextValue).show();
+                }
+
+                // select category name
+                if (str.endsWith(".")) {
+                    // all between last @ and current dot
+                    str = str.substring(str.lastIndexOf("@") + 1, str.length() - 1);
+                    Log.d(TAG, "String to analyze: " + str);
+
+                    if (str.contains("@") ||
+                            str.contains("(") ||
+                            str.contains(")") ||
+                            str.contains("+") ||
+                            str.contains("-") ||
+                            str.contains("*") ||
+                            str.contains("/")) {
+                        stringValid = false;
+                        Log.d(TAG, "String validation failed.");
+                    };
+
+                    int num = str.length() - str.replace(".", "").length();
+                    if (stringValid) {
+                        // no previous dots - select category
+                        if (num == 0) {
+                            generateCategoryMenu(editTextValue).show();
+                        }
+                        // one previous dot - select field
+                        if (num == 1) {
+                            generateFieldMenu(editTextValue).show();
+                        }
+                    }
+                }
             }
+
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
@@ -187,6 +233,7 @@ public class FragmentEditField extends Fragment {
                 Log.d(TAG, "btnOK onClick");
                 Session.getInstance().getElementFromCache().addField(
                         settingsIntoField());
+                getFragmentManager().popBackStack();
             }
         });
 
@@ -231,5 +278,81 @@ public class FragmentEditField extends Fragment {
         sf.addValue(editTextValue.getText().toString());
 
         return sf;
+    }
+
+    private PopupMenu generateElementMenu (final EditText textAnchor) {
+        PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
+        Log.d(TAG, "generateElementMenu");
+
+        for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
+            pm.getMenu().add(e.getName());
+        }
+
+        pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor));
+        return pm;
+    }
+
+    private PopupMenu generateCategoryMenu (final EditText textAnchor) {
+        PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
+
+        String eBuf = textAnchor.getText().toString();
+        eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
+        Log.d(TAG, "generateCategoryMenu: Element " + eBuf);
+
+        for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
+            for (String c : e.getCategories()) {
+                pm.getMenu().add(c);
+            }
+        }
+
+        pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor));
+        return pm;
+    }
+
+    private PopupMenu generateFieldMenu (final EditText textAnchor) {
+        PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
+        String base = textAnchor.getText().toString();
+
+        // remove last dot
+        String eBuf = base.substring(1, base.length());
+        String cBuf = base.substring(1, base.length());
+
+        eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
+        cBuf = cBuf.substring(cBuf.lastIndexOf("."), cBuf.length());
+        Log.d(TAG, "generateFieldMenu: Element " + eBuf + " and Category " + cBuf);
+
+        for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
+            if (e.getName().equals(eBuf)) {
+                for (String c : e.getCategories()) {
+                    if (c.equals(cBuf)) {
+                        for (SysField f : e.getFieldsByCategory(c)) {
+                            if (f.getType() == Field.FieldType.NUMERIC ||
+                                    f.getType() == Field.FieldType.CALCULATED) {
+                                pm.getMenu().add(f.getName());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor));
+        return pm;
+    }
+
+    private class SaverMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+        private EditText textAnchor;
+        private MenuItem item;
+
+        SaverMenuItemClickListener (EditText textAnchor) {
+            this.textAnchor = textAnchor;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            String buf = textAnchor.getText().toString() + item.getTitle();
+            textAnchor.setText(buf);
+            return false;
+        }
     }
 }

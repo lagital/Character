@@ -26,6 +26,8 @@
                 android:textSize="@dimen/text_display1_type"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/head_text_margin_start"
+                android:layout_marginStart="@dimen/head_text_margin_start"
                 android:text="@{category.name}"/>
 
             <LinearLayout
@@ -40,8 +42,11 @@
                     android:id="@+id/btn_edit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@android:drawable/ic_menu_edit"
-                    android:contentDescription="@string/system_item_add_icon"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/card_icons_margin"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="@string/category_item_edit_icon"
+                    android:src="@drawable/ic_build_black_24dp"
                     android:onClick="@{editclick}"/>
 
                 <ImageButton
@@ -49,9 +54,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_add_black_36dp"
+                    android:layout_margin="@dimen/card_icons_margin"
                     android:background="@android:color/transparent"
-                    android:contentDescription="@string/system_item_add_icon"
+                    android:contentDescription="@string/category_item_add_icon"
+                    android:src="@drawable/ic_add_black_36dp"
                     android:onClick="@{plusclick}"/>
 
             </LinearLayout>

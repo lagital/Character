@@ -29,6 +29,8 @@
             android:layout_alignParentStart="true"
             android:textColor="@color/colorPrimaryText"
             android:textSize="@dimen/text_display1_type"
+            android:layout_marginLeft="@dimen/head_text_margin_start"
+            android:layout_marginStart="@dimen/head_text_margin_start"
             android:text="@{system.name}"/>
 
         <TextView
@@ -40,6 +42,8 @@
             android:textStyle="italic"
             android:fontFamily="sans-serif-thin"
             android:textSize="@dimen/text_subheading1_type"
+            android:layout_marginLeft="@dimen/card_margin_start"
+            android:layout_marginStart="@dimen/card_margin_start"
             android:text="@{@string/system_item_version + ' ' + system.version}"/>
 
         <LinearLayout
@@ -58,6 +62,7 @@
                 android:src="@drawable/ic_share_black_36dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/system_item_share_icon"
+                android:layout_margin="4dp"
                 android:onClick="@{shareclick}"/>
 
             <ImageButton
@@ -68,6 +73,7 @@
                 android:src="@drawable/ic_add_black_36dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/system_item_add_icon"
+                android:layout_margin="4dp"
                 android:onClick="@{addclick}"/>
         </LinearLayout>
 

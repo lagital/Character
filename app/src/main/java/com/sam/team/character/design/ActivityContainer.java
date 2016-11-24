@@ -87,7 +87,6 @@ public class ActivityContainer extends AppCompatActivity {
             }
 
             Log.d(TAG, "replaceFragment to " + toFragment.name());
-
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }

@@ -26,4 +26,14 @@
     <!-- Step Transitions -->
     <integer name="step_transition_time">900</integer>
 
+    <!-- Basic Card Settings -->
+    <dimen name="card_margin_end">4dp</dimen>
+    <dimen name="card_margin_start">4dp</dimen>
+    <dimen name="card_icons_margin">4dp</dimen>
+
+    <!-- Basic Settings for System and Category Items -->
+    <dimen name="head_text_margin_end">4dp</dimen>
+    <dimen name="head_text_margin_start">4dp</dimen>
+
+
 </resources>

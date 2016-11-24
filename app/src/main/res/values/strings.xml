@@ -15,19 +15,17 @@
     <string name="new_system_dflt_name">Title*</string>
     <string name="new_system_dflt_version">1.0</string>
     <string name="new_system_dflt_copyright">Copyright</string>
-
-    <!-- Fragment Element Picker -->
-    <string name="element_picker_title">Pages</string>
     <string name="new_element_dialog_title">New page</string>
     <string name="new_element_empty_name">Title is empty</string>
     <string name="new_element_dflt_name">Title*</string>
-    <string name="field_type_decription">Field type</string>
 
     <!-- Fragment Edit Element -->
     <string name="edit_element_title">Page</string>
     <string name="new_category_dialog_title">New section</string>
     <string name="new_category_empty_name">Title is empty</string>
     <string name="new_category_dflt_name">Section name*</string>
+    <string name="category_item_add_icon">Add attribute</string>
+    <string name="category_item_edit_icon">Change section</string>
 
     <!-- Fragment Edit Field -->
     <string name="edit_field_title">New attribute</string>
