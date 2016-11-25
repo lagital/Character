@@ -7,13 +7,13 @@
             name="system"
             type="SysRPSystem" />
         <variable
-            name="cardclick"
-            type="android.view.View.OnClickListener" />
-        <variable
             name="addclick"
             type="android.view.View.OnClickListener" />
         <variable
             name="shareclick"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="editclick"
             type="android.view.View.OnClickListener" />
     </data>
 
@@ -55,15 +55,15 @@
             android:layout_centerVertical="true">
 
             <ImageButton
-                android:id="@+id/btn_share"
+                android:id="@+id/btn_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_share_black_36dp"
+                android:src="@drawable/ic_build_black_36dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="@string/system_item_share_icon"
+                android:contentDescription="@string/system_item_edit_icon"
                 android:layout_margin="4dp"
-                android:onClick="@{shareclick}"/>
+                android:onClick="@{editclick}"/>
 
             <ImageButton
                 android:id="@+id/btn_add_element"

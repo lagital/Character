@@ -50,7 +50,6 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_CATEGORY) {
-            Log.d(TAG, "Bind category");
             ViewHolderSysCategoryItem h = (ViewHolderSysCategoryItem) holder;
             h.binding.setCategory((SysCategory) items.get(position));
             h.binding.setPlusclick(new View.OnClickListener() {
@@ -70,7 +69,6 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
         } else if (type == ListItem.TYPE_FIELD) {
-            Log.d(TAG, "Bind field");
             ViewHolderSysFieldItem h = (ViewHolderSysFieldItem) holder;
             h.binding.setField((SysField) items.get(position));
             h.binding.setCardclick(new View.OnClickListener() {

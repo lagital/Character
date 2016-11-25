@@ -4,9 +4,11 @@ import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,22 +62,35 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_SYSTEM) {
-            Log.d(TAG, "Bind system");
             AdapterSystemElement.ViewHolderSysRPSystemItem h = (AdapterSystemElement.ViewHolderSysRPSystemItem) holder;
             h.binding.setSystem((SysRPSystem) items.get(position));
-            h.binding.setCardclick(new View.OnClickListener() {
+            h.binding.setEditclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "Click on system " + Integer.toString(position));
+                    Log.d(TAG, "Edit system " + Integer.toString(position));
                     Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
-                }
-            });
-            h.binding.setShareclick(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //TODO: sharing the system
-                    Log.d(TAG, "Sharing system " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
+                    PopupMenu pm = new PopupMenu(fragment.getActivity(), view);
+                    pm.getMenu().add(1, R.id.system_item_edit_menu_edit,   1, R.string.system_item_edit_menu_edit);
+                    pm.getMenu().add(1, R.id.system_item_edit_menu_share,  2, R.string.system_item_edit_menu_share);
+                    pm.getMenu().add(1, R.id.system_item_edit_menu_delete, 3, R.string.system_item_edit_menu_delete);
+                    pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.system_item_edit_menu_edit: {
+
+                                }
+                                case R.id.system_item_edit_menu_share: {
+                                    // TODO: share system
+                                }
+                                case R.id.system_item_edit_menu_delete: {
+                                }
+                            }
+                            return false;
+                        }
+                    });
+
+                    pm.show();
                 }
             });
             h.binding.setAddclick(new View.OnClickListener() {

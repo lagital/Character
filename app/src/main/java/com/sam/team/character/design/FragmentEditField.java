@@ -1,7 +1,6 @@
 package com.sam.team.character.design;
 
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
@@ -22,12 +21,8 @@ import android.widget.Switch;
 import com.sam.team.character.R;
 import com.sam.team.character.core.Field;
 import com.sam.team.character.viewmodel.CleanOnTouchListener;
-import com.sam.team.character.viewmodel.SysCategory;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
-
-import org.antlr.v4.codegen.model.CaptureNextToken;
-import org.apache.commons.codec.binary.StringUtils;
 
 /**
  * Created by pborisenko on 11/5/2016.
@@ -314,11 +309,11 @@ public class FragmentEditField extends Fragment {
         String base = textAnchor.getText().toString();
 
         // remove last dot
-        String eBuf = base.substring(1, base.length());
-        String cBuf = base.substring(1, base.length());
+        String eBuf = base.substring(0, base.length()-1);
+        String cBuf = eBuf;
 
         eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
-        cBuf = cBuf.substring(cBuf.lastIndexOf("."), cBuf.length());
+        cBuf = cBuf.substring(cBuf.lastIndexOf(".") + 1, cBuf.length());
         Log.d(TAG, "generateFieldMenu: Element " + eBuf + " and Category " + cBuf);
 
         for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
@@ -342,7 +337,6 @@ public class FragmentEditField extends Fragment {
 
     private class SaverMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
         private EditText textAnchor;
-        private MenuItem item;
 
         SaverMenuItemClickListener (EditText textAnchor) {
             this.textAnchor = textAnchor;

@@ -10,6 +10,10 @@
     <string name="system_item_share_icon">Share</string>
     <string name="system_item_version">Version</string>
     <string name="system_item_add_icon">Add page</string>
+    <string name="system_item_edit_icon">Edit</string>
+    <string name="system_item_edit_menu_edit">Edit</string>
+    <string name="system_item_edit_menu_delete">Rename</string>
+    <string name="system_item_edit_menu_share">Rename</string>
     <string name="new_system_dialog_title">New game</string>
     <string name="new_system_empty_name">Title is empty</string>
     <string name="new_system_dflt_name">Title*</string>
