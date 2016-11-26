@@ -1,10 +1,14 @@
 package com.sam.team.character.design;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -13,6 +17,7 @@ import com.sam.team.character.databinding.ItemSyscategoryBinding;
 import com.sam.team.character.databinding.ItemSysfieldBinding;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysCategory;
+import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
 
 import java.util.ArrayList;
@@ -26,11 +31,11 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "AdapterCategoryField";
 
     private ArrayList<ListItem> items;
-    private Context context;
+    private FragmentEditElement fragment;
 
-    AdapterCategoryField(Context context, ArrayList<ListItem> items) {
+    AdapterCategoryField(FragmentEditElement fragment, ArrayList<ListItem> items) {
         this.items = items;
-        this.context = context;
+        this.fragment = fragment;
     }
 
     @Override
@@ -57,7 +62,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     Log.d(TAG, "Add field " + Integer.toString(position));
                     Session.getInstance().cacheCategory(((SysCategory) items.get(position)).getName());
-                    ((ActivityContainer) context).replaceFragment(ActivityContainer
+                    ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_FIELD);
                 }
             });
@@ -65,7 +70,65 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit category " + Integer.toString(position));
-                    // TODO: changing category
+                    Session.getInstance().cacheCategory(((SysCategory) items.get(position)).getName());
+                    PopupMenu pm = new PopupMenu(fragment.getActivity(), view);
+                    pm.getMenu().add(1, R.id.category_item_edit_menu_edit,   1, R.string.category_item_edit_menu_edit);
+                    pm.getMenu().add(1, R.id.category_item_edit_menu_delete, 2, R.string.category_item_edit_menu_delete);
+                    pm.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.category_item_edit_menu_edit: {
+                                    ArrayList<TextParameter> tpl = new ArrayList<>();
+                                    tpl.add(new TextParameter("", Session.getInstance().getCategoryFromCache(), true));
+                                    TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
+                                            fragment.getActivity(),
+                                            R.layout.dialog_settings_container,
+                                            R.layout.dialog_settings_parameter,
+                                            R.string.edit_category_dialog_title,
+                                            tpl) {
+                                        @Override
+                                        void applySettings() {
+                                            for (SysField f : Session.getInstance().getElementFromCache()
+                                                    .getFieldsByCategory(Session.getInstance().getCategoryFromCache())) {
+                                                f.setCategory(getResults().get(0));
+                                            }
+                                            fragment.fillList();
+                                        }
+                                    };
+                                    builder.getDialog().show();
+                                    break;
+                                }
+
+                                case R.id.category_item_edit_menu_delete: {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getActivity());
+                                    builder.setTitle(fragment.getResources().getString(R.string.dialog_are_you_sure));
+                                    final AlertDialog alertDialog = builder.create();
+                                    builder.setPositiveButton(R.string.dialog_btn_yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            for (SysField f : Session.getInstance().getElementFromCache()
+                                                    .getFieldsByCategory(Session.getInstance().getCategoryFromCache())) {
+                                            Session.getInstance().getElementFromCache().removeField(f.getTypeStr(), f.getName());
+                                            }
+                                            fragment.fillList();
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    builder.setNegativeButton(R.string.dialog_btn_no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    builder.show();
+                                    break;
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                    pm.show();
                 }
             });
         } else if (type == ListItem.TYPE_FIELD) {

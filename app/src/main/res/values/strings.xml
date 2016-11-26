@@ -3,6 +3,14 @@
     <!-- Application -->
     <string name="app_name">RPG Builder</string>
 
+    <!-- Settings Dialogs -->
+    <string name="dialog_btn_ok">OK</string>
+    <string name="dialog_btn_cancel">Cancel</string>
+    <string name="dialog_btn_yes">Yes</string>
+    <string name="dialog_btn_no">No</string>
+    <string name="dialog_mandatory_parms_missing">Please complete mandatory parameters</string>
+    <string name="dialog_are_you_sure">Are you sure?</string>
+
     <!-- Fragment System Picker -->
     <string name="system_picker_title">Games</string>
     <string name="fab_add_system_dscr">Create a game</string>
@@ -12,35 +20,41 @@
     <string name="system_item_add_icon">Add page</string>
     <string name="system_item_edit_icon">Edit</string>
     <string name="system_item_edit_menu_edit">Edit</string>
-    <string name="system_item_edit_menu_delete">Rename</string>
-    <string name="system_item_edit_menu_share">Rename</string>
+    <string name="system_item_edit_menu_delete">Delete</string>
+    <string name="system_item_edit_menu_share">Share</string>
     <string name="new_system_dialog_title">New game</string>
+    <string name="edit_system_dialog_title">Edit game</string>
     <string name="new_system_empty_name">Title is empty</string>
-    <string name="new_system_dflt_name">Title*</string>
+    <string name="new_system_dflt_name">Title</string>
     <string name="new_system_dflt_version">1.0</string>
     <string name="new_system_dflt_copyright">Copyright</string>
     <string name="new_element_dialog_title">New page</string>
+    <string name="edit_element_dialog_title">Edit page</string>
     <string name="new_element_empty_name">Title is empty</string>
-    <string name="new_element_dflt_name">Title*</string>
+    <string name="new_element_dflt_name">Title</string>
+    <string name="element_item_edit_menu_rename">Rename</string>
+    <string name="element_item_edit_menu_edit">Edit</string>
+    <string name="element_item_edit_menu_delete">Delete</string>
 
     <!-- Fragment Edit Element -->
     <string name="edit_element_title">Page</string>
     <string name="new_category_dialog_title">New section</string>
+    <string name="edit_category_dialog_title">Edit section</string>
     <string name="new_category_empty_name">Title is empty</string>
-    <string name="new_category_dflt_name">Section name*</string>
+    <string name="new_category_dflt_name">Section name</string>
     <string name="category_item_add_icon">Add attribute</string>
     <string name="category_item_edit_icon">Change section</string>
+    <string name="category_item_edit_menu_edit">Edit</string>
+    <string name="category_item_edit_menu_delete">Delete</string>
 
     <!-- Fragment Edit Field -->
     <string name="edit_field_title">New attribute</string>
-    <string name="edit_field_dflt_name">Name*</string>
+    <string name="edit_field_dflt_name">Name</string>
     <string name="edit_field_dflt_type">Choose type</string>
     <string name="edit_field_editable">Editable:</string>
     <string name="edit_field_editable_yes">Yes</string>
     <string name="edit_field_editable_no">No</string>
-    <string name="edit_field_dflt_value">Value*</string>
-    <string name="edit_field_btn_ok">OK</string>
-    <string name="edit_field_btn_cancel">Cancel</string>
+    <string name="edit_field_dflt_value">Value</string>
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>

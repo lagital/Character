@@ -98,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/edit_field_dflt_value"
                     android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_subheading2_type"
+                    android:textSize="@dimen/text_headline_type"
                     android:inputType="textMultiLine"
                     android:gravity="center_vertical"/>
             </LinearLayout>
@@ -115,7 +115,7 @@
                     android:layout_weight="0.5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit_field_btn_ok"
+                    android:text="@string/dialog_btn_ok"
                     android:gravity="center_vertical"
                     android:visibility="invisible"
                     style="?buttonBarButtonStyle"
@@ -126,7 +126,7 @@
                     android:layout_weight="0.5"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/edit_field_btn_cancel"
+                    android:text="@string/dialog_btn_cancel"
                     android:gravity="center_vertical"
                     style="?buttonBarButtonStyle"/>
             </LinearLayout>

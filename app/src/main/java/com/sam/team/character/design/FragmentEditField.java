@@ -73,7 +73,7 @@ public class FragmentEditField extends Fragment {
         };
 
         editTextName.setOnTouchListener(new CleanOnTouchListener(getActivity(), editTextName,
-                R.string.edit_field_dflt_name));
+                getActivity().getResources().getString(R.string.edit_field_dflt_name)));
         editTextName.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
@@ -163,7 +163,7 @@ public class FragmentEditField extends Fragment {
         };
 
         editTextValue.setOnTouchListener(new CleanOnTouchListener(getActivity(), editTextValue,
-                R.string.edit_field_dflt_value));
+                getActivity().getResources().getString(R.string.edit_field_dflt_value)));
         editTextValue.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {

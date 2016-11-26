@@ -1,10 +1,8 @@
 package com.sam.team.character.design;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,12 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel.CleanOnTouchListener;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysCategory;
 import com.sam.team.character.viewmodel.SysElement;
@@ -63,49 +57,20 @@ public class FragmentEditElement extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "Main FAB click");
 
-                final LinearLayout l = (LinearLayout) View.inflate(getActivity(),
-                        R.layout.dialog_new_category, null);
-                final EditText name = (EditText) l.findViewById(R.id.name);
-                name.setOnTouchListener(new CleanOnTouchListener(getActivity(), name,
-                        R.string.new_category_dflt_name));
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setView(l);
-                builder.setTitle(R.string.new_category_dialog_title);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                ArrayList<TextParameter> tpl = new ArrayList<>();
+                tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true));
+                TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
+                        getActivity(),
+                        R.layout.dialog_settings_container,
+                        R.layout.dialog_settings_parameter,
+                        R.string.new_category_dialog_title,
+                        tpl) {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing, see dialog.getButton
+                    void applySettings() {
+                        items.add(new SysCategory(getResults().get(0)));
+                        mAdapter.notifyDataSetChanged();
                     }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                final AlertDialog dialog = builder.create();
-                dialog.show();
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        EditText name = (EditText) l.findViewById(R.id.name);
-                        String e_name = name.getText().toString();
-                        if (!e_name.isEmpty() && !e_name.equalsIgnoreCase(
-                                getResources().getString(R.string.new_category_dflt_name))) {
-                            items.add(new SysCategory(e_name));
-                            mAdapter.notifyDataSetChanged();
-                            dialog.cancel();
-                        } else {
-                            Toast.makeText(getActivity(),
-                                    getResources().getString(R.string.new_category_empty_name),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                };
             }
         });
 
@@ -113,13 +78,13 @@ public class FragmentEditElement extends Fragment {
         element = Session.getInstance().getElementFromCache();
         fillList();
 
-        mAdapter = new AdapterCategoryField(getActivity(), items);
+        mAdapter = new AdapterCategoryField(this, items);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
 
-    private void fillList () {
+    public void fillList () {
         Log.d(TAG, "fillList");
 
         items.clear();

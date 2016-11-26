@@ -19,19 +19,18 @@ public class CleanOnTouchListener implements View.OnTouchListener{
 
     private EditText editText;
     private Context  context;
-    private Integer  dfltTextRes;
+    private String  dfltText;
 
-    public CleanOnTouchListener (Context context, EditText editText, Integer dfltTextRes) {
+    public CleanOnTouchListener (Context context, EditText editText, String dfltText) {
         this.editText = editText;
         this.context = context;
-        this.dfltTextRes = dfltTextRes;
+        this.dfltText = dfltText;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        if (editText.getText().toString().equals(
-                context.getResources().getString(dfltTextRes))) {
+        if (editText.getText().toString().equals(dfltText)) {
             editText.setText("");
             editText.setTextColor(ContextCompat.
                     getColor(context, R.color.colorPrimaryText));
