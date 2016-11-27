@@ -23,6 +23,7 @@ public class ActivityContainer extends AppCompatActivity {
     FragmentSystemPicker mFragmentSystemPicker;
     FragmentEditElement mFragmentEditElement;
     FragmentEditField mFragmentEditField;
+    FragmentHelp mFragmentHelp;
 
     private Toolbar mToolbar;
 
@@ -36,8 +37,12 @@ public class ActivityContainer extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 
+        container = (FrameLayout) findViewById(R.id.container);
+
+        mFragmentManager = getSupportFragmentManager();
+
         //Listen for changes in the back stack
-        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+        mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
                 shouldDisplayHomeUp();
@@ -46,12 +51,10 @@ public class ActivityContainer extends AppCompatActivity {
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp();
 
-        container = (FrameLayout) findViewById(R.id.container);
-
-        mFragmentManager = getSupportFragmentManager();
         mFragmentSystemPicker = new FragmentSystemPicker();
         mFragmentEditElement = new FragmentEditElement();
         mFragmentEditField = new FragmentEditField();
+        mFragmentHelp = new FragmentHelp();
 
         if (savedInstanceState == null) {
             // on first run
@@ -84,10 +87,15 @@ public class ActivityContainer extends AppCompatActivity {
                             mFragmentEditField);
                     break;
                 }
+                case HELP: {
+                    fragmentTransaction.replace(R.id.container,
+                            mFragmentHelp);
+                    break;
+                }
             }
 
             Log.d(TAG, "replaceFragment to " + toFragment.name());
-            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.addToBackStack(toFragment.name());
             fragmentTransaction.commit();
         }
     }
@@ -95,7 +103,8 @@ public class ActivityContainer extends AppCompatActivity {
     public enum FragmentType {
         SYSTEM_PICKER,
         EDIT_ELEMENT,
-        EDIT_FIELD
+        EDIT_FIELD,
+        HELP
     }
 
     @Override
@@ -110,14 +119,14 @@ public class ActivityContainer extends AppCompatActivity {
 
     public void shouldDisplayHomeUp(){
         //Enable Up button only  if there are entries in the back stack
-        boolean canback = getSupportFragmentManager().getBackStackEntryCount()>0;
+        boolean canback = mFragmentManager.getBackStackEntryCount()>0;
         getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         //This method is called when the up button is pressed. Just the pop back stack.
-        getSupportFragmentManager().popBackStack();
+        mFragmentManager.popBackStack();
         return true;
     }
 }

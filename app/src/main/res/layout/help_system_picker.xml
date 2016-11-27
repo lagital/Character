@@ -1,0 +1,25 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/help_system_picker"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse molestie est vel facilisis molestie.
+        Quisque ut interdum tellus. Ut in erat euismod ipsum maximus fringilla vel ut ante. In molestie convallis orci, sed vestibulum purus blandit at.
+        Pellentesque vitae mollis tortor. Vivamus ligula mauris, eleifend a tempus fringilla, efficitur ac erat. Duis mollis dapibus mi a cursus. Nulla nec molestie purus.
+        Donec eget neque id dolor eleifend ultricies. Nulla condimentum sapien sit amet faucibus pretium. Suspendisse mattis varius euismod. Praesent laoreet posuere finibus.
+        Etiam sodales interdum libero, at dapibus nunc fringilla eu. Vestibulum massa nulla, elementum tincidunt nulla et, scelerisque elementum sem
+        Aliquam fermentum malesuada nisi et malesuada. Donec vehicula, arcu at porta varius, lorem velit accumsan metus, sodales posuere metus orci quis justo.
+        Donec vulputate vitae lectus sit amet elementum. Morbi ultricies ullamcorper nulla, ut ultricies tellus placerat ultricies. Suspendisse tristique sagittis sapien a iaculis.
+        Maecenas sagittis maximus orci, eu bibendum sapien placerat eget. Donec efficitur libero risus, at suscipit purus finibus nec.
+        Ut eu consectetur enim. Morbi nec malesuada lorem. Etiam eget metus arcu. Etiam egestas ex tortor, eu dapibus lacus condimentum a.
+        Vivamus molestie sodales lacus, sed iaculis tellus convallis id. Vivamus pretium, tortor at pharetra consectetur, velit mi euismod dui, a tempus orci ex et diam. Maecenas ac sollicitudin est.
+        Praesent arcu erat, lobortis ac lectus a, suscipit consectetur magna. Mauris commodo nibh varius porta porta. Vestibulum non lobortis nisl."/>
+
+</LinearLayout>

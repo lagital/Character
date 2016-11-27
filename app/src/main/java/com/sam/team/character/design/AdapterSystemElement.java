@@ -202,10 +202,26 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     break;
                                 }
                                 case R.id.element_item_edit_menu_delete: {
-                                    Session.getInstance().getCurrentSystem().removeElement(
-                                            Session.getInstance().getElementFromCache().getType(),
-                                            Session.getInstance().getElementFromCache().getName());
-                                    fragment.fillList();
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getActivity());
+                                    builder.setTitle(fragment.getResources().getString(R.string.dialog_are_you_sure));
+                                    final AlertDialog alertDialog = builder.create();
+                                    builder.setPositiveButton(R.string.dialog_btn_yes, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Session.getInstance().getCurrentSystem().removeElement(
+                                                    Session.getInstance().getElementFromCache().getType(),
+                                                    Session.getInstance().getElementFromCache().getName());
+                                            fragment.fillList();
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    builder.setNegativeButton(R.string.dialog_btn_no, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    builder.show();
                                     break;
                                 }
                             }

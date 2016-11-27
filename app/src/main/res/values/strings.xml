@@ -65,6 +65,16 @@
     <string name="field_type_numeric">Numeric</string>
     <string name="field_type_calculated">Formula</string>
 
+    <!-- Fragment Help -->
+    <string name="help_fragment_title">Help</string>
+    <string name="help_icon_description">Help</string>
+    <string name="help_btn_got_it">Got it!</string>
+    <string name="help_btn_contact_us">Contact us</string>
+    <string name="support_email_address">samsara.inbox@gmail.com</string>
+    <string name="support_email_subject">Letter from User</string>
+    <string name="support_email_dialog_title">Send e-mail</string>
+    <string name="support_email_body_title">Please leave this data as it is</string>
+
     <!-- DEBUG -->
     <string name="locale">EN</string>
 

@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -162,5 +165,24 @@ public class FragmentSystemPicker extends Fragment{
         Log.d(TAG, "onCreate");
 
         super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.toolbar_system_picker, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.help_system_picker: {
+                ((ActivityContainer) getActivity()).replaceFragment(ActivityContainer.FragmentType.HELP);
+                break;
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
