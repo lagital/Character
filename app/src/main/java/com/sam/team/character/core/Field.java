@@ -2,6 +2,11 @@
 package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
+
+import org.simpleframework.xml.ElementArray;
+import org.simpleframework.xml.ElementList;
+import org.simpleframework.xml.Root;
+
 import java.util.ArrayList;
 
 /**
@@ -9,19 +14,31 @@ import java.util.ArrayList;
  * @author Vaize
  */
 
+@Root
 public class Field<E extends Element> extends BaseObservable {
 
     private static final String TAG = "Field";
 
-    private String category, name;
+    @org.simpleframework.xml.Element
+    private String name;
+    @org.simpleframework.xml.Element
+    private String category;
+    @org.simpleframework.xml.Element
+    private String typeStr;
+    @ElementList
+    private ArrayList<String> values;
+    @ElementList(required = false)
+    private ArrayList<String> calcRules;
+
     private E element;
-    private ArrayList<String> values, calcRules;
     private FieldType type;
 
     public Field(String category, String name, FieldType type, E element) {
         this.category = category;
         this.name = name;
         this.type = type;
+        // for xml
+        this.typeStr = type.name();
         this.element = element;
         values = new ArrayList();
         calcRules = new ArrayList();

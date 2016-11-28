@@ -1,8 +1,14 @@
 package com.sam.team.character.viewmodel;
 
+import android.content.Context;
 import android.databinding.Bindable;
+import android.util.Log;
 
 import com.sam.team.character.core.RPSystem;
+import com.sam.team.character.design.ApplicationMain;
+
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by pborisenko on 10/31/2016.
@@ -34,5 +40,19 @@ public class SysRPSystem extends RPSystem<SysElement> implements ListItem {
     @Override
     public int getItemType() {
         return TYPE_SYSTEM;
+    }
+
+    public static ArrayList<File> getAvailableSystems (Context context) {
+        ArrayList<File> files = new ArrayList<>();
+        if (ApplicationMain.isExternalStorageReadable()) {
+            for (File f : context.getExternalFilesDir(null).listFiles()) {
+                // find all rpg system files
+                if (f.getName().endsWith(RPSystem.SYSTEM_FILE_TYPE)) {
+                    files.add(f);
+                    Log.d(TAG, "File " + f.getName() + " has been added chosen.");
+                }
+            }
+        }
+        return files;
     }
 }

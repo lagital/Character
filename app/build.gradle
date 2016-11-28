@@ -30,5 +30,10 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.2.1'
     compile 'com.android.support:cardview-v7:23.3.0'
     compile 'com.android.support:design:23.4.0'
+    compile (group: 'org.simpleframework', name: 'simple-xml', version: '2.7.1') {
+        exclude group: 'xpp3', module: 'xpp3'
+        exclude group: 'stax', module: 'stax-api'
+        exclude group: 'stax', module: 'stax'
+    }
     compile 'com.github.lagital:SamsaraLib:1.0.7'
 }

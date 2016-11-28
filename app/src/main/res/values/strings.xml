@@ -19,6 +19,8 @@
     <string name="system_item_version">Version</string>
     <string name="system_item_add_icon">Add page</string>
     <string name="system_item_edit_icon">Edit</string>
+    <string name="system_item_share_title">Share game</string>
+    <string name="system_item_share_err_message">Can not write game file</string>
     <string name="system_item_edit_menu_edit">Edit</string>
     <string name="system_item_edit_menu_delete">Delete</string>
     <string name="system_item_edit_menu_share">Share</string>

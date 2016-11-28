@@ -1,7 +1,10 @@
 package com.sam.team.character.design;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -10,14 +13,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
+import com.sam.team.character.core.RPSystem;
 import com.sam.team.character.databinding.ItemSyselementBinding;
 import com.sam.team.character.databinding.ItemSysrpsystemBinding;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysRPSystem;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -94,7 +101,25 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     break;
                                 }
                                 case R.id.system_item_edit_menu_share: {
-                                    // TODO: share system
+                                    File systemFile = RPSystem.generateXML(Session.getInstance().getCurrentSystem(),
+                                            fragment.getActivity().getCacheDir().getAbsolutePath());
+                                    if (BuildConfig.DEBUG) {
+                                        Log.d(TAG, systemFile.toString());
+                                    }
+                                    Uri fileUri = FileProvider.getUriForFile(fragment.getActivity(),
+                                            "com.fileprovider", systemFile);
+                                    if (fileUri != null) {
+
+                                        Intent shareIntent = new Intent();
+                                        shareIntent.setAction(Intent.ACTION_SEND);
+                                        // temp permission for receiving app to read the file
+                                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        shareIntent.setDataAndType(fileUri,
+                                                fragment.getActivity().getContentResolver().getType(fileUri));
+                                        shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                                        fragment.startActivity(Intent.createChooser(shareIntent,
+                                                fragment.getResources().getString(R.string.system_item_share_title)));
+                                    }
                                     break;
                                 }
                                 case R.id.system_item_edit_menu_delete: {

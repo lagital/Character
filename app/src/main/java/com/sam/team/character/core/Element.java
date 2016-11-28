@@ -3,6 +3,9 @@ package com.sam.team.character.core;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
+import org.simpleframework.xml.ElementMap;
+import org.simpleframework.xml.Root;
+
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
@@ -12,11 +15,18 @@ import java.util.TreeMap;
  *
  * @author Vaize
  */
+
+@Root
 public class Element<F extends Field, S extends RPSystem> extends BaseObservable {
 
-    private String name, type;
-    private S system;
+    @org.simpleframework.xml.Element
+    private String name;
+    @org.simpleframework.xml.Element
+    private String type;
+    //@ElementMap
     private TreeMap<String, TreeMap<String, F>> fields;
+
+    private S system;
 
     //constructors
     public Element(S system) {

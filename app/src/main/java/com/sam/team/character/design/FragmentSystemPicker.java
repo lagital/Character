@@ -108,7 +108,7 @@ public class FragmentSystemPicker extends Fragment{
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "mLoadMiniFAB - load new game");
-                //TODO: system import
+
             }
         });
 

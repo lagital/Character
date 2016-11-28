@@ -3,21 +3,35 @@ package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
 
+import com.sam.team.character.BuildConfig;
+
+import org.simpleframework.xml.Root;
+import org.simpleframework.xml.Serializer;
+import org.simpleframework.xml.core.Persister;
+
+import java.io.File;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 import java.util.TreeMap;
-
 /**
  *
  * @author Vaize
  */
-
+@Root
 public class RPSystem<E extends Element> extends BaseObservable {
 
-    private String name, version, copyright;
+    @org.simpleframework.xml.Element
+    private String name;
+    @org.simpleframework.xml.Element(required = false)
+    private String version;
+    @org.simpleframework.xml.Element(required = false)
+    private String copyright;
+    //@ElementMap
     private TreeMap<String, TreeMap<String, E>> elements;
+
+    public static String SYSTEM_FILE_TYPE = "xml";
 
     // character constructor
     public RPSystem(String name) {
@@ -210,5 +224,28 @@ public class RPSystem<E extends Element> extends BaseObservable {
     
     public boolean validateExp(String exp){
         return true;
+    }
+
+    public static File generateXML (RPSystem system, String root) {
+        File xml = new File(root + "/" + system.getName() + "." + SYSTEM_FILE_TYPE);
+        Serializer serializer = new Persister();
+        try {
+            serializer.write(system, xml);
+            return xml;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static RPSystem parseXML (String filePath) {
+        File xml = new File(filePath);
+        Serializer serializer = new Persister();
+        try {
+            return serializer.read(RPSystem.class, xml);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
