@@ -19,16 +19,13 @@ public class Field<E extends Element> extends BaseObservable {
 
     private static final String TAG = "Field";
 
-    @org.simpleframework.xml.Element
     private String name;
-    @org.simpleframework.xml.Element
     private String category;
-    @org.simpleframework.xml.Element
     private String typeStr;
-    @ElementList
-    private ArrayList<String> values;
-    @ElementList(required = false)
-    private ArrayList<String> calcRules;
+    private String value;
+    private String calcRule;
+    private Boolean visible;
+    private Boolean editable;
 
     private E element;
     private FieldType type;
@@ -40,71 +37,78 @@ public class Field<E extends Element> extends BaseObservable {
         // for xml
         this.typeStr = type.name();
         this.element = element;
-        values = new ArrayList();
-        calcRules = new ArrayList();
+        value = calcRule = null;
     }
-    
+
+    public Field(String category, String name, String type, E element) {
+        this.category = category;
+        this.name = name;
+        // from xml
+        this.type = FieldType.valueOf(type);
+        this.typeStr = type;
+        this.element = element;
+        value = calcRule = null;
+    }
+
+    @org.simpleframework.xml.Element
     public String getCategory() { return category; }
 
+    @org.simpleframework.xml.Element
     public void setName(String name) { this.name = name; }
 
+    @org.simpleframework.xml.Element
     public String getName() { return name; }
 
+    @org.simpleframework.xml.Element
     public void setCategory(String category) { this.category = category; }
 
-    public int addValue(String value) {
-        values.add(value);
-        calcRules.add(null);
-        return (values.size() - 1); //id
+    @org.simpleframework.xml.Element
+    public void setValue(String value) {
+        if (type != FieldType.CALCULATED) {
+            this.value = value;
+        }
     }
 
-    public void setValue(int id, String value) { values.set(id, value); }
+    @org.simpleframework.xml.Element
+    public String getValue() { return value; }
 
-    public String getValue(int id) {
-        if (values.isEmpty()) return "NaN";
-        else if (values.size() < id - 1) return "NaN";
-        else return values.get(id);
-    }
+    public void removeValue(int id) { value = null; }
 
-    public String getValue() {
-        if (values.isEmpty()) return "NaN";
-        else return values.get(0); 
-    }
+    @org.simpleframework.xml.Element(required = false)
+    public void setRule(String rule) { calcRule = rule; }
 
-    public ArrayList getValues() { return values; }
+    @org.simpleframework.xml.Element(required = false)
+    public String getRule() { return calcRule; }
 
-    public int getNumberOfValues() { return values.size(); }
-
-    public void removeValue(int id) { values.remove(id); }
-
-    public void removeValue(String value) { values.remove(value); }
-
-    public void setRule(int id, String rule) { calcRules.set(id, rule); }
-
-    public String getRule(int id) { return calcRules.get(id); }
-
-    public String getRule() { return calcRules.get(0); }
-
-    public ArrayList getRules() { return calcRules; }
-
-    public void removeRule(int id) { calcRules.remove(id); }
-
-    public void removeRule(String rule) { calcRules.remove(rule); }
-
-    public int describeContents() {
-        return 0;
-    }
+    public void removeRule() { calcRule = null; }
 
     public FieldType getType() {
         return type;
     }
 
+    @org.simpleframework.xml.Element
     public String getTypeStr() {
         return type.name();
     }
 
     public E getElement() {
         return element;
+    }
+
+    public Boolean getEditable() {
+        return editable;
+    }
+
+    public void setEditable(Boolean editable) {
+        this.editable = editable;
+    }
+
+    public Boolean getVisible() {
+        return visible;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
     }
 
     public enum FieldType {

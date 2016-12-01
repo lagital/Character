@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
+import com.sam.team.character.core.Element;
 import com.sam.team.character.viewmodel.CleanOnTouchListener;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysElement;
@@ -118,12 +119,12 @@ public class FragmentSystemPicker extends Fragment{
 
             int i;
             SysRPSystem rps = new SysRPSystem("Game", "1.0", "Bla-bla");
-            SysElement e = new SysElement("Character Sheet", "CHARACTER", rps);
+            SysElement e = new SysElement("Character Sheet", Element.ElementType.CHARACTER_SHEET, rps);
             e.addField(new SysField("Main", "Name", SysField.FieldType.SHORT_TEXT, e));
             e.addField(new SysField("Additional", "Knowledge", SysField.FieldType.LONG_TEXT, e));
             SysField f = new SysField("Additional", "Power", SysField.FieldType.CALCULATED, e);
-            i = f.addValue("Test1");
-            f.setRule(i, "Test");
+            f.setValue("Test1");
+            f.setRule("Test");
             e.addField(f);
             e.addField(new SysField("Additional", "Ololo", SysField.FieldType.NUMERIC, e));
             rps.addElement(e);

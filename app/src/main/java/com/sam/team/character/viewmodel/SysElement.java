@@ -14,7 +14,7 @@ public class SysElement extends Element<SysField, SysRPSystem> implements ListIt
 
     private static final String TAG = "SysElement";
 
-    public SysElement(String name, String type, SysRPSystem system) {
+    public SysElement(String name, ElementType type, SysRPSystem system) {
         super(name, type, system);
     }
 
@@ -24,7 +24,7 @@ public class SysElement extends Element<SysField, SysRPSystem> implements ListIt
     }
 
     @Bindable
-    public String getType() {
+    public ElementType getType() {
         return super.getType();
     }
 

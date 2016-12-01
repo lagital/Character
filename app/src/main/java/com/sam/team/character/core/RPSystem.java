@@ -3,8 +3,7 @@ package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
 
-import com.sam.team.character.BuildConfig;
-
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
@@ -12,9 +11,6 @@ import org.simpleframework.xml.core.Persister;
 import java.io.File;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.TreeMap;
 /**
  *
  * @author Vaize
@@ -22,14 +18,11 @@ import java.util.TreeMap;
 @Root
 public class RPSystem<E extends Element> extends BaseObservable {
 
-    @org.simpleframework.xml.Element
     private String name;
-    @org.simpleframework.xml.Element(required = false)
     private String version;
-    @org.simpleframework.xml.Element(required = false)
     private String copyright;
-    //@ElementMap
-    private TreeMap<String, TreeMap<String, E>> elements;
+    @ElementList
+    private ArrayList<E> elements;
 
     public static String SYSTEM_FILE_TYPE = "xml";
 
@@ -38,7 +31,7 @@ public class RPSystem<E extends Element> extends BaseObservable {
         this.name = name;
         version = null;
         copyright = null;
-        elements = new TreeMap<>();
+        elements = new ArrayList<>();
     }
 
     // system constructor
@@ -46,32 +39,38 @@ public class RPSystem<E extends Element> extends BaseObservable {
         this.name = name;
         this.version = version;
         this.copyright = copyright;
-        elements = new TreeMap<>();
+        elements = new ArrayList<>();
     }
 
     //work with name
+    @org.simpleframework.xml.Element
     public void setName(String name) {
         this.name = name;
     }
 
+    @org.simpleframework.xml.Element
     public String getName() {
         return name;
     }
 
     //work with version
+    @org.simpleframework.xml.Element(required = false)
     public void setVersion(String version) {
         this.version = version;
     }
 
+    @org.simpleframework.xml.Element(required = false)
     public String getVersion() {
         return version;
     }
 
     //work with copyright
+    @org.simpleframework.xml.Element(required = false)
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
 
+    @org.simpleframework.xml.Element(required = false)
     public String getCopyright() {
         return copyright;
     }
@@ -79,57 +78,43 @@ public class RPSystem<E extends Element> extends BaseObservable {
     //work with elements
     public void addElement(E element) {
         if (element.getType() == null || element.getName() == null) return;
-        if (!elements.containsKey(element.getType())) {
-            TreeMap<String, E> temp = new TreeMap<String, E>();
-            temp.put(element.getName(), element);
-            elements.put(element.getType(), temp);
-        } else {
-            TreeMap<String, E> temp = elements.get(element.getType());
-            temp.put(element.getName(), element);
-            elements.put(element.getType(), temp);
+        elements.add(element);
+    }
+
+    public void removeElement(Element.ElementType type, String name) {
+        for (E e : elements) {
+            if (e.getType() == type && e.getName().equals(name)){
+                elements.remove(e);
+            }
         }
     }
 
-    public void removeElement(String type, String name) {
-        if (elements.containsKey(type)) {
-            TreeMap<String, E> temp = elements.get(type);
-            if (temp.containsKey(name)) temp.remove(name);
+    public ArrayList<E> getElementsByName (Element.ElementType type, String name) {
+        ArrayList<E> el = new ArrayList<>();
+        for (E e : elements) {
+            if (e.getType() == type && e.getName().equals(name)){
+                el.add(e);
+            }
         }
+        return el;
     }
 
-    public E getElement(String type, String name) {
-        return elements.get(type).get(name);
-    }
-
-    public Collection getElementsByType(String type) {
-        if (elements.containsKey(type)) {
-            return elements.get(type).values();
-        } else {
-            return null;
+    public ArrayList<E> getElementsByType(Element.ElementType t) {
+        ArrayList<E> el = new ArrayList<>();
+        for (E e : elements) {
+            if (e.getType() == t){
+                el.add(e);
+            }
         }
+        return el;
     }
 
     public ArrayList<E> getElements () {
         ArrayList<E> el = new ArrayList<>();
-        for (TreeMap<String, E> tm : elements.values()) {
-            for (String s : tm.keySet()) {
-                el.add(tm.get(s));
-            }
+        for (E e: elements) {
+            el.add(e);
         }
-            return el;
-    }
-
-    //work with types
-    public Set getTypes() {
-        return elements.keySet();
-    }
-
-    public Set getNamesByType(String type) {
-        if (elements.containsKey(type)) {
-            return elements.get(type).keySet();
-        } else {
-            return null;
-        }
+        return el;
     }
     
     //calculation

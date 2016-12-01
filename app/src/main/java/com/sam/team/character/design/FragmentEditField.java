@@ -272,7 +272,7 @@ public class FragmentEditField extends Fragment {
                 Field.getTypeFromInt(currentTypeInt),
                 Session.getInstance().getElementFromCache());
         // TODO: change after core refactoring
-        sf.addValue(editTextValue.getText().toString());
+        sf.setValue(editTextValue.getText().toString());
 
         return sf;
     }
