@@ -119,30 +119,28 @@ public class RPSystem<E extends Element> extends BaseObservable {
     
     //calculation
     public String parseExp(String exp){
-        if (!validateExp(exp)) return "not valid";
-	while(exp.contains("(")){    
-            System.out.println(exp);
+    	if (!validateExp(exp)) return "not valid";
+        String tmp;
+	while(exp.contains("(")){
+            tmp = exp.substring(exp.lastIndexOf("("),exp.length()); 
             exp = exp.substring(0, exp.lastIndexOf("(")) +
-                  calculateExp(exp.substring(exp.lastIndexOf("(")+1, exp.indexOf(")"))) +
-                  exp.substring(exp.indexOf(")")+1, exp.length());
-            //need add processing * and /
+                  calculateExp(tmp.substring(tmp.lastIndexOf("(")+1, tmp.indexOf(")"))) +
+                  tmp.substring(tmp.indexOf(")")+1, tmp.length());
             exp = exp.replaceAll("\\+\\-|\\-\\+", "-");
-            exp = exp.replaceAll("--", "-");
+            exp = exp.replaceAll("--", "+");
+            System.out.println(exp);
         }
-        System.out.println(exp);
         exp = calculateExp(exp);
         return exp;
     }
-
+    
     private String calculateExp(String exp){
         ArrayList<String> operands = new ArrayList();
         operands.addAll(Arrays.asList(exp.split("[\\+\\-\\*\\/)]+")));
         ArrayList<String> operators = new ArrayList();
         operators.addAll(Arrays.asList(exp.split("[\\w@:().]+")));
-        
         //delete space (need improve regex)
         operators.remove(0);
-        //calculcation (need improve)
         int tmp = 0;
         while(operators.size() > 0){
             if (operators.contains("*")){
@@ -203,11 +201,10 @@ public class RPSystem<E extends Element> extends BaseObservable {
             operators.remove(tmp);
             operands.remove(tmp + 1);        
         }
-        
         return operands.get(0);
     }
     
-    public boolean validateExp(String exp){
+    private boolean validateExp(String exp){
         return true;
     }
 
