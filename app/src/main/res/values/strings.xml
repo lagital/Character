@@ -76,6 +76,9 @@
     <string name="support_email_subject">Letter from User</string>
     <string name="support_email_dialog_title">Send e-mail</string>
     <string name="support_email_body_title">Please leave this data as it is</string>
+    <string name="url_SYSTEM_PICKER">http://rpgames.herokuapp.com/</string>
+    <string name="url_EDIT_ELEMENT">http://rpgames.herokuapp.com/</string>
+    <string name="url_EDIT_FIELD">http://rpgames.herokuapp.com/</string>
 
     <!-- DEBUG -->
     <string name="locale">EN</string>

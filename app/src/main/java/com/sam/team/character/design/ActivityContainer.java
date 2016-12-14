@@ -83,6 +83,8 @@ public class ActivityContainer extends AppCompatActivity {
                     break;
                 }
                 case EDIT_FIELD: {
+                    // recreate because normally this fragment one-time-used
+                    mFragmentEditField = new FragmentEditField();
                     fragmentTransaction.replace(R.id.container,
                             mFragmentEditField);
                     break;
@@ -111,7 +113,6 @@ public class ActivityContainer extends AppCompatActivity {
     public void onBackPressed() {
         if (mFragmentManager.getBackStackEntryCount() > 1){
             mFragmentManager.popBackStackImmediate();
-            mFragmentManager.beginTransaction().commit();
         } else {
             super.onBackPressed();
         }

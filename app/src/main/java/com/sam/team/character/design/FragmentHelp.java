@@ -1,6 +1,7 @@
 package com.sam.team.character.design;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.sam.team.character.R;
 
@@ -23,12 +26,32 @@ public class FragmentHelp extends Fragment {
 
     private Button mBtnGotIt;
     private Button mBtnContactUs;
+    private WebView webView;
+    private WebViewClient webViewClient;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help, null);
-        LinearLayout base = (LinearLayout) view.findViewById(R.id.sub_container);
+
+        webView = (WebView) view.findViewById(R.id.webview);
+        webViewClient = new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                progressBar.setVisibility(View.VISIBLE);
+                super.onPageStarted(view, url, favicon);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
+                super.onPageFinished(view, url);
+            }
+        };
+        webView.setWebViewClient(webViewClient);
+
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
 
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.help_fragment_title);
@@ -45,15 +68,15 @@ public class FragmentHelp extends Fragment {
 
         switch (name) {
             case "SYSTEM_PICKER": {
-                base.addView(inflater.inflate(R.layout.help_system_picker, null));
+                webView.loadUrl(getResources().getString(R.string.url_SYSTEM_PICKER));
                 break;
             }
             case "EDIT_ELEMENT": {
-                base.addView(inflater.inflate(R.layout.help_edit_element, null));
+                webView.loadUrl(getResources().getString(R.string.url_EDIT_ELEMENT));
                 break;
             }
             case "EDIT_FIELD": {
-                base.addView(inflater.inflate(R.layout.help_edit_field, null));
+                webView.loadUrl(getResources().getString(R.string.url_EDIT_FIELD));
                 break;
             }
         }

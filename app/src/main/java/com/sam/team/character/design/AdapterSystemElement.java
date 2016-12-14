@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
+import com.sam.team.character.core.Element;
 import com.sam.team.character.core.RPSystem;
 import com.sam.team.character.databinding.ItemSyselementBinding;
 import com.sam.team.character.databinding.ItemSysrpsystemBinding;
@@ -167,7 +168,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         void applySettings() {
                             // TODO: work with element types
                             Session.getInstance().getCurrentSystem().addElement(
-                                    new SysElement(getResults().get(0), "CHARACTER",
+                                    new SysElement(getResults().get(0), Element.ElementType.CHARACTER_SHEET,
                                             Session.getInstance().getCurrentSystem()));
                             fragment.fillList();
                         }
