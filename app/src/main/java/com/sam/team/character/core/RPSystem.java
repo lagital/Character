@@ -3,6 +3,7 @@ package com.sam.team.character.core;
 
 import android.databinding.BaseObservable;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Serializer;
@@ -16,22 +17,22 @@ import java.util.ArrayList;
  * @author Vaize
  */
 @Root
-public class RPSystem<E extends Element> extends BaseObservable {
+public class RPSystem<S extends Sheet> extends BaseObservable {
+
+    public static String SYSTEM_FILE_TYPE = "xml";
 
     private String name;
     private String version;
     private String copyright;
     @ElementList
-    private ArrayList<E> elements;
-
-    public static String SYSTEM_FILE_TYPE = "xml";
+    private ArrayList<S> sheets;
 
     // character constructor
     public RPSystem(String name) {
         this.name = name;
         version = null;
         copyright = null;
-        elements = new ArrayList<>();
+        sheets = new ArrayList<>();
     }
 
     // system constructor
@@ -39,82 +40,82 @@ public class RPSystem<E extends Element> extends BaseObservable {
         this.name = name;
         this.version = version;
         this.copyright = copyright;
-        elements = new ArrayList<>();
+        sheets = new ArrayList<>();
     }
 
     //work with name
-    @org.simpleframework.xml.Element
+    @Element
     public void setName(String name) {
         this.name = name;
     }
 
-    @org.simpleframework.xml.Element
+    @Element
     public String getName() {
         return name;
     }
 
     //work with version
-    @org.simpleframework.xml.Element(required = false)
+    @Element(required = false)
     public void setVersion(String version) {
         this.version = version;
     }
 
-    @org.simpleframework.xml.Element(required = false)
+    @Element(required = false)
     public String getVersion() {
         return version;
     }
 
     //work with copyright
-    @org.simpleframework.xml.Element(required = false)
+    @Element(required = false)
     public void setCopyright(String copyright) {
         this.copyright = copyright;
     }
 
-    @org.simpleframework.xml.Element(required = false)
+    @Element(required = false)
     public String getCopyright() {
         return copyright;
     }
 
-    //work with elements
-    public void addElement(E element) {
-        if (element.getType() == null || element.getName() == null) return;
-        elements.add(element);
+    //work with sheets
+    public void addSheet(S sheet) {
+        if (sheet.getType() == null || sheet.getName() == null) return;
+        sheets.add(sheet);
     }
 
-    public void removeElement(Element.ElementType type, String name) {
-        for (E e : elements) {
-            if (e.getType() == type && e.getName().equals(name)){
-                elements.remove(e);
+    public void removeSheet(Sheet.SheetType type, String name) {
+        for (S s : sheets) {
+            if (s.getType() == type && s.getName().equals(name)){
+                sheets.remove(s);
             }
         }
     }
 
-    public ArrayList<E> getElementsByName (Element.ElementType type, String name) {
-        ArrayList<E> el = new ArrayList<>();
-        for (E e : elements) {
-            if (e.getType() == type && e.getName().equals(name)){
-                el.add(e);
-            }
-        }
-        return el;
-    }
-
-    public ArrayList<E> getElementsByType(Element.ElementType t) {
-        ArrayList<E> el = new ArrayList<>();
-        for (E e : elements) {
-            if (e.getType() == t){
-                el.add(e);
+    public ArrayList<S> getSheetsByName (Sheet.SheetType type, String name) {
+        ArrayList<S> el = new ArrayList<>();
+        for (S s : sheets) {
+            if (s.getType() == type && s.getName().equals(name)){
+                el.add(s);
             }
         }
         return el;
     }
 
-    public ArrayList<E> getElements () {
-        ArrayList<E> el = new ArrayList<>();
-        for (E e: elements) {
-            el.add(e);
+    public ArrayList<S> getSheetsByType(Sheet.SheetType t) {
+        ArrayList<S> sl = new ArrayList<>();
+        for (S s : sheets) {
+            if (s.getType() == t){
+                sl.add(s);
+            }
         }
-        return el;
+        return sl;
+    }
+
+    public ArrayList<S> getSheets () {
+        ArrayList<S> sl = new ArrayList<>();
+        for (S s: sheets) {
+            sl.add(s);
+        }
+        return sl;
     }
     
     //calculation

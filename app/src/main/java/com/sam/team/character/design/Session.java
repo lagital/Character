@@ -2,7 +2,7 @@ package com.sam.team.character.design;
 
 import android.util.Log;
 
-import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysSheet;
 import com.sam.team.character.viewmodel.SysRPSystem;
 
 /**
@@ -16,7 +16,7 @@ class Session {
     private static Session instance;
 
     private SysRPSystem currentSystem;
-    private SysElement element;
+    private SysSheet sheet;
     private String category;
 
     static synchronized Session getInstance() {
@@ -37,14 +37,14 @@ class Session {
         this.currentSystem = system;
     }
 
-    void cacheElement (SysElement element) {
-        Log.d(TAG, "cacheElement");
-        this.element = element;
+    void cacheSheet(SysSheet sheet) {
+        Log.d(TAG, "cacheSheet");
+        this.sheet = sheet;
     }
 
-    SysElement getElementFromCache () {
-        Log.d(TAG, "getElementFromCache");
-        return element;
+    SysSheet getSheetFromCache () {
+        Log.d(TAG, "getSheetFromCache");
+        return sheet;
     }
 
     void cacheCategory (String category) {

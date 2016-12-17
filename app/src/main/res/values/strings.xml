@@ -30,16 +30,16 @@
     <string name="new_system_dflt_name">Title</string>
     <string name="new_system_dflt_version">1.0</string>
     <string name="new_system_dflt_copyright">Copyright</string>
-    <string name="new_element_dialog_title">New page</string>
-    <string name="edit_element_dialog_title">Edit page</string>
-    <string name="new_element_empty_name">Title is empty</string>
-    <string name="new_element_dflt_name">Title</string>
-    <string name="element_item_edit_menu_rename">Rename</string>
-    <string name="element_item_edit_menu_edit">Edit</string>
-    <string name="element_item_edit_menu_delete">Delete</string>
+    <string name="new_sheet_dialog_title">New page</string>
+    <string name="edit_sheet_dialog_title">Edit page</string>
+    <string name="new_sheet_empty_name">Title is empty</string>
+    <string name="new_sheet_dflt_name">Title</string>
+    <string name="sheet_item_edit_menu_rename">Rename</string>
+    <string name="sheet_item_edit_menu_edit">Edit</string>
+    <string name="sheet_item_edit_menu_delete">Delete</string>
 
     <!-- Fragment Edit Element -->
-    <string name="edit_element_title">Page</string>
+    <string name="edit_sheet_title">Page</string>
     <string name="new_category_dialog_title">New section</string>
     <string name="edit_category_dialog_title">Edit section</string>
     <string name="new_category_empty_name">Title is empty</string>

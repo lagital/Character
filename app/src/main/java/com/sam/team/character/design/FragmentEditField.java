@@ -23,7 +23,7 @@ import android.widget.Switch;
 import com.sam.team.character.R;
 import com.sam.team.character.core.Field;
 import com.sam.team.character.viewmodel.CleanOnTouchListener;
-import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysSheet;
 import com.sam.team.character.viewmodel.SysField;
 
 /**
@@ -181,9 +181,9 @@ public class FragmentEditField extends Fragment {
                     valueStep.setValid(false);
                 }
 
-                // select element name
+                // select sheet name
                 if (str.endsWith("@")) {
-                    generateElementMenu(editTextValue).show();
+                    generateSheetMenu(editTextValue).show();
                 }
 
                 // select category name
@@ -228,7 +228,7 @@ public class FragmentEditField extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "btnOK onClick");
-                Session.getInstance().getElementFromCache().addField(
+                Session.getInstance().getSheetFromCache().addField(
                         settingsIntoField());
                 getFragmentManager().popBackStack();
             }
@@ -270,18 +270,18 @@ public class FragmentEditField extends Fragment {
                 Session.getInstance().getCategoryFromCache(),
                 editTextName.getText().toString(),
                 Field.getTypeFromInt(currentTypeInt),
-                Session.getInstance().getElementFromCache());
+                Session.getInstance().getSheetFromCache());
         // TODO: change after core refactoring
         sf.setValue(editTextValue.getText().toString());
 
         return sf;
     }
 
-    private PopupMenu generateElementMenu (final EditText textAnchor) {
+    private PopupMenu generateSheetMenu (final EditText textAnchor) {
         PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
-        Log.d(TAG, "generateElementMenu");
+        Log.d(TAG, "generateSheetMenu");
 
-        for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
+        for (SysSheet e : Session.getInstance().getCurrentSystem().getSheets()) {
             pm.getMenu().add(e.getName());
         }
 
@@ -294,9 +294,9 @@ public class FragmentEditField extends Fragment {
 
         String eBuf = textAnchor.getText().toString();
         eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
-        Log.d(TAG, "generateCategoryMenu: Element " + eBuf);
+        Log.d(TAG, "generateCategoryMenu: Sheet " + eBuf);
 
-        for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
+        for (SysSheet e : Session.getInstance().getCurrentSystem().getSheets()) {
             for (String c : e.getCategories()) {
                 pm.getMenu().add(c);
             }
@@ -316,9 +316,9 @@ public class FragmentEditField extends Fragment {
 
         eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
         cBuf = cBuf.substring(cBuf.lastIndexOf(".") + 1, cBuf.length());
-        Log.d(TAG, "generateFieldMenu: Element " + eBuf + " and Category " + cBuf);
+        Log.d(TAG, "generateFieldMenu: Sheet " + eBuf + " and Category " + cBuf);
 
-        for (SysElement e : Session.getInstance().getCurrentSystem().getElements()) {
+        for (SysSheet e : Session.getInstance().getCurrentSystem().getSheets()) {
             if (e.getName().equals(eBuf)) {
                 for (String c : e.getCategories()) {
                     if (c.equals(cBuf)) {

@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/element_item_edit_menu_rename"
+        android:id="@+id/sheet_item_edit_menu_rename"
         app:showAsAction="ifRoom|withText"
         android:visible="true"/>
     <item
-        android:id="@+id/element_item_edit_menu_edit"
+        android:id="@+id/sheet_item_edit_menu_edit"
         app:showAsAction="ifRoom|withText"
         android:visible="true"/>
     <item
-        android:id="@+id/element_item_edit_menu_delete"
+        android:id="@+id/sheet_item_edit_menu_delete"
         app:showAsAction="ifRoom|withText"
         android:visible="true"/>
 

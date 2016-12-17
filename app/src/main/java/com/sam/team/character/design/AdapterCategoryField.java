@@ -1,6 +1,5 @@
 package com.sam.team.character.design;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.support.v7.app.AlertDialog;
@@ -17,7 +16,6 @@ import com.sam.team.character.databinding.ItemSyscategoryBinding;
 import com.sam.team.character.databinding.ItemSysfieldBinding;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.SysCategory;
-import com.sam.team.character.viewmodel.SysElement;
 import com.sam.team.character.viewmodel.SysField;
 
 import java.util.ArrayList;
@@ -31,9 +29,9 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "AdapterCategoryField";
 
     private ArrayList<ListItem> items;
-    private FragmentEditElement fragment;
+    private FragmentEditSheet fragment;
 
-    AdapterCategoryField(FragmentEditElement fragment, ArrayList<ListItem> items) {
+    AdapterCategoryField(FragmentEditSheet fragment, ArrayList<ListItem> items) {
         this.items = items;
         this.fragment = fragment;
     }
@@ -89,7 +87,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                             tpl) {
                                         @Override
                                         void applySettings() {
-                                            for (SysField f : Session.getInstance().getElementFromCache()
+                                            for (SysField f : Session.getInstance().getSheetFromCache()
                                                     .getFieldsByCategory(Session.getInstance().getCategoryFromCache())) {
                                                 f.setCategory(getResults().get(0));
                                             }
@@ -107,9 +105,9 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     builder.setPositiveButton(R.string.dialog_btn_yes, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            for (SysField f : Session.getInstance().getElementFromCache()
+                                            for (SysField f : Session.getInstance().getSheetFromCache()
                                                     .getFieldsByCategory(Session.getInstance().getCategoryFromCache())) {
-                                            Session.getInstance().getElementFromCache().removeField(f.getTypeStr(), f.getName());
+                                            Session.getInstance().getSheetFromCache().removeField(f.getTypeStr(), f.getName());
                                             }
                                             fragment.fillList();
                                             alertDialog.dismiss();

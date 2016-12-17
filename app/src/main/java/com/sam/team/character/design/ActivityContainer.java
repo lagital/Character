@@ -21,7 +21,7 @@ public class ActivityContainer extends AppCompatActivity {
     FrameLayout container;
     FragmentManager mFragmentManager;
     FragmentSystemPicker mFragmentSystemPicker;
-    FragmentEditElement mFragmentEditElement;
+    FragmentEditSheet mFragmentEditSheet;
     FragmentEditField mFragmentEditField;
     FragmentHelp mFragmentHelp;
 
@@ -52,9 +52,7 @@ public class ActivityContainer extends AppCompatActivity {
         shouldDisplayHomeUp();
 
         mFragmentSystemPicker = new FragmentSystemPicker();
-        mFragmentEditElement = new FragmentEditElement();
-        mFragmentEditField = new FragmentEditField();
-        mFragmentHelp = new FragmentHelp();
+        mFragmentEditSheet = new FragmentEditSheet();
 
         if (savedInstanceState == null) {
             // on first run
@@ -79,7 +77,7 @@ public class ActivityContainer extends AppCompatActivity {
                 }
                 case EDIT_ELEMENT: {
                     fragmentTransaction.replace(R.id.container,
-                            mFragmentEditElement);
+                            mFragmentEditSheet);
                     break;
                 }
                 case EDIT_FIELD: {
@@ -90,6 +88,8 @@ public class ActivityContainer extends AppCompatActivity {
                     break;
                 }
                 case HELP: {
+                    // recreate because normally this fragment one-time-used
+                    mFragmentHelp = new FragmentHelp();
                     fragmentTransaction.replace(R.id.container,
                             mFragmentHelp);
                     break;

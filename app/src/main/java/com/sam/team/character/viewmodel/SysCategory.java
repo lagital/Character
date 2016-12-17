@@ -3,7 +3,7 @@ package com.sam.team.character.viewmodel;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
-import com.sam.team.character.core.Element;
+import com.sam.team.character.core.Sheet;
 import com.sam.team.character.core.Field;
 
 /**
@@ -13,12 +13,12 @@ import com.sam.team.character.core.Field;
 public class SysCategory extends BaseObservable implements ListItem {
 
     private String name;
-    private Element element;
+    private Sheet sheet;
 
     //constructors
-    public SysCategory(String name, Element element) {
+    public SysCategory(String name, Sheet sheet) {
         this.name = name;
-        this.element = element;
+        this.sheet = sheet;
     }
 
     // for dummy categories
@@ -39,7 +39,7 @@ public class SysCategory extends BaseObservable implements ListItem {
     //work with fields
     public void addField(Field field) {
         field.setCategory(this.name);
-        element.addField(field);
+        sheet.addField(field);
     }
 
     @Override

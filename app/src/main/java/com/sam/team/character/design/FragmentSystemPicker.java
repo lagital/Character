@@ -1,11 +1,9 @@
 package com.sam.team.character.design;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,16 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
-import com.sam.team.character.core.Element;
-import com.sam.team.character.viewmodel.CleanOnTouchListener;
+import com.sam.team.character.core.Sheet;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.SysElement;
+import com.sam.team.character.viewmodel.SysSheet;
 import com.sam.team.character.viewmodel.SysField;
 import com.sam.team.character.viewmodel.SysRPSystem;
 
@@ -48,6 +42,7 @@ public class FragmentSystemPicker extends Fragment{
     private FloatingActionButton mLoadMiniFAB;
     private ArrayList<ListItem> items;
     private ArrayList<SysRPSystem> systems;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,6 +57,16 @@ public class FragmentSystemPicker extends Fragment{
         mRecyclerView = (RecyclerView) view.findViewById(R.id.systems_list);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fillList();
+                mAdapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         mMainFAB = (FloatingActionButton) view.findViewById(R.id.fab_main);
         mAddMiniFAB = (FloatingActionButton) view.findViewById(R.id.fab_add);
@@ -119,7 +124,7 @@ public class FragmentSystemPicker extends Fragment{
 
             int i;
             SysRPSystem rps = new SysRPSystem("Game", "1.0", "Bla-bla");
-            SysElement e = new SysElement("Character Sheet", Element.ElementType.CHARACTER_SHEET, rps);
+            SysSheet e = new SysSheet("Character Sheet", Sheet.SheetType.CHARACTER_SHEET, rps);
             e.addField(new SysField("Main", "Name", SysField.FieldType.SHORT_TEXT, e));
             e.addField(new SysField("Additional", "Knowledge", SysField.FieldType.LONG_TEXT, e));
             SysField f = new SysField("Additional", "Power", SysField.FieldType.CALCULATED, e);
@@ -127,12 +132,12 @@ public class FragmentSystemPicker extends Fragment{
             f.setRule("Test");
             e.addField(f);
             e.addField(new SysField("Additional", "Ololo", SysField.FieldType.NUMERIC, e));
-            rps.addElement(e);
+            rps.addSheet(e);
             systems.add(rps);
         }
         /* DEBUG */
 
-        mAdapter = new AdapterSystemElement(this, items);
+        mAdapter = new AdapterSystemSheet(this, items);
         mRecyclerView.setAdapter(mAdapter);
 
         fillList();
@@ -154,7 +159,7 @@ public class FragmentSystemPicker extends Fragment{
         items.clear();
         for (SysRPSystem s : systems) {
             items.add(s);
-            for (SysElement e : s.getElements()) {
+            for (SysSheet e : s.getSheets()) {
                 items.add(e);
             }
         }

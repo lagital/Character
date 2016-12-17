@@ -14,7 +14,7 @@ public class SysField extends Field implements ListItem {
 
     private static final String TAG = "SysField";
 
-    public SysField(String category, String name, FieldType type, SysElement element) {
+    public SysField(String category, String name, FieldType type, SysSheet element) {
         super(category, name, type, element);
     }
 

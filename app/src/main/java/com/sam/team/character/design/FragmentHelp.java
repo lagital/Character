@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,7 +29,11 @@ public class FragmentHelp extends Fragment {
     private Button mBtnContactUs;
     private WebView webView;
     private WebViewClient webViewClient;
+    private String url;
     private ProgressBar progressBar;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private Boolean initialLoad = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,19 +44,37 @@ public class FragmentHelp extends Fragment {
         webViewClient = new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                progressBar.setVisibility(View.VISIBLE);
+                if (initialLoad) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
                 super.onPageStarted(view, url, favicon);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                progressBar.setVisibility(View.GONE);
                 super.onPageFinished(view, url);
+                if (initialLoad) {
+                    progressBar.setVisibility(View.GONE);
+                    initialLoad = false;
+                } else {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
             }
         };
         webView.setWebViewClient(webViewClient);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                webView.loadUrl(url);
+                if (!initialLoad) {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+            }
+        });
 
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.help_fragment_title);
@@ -68,18 +91,20 @@ public class FragmentHelp extends Fragment {
 
         switch (name) {
             case "SYSTEM_PICKER": {
-                webView.loadUrl(getResources().getString(R.string.url_SYSTEM_PICKER));
+                url = getResources().getString(R.string.url_SYSTEM_PICKER);
                 break;
             }
             case "EDIT_ELEMENT": {
-                webView.loadUrl(getResources().getString(R.string.url_EDIT_ELEMENT));
+                url = getResources().getString(R.string.url_EDIT_ELEMENT);
                 break;
             }
             case "EDIT_FIELD": {
-                webView.loadUrl(getResources().getString(R.string.url_EDIT_FIELD));
+                url = getResources().getString(R.string.url_EDIT_FIELD);
                 break;
             }
         }
+
+        webView.loadUrl(url);
 
         mBtnGotIt = (Button) view.findViewById(R.id.btn_got_it);
         mBtnContactUs = (Button) view.findViewById(R.id.btn_contact_us);

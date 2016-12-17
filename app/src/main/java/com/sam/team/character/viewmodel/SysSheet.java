@@ -2,7 +2,7 @@ package com.sam.team.character.viewmodel;
 
 import android.databinding.Bindable;
 
-import com.sam.team.character.core.Element;
+import com.sam.team.character.core.Sheet;
 
 import java.util.ArrayList;
 
@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * Created by pborisenko on 10/31/2016.
  */
 
-public class SysElement extends Element<SysField, SysRPSystem> implements ListItem {
+public class SysSheet extends Sheet<SysField, SysRPSystem> implements ListItem {
 
-    private static final String TAG = "SysElement";
+    private static final String TAG = "SysSheet";
 
-    public SysElement(String name, ElementType type, SysRPSystem system) {
+    public SysSheet(String name, SheetType type, SysRPSystem system) {
         super(name, type, system);
     }
 
@@ -24,7 +24,7 @@ public class SysElement extends Element<SysField, SysRPSystem> implements ListIt
     }
 
     @Bindable
-    public ElementType getType() {
+    public SheetType getType() {
         return super.getType();
     }
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * Created by pborisenko on 10/31/2016.
  */
 
-public class SysRPSystem extends RPSystem<SysElement> implements ListItem {
+public class SysRPSystem extends RPSystem<SysSheet> implements ListItem {
     private static final String TAG = "SysRPSystem";
 
     //constructors

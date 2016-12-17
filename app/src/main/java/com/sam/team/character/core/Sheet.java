@@ -16,10 +16,10 @@ import java.util.Set;
  */
 
 @Root
-public class Element<F extends Field, S extends RPSystem> extends BaseObservable {
+public class Sheet<F extends Field, S extends RPSystem> extends BaseObservable {
 
     private String name;
-    private ElementType type;
+    private SheetType type;
     @ElementList
     private ArrayList<F> fields;
     private Set<String> categories = new HashSet<>();
@@ -27,7 +27,7 @@ public class Element<F extends Field, S extends RPSystem> extends BaseObservable
     private S system;
 
     //constructors
-    public Element(String name, ElementType type, S system) {
+    public Sheet(String name, SheetType type, S system) {
         this.name = name;
         this.type = type;
         this.system = system;
@@ -48,13 +48,13 @@ public class Element<F extends Field, S extends RPSystem> extends BaseObservable
 
     //work with type
     @org.simpleframework.xml.Element
-    public void setType(ElementType type) {
+    public void setType(SheetType type) {
         this.type = type;
     }
 
     @Bindable
     @org.simpleframework.xml.Element
-    public ElementType getType() {
+    public SheetType getType() {
         return type; 
     }
 
@@ -108,7 +108,7 @@ public class Element<F extends Field, S extends RPSystem> extends BaseObservable
         return system;
     }
 
-    public enum ElementType {
+    public enum SheetType {
         CHARACTER_SHEET,
         SKILLS,
         ITEMS,
