@@ -1,0 +1,85 @@
+
+package sbcore;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import org.simpleframework.xml.*;
+
+/**
+ *
+ * @author vaize
+ */
+@Root(name="Category") public class SB_Category {
+    
+    @Attribute(name = "index") private int index;
+    @Element(name = "Name") private String name;
+    private Map<String, SB_Field> fields;
+    @ElementList(name = "Fields") private List<SB_Field> fieldsXML;
+    private SB_ElementType element;
+    
+    //constructor to create temporary objects
+    public SB_Category() {}
+    //constructor to create permanent objects
+    public SB_Category(int index, String name, SB_ElementType element) {
+        this.index = index;
+        this.name = name;
+        this.element = element;
+        fields = new TreeMap<>();
+    }
+    
+    //work with name
+    public void setName(String name) { this.name = name; }
+    public String getName() { return name; }
+    
+    //work with index
+    public void setIndex(int index) { this.index = index; }
+    public int getIndex() { return index; }
+        
+    //work with fields
+    public void addField(String fieldName, boolean ... rewrite) {
+        fields.put(fieldName, new SB_Field(getAmountOfFields()+1, fieldName, "", this));
+    } 
+    public void removeField(String fieldName) {
+        fields.remove(fieldName);
+    };
+    public SB_Field getField(String fieldName) { 
+        return fields.get(fieldName);
+    }
+    public ArrayList<String> getFields() {
+        ArrayList<String> tmp = new ArrayList<>();
+        for (String key : fields.keySet()) {
+            tmp.add(key);
+        }
+        tmp.sort(SortByIndex(this));
+        return tmp;
+    }
+    public int getAmountOfFields(){ return fields.size(); }
+    
+    //custom comparator
+    private Comparator<String> SortByIndex(SB_Category category) {   
+        Comparator comp = new Comparator<String>(){
+            @Override
+            public int compare(String s1, String s2)
+            {
+                int tmp = 0;
+                try{
+                    tmp = Integer.toString(category.getField(s1).getIndex()).compareTo(
+                          Integer.toString(category.getField(s2).getIndex()));
+                } catch(Exception e){}
+                return tmp;
+            }        
+        };
+        return comp;
+    }
+    
+    //generateXML
+    public void prepareListOfFields() {
+        fieldsXML = new ArrayList<SB_Field>();
+        for(String s : getFields()){
+            fieldsXML.add(fields.get(s));
+        };
+    }
+}
