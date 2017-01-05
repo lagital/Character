@@ -19,8 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 import com.sam.team.character.R;
-import com.sam.team.character.core.Field;
 import com.sam.team.character.corev2.SB_Field;
+import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelField;
 
@@ -240,7 +240,7 @@ public class FragmentEditField extends Fragment {
                 Session.getInstance().getCategoryFromCache().getName(),
                 editTextName.getText().toString()
         );
-        Session.getInstance().getSystemFromCache().getContent().getField(
+        Session.getInstance().getSystemFromCache().getField(
                 Session.getInstance().getElementFromCache().getName(),
                 Session.getInstance().getCategoryFromCache().getName(),
                 editTextName.getText().toString()
@@ -266,7 +266,7 @@ public class FragmentEditField extends Fragment {
         eBuf = eBuf.substring(eBuf.lastIndexOf('[') + 1, eBuf.lastIndexOf("."));
         Log.d(TAG, "generateCategoryMenu: Element " + eBuf);
 
-        ViewModelElementType tmp = new ViewModelElementType(Session.getInstance().getSystemFromCache().getContent().getElement(eBuf));
+        ViewModelElementType tmp = Session.getInstance().getSystemFromCache().getElement(eBuf);
 
         for (String c : tmp.getCategories()) {
             pm.getMenu().add(c);

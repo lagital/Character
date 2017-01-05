@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel.ListItem;
+import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelCategory;
 import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelField;
@@ -74,7 +75,7 @@ public class FragmentEditElement extends Fragment {
 
                 ArrayList<TextParameter> tpl = new ArrayList<>();
                 tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true));
-                TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
+                new TextParmsDialogBuilder(
                         getActivity(),
                         R.layout.dialog_settings_container,
                         R.layout.dialog_settings_parameter,
@@ -83,8 +84,8 @@ public class FragmentEditElement extends Fragment {
                     @Override
                     void applySettings() {
                         // instantiate new category and create new ViewModel envelope for it
-                        Session.getInstance().getElementFromCache().getContent().addCategory(getResults().get(0));
-                        items.add(new ViewModelCategory(Session.getInstance().getElementFromCache().getContent().getCategory(getResults().get(0))));
+                        Session.getInstance().getElementFromCache().addCategory(getResults().get(0));
+                        items.add(Session.getInstance().getElementFromCache().getCategory(getResults().get(0)));
                         mAdapter.notifyDataSetChanged();
                     }
                 };
@@ -107,9 +108,9 @@ public class FragmentEditElement extends Fragment {
         items.clear();
         if (element != null) {
             for (String c : element.getCategories()) {
-                items.add(new ViewModelCategory(element.getContent().getCategory(c)));
-                for (String f : element.getContent().getFieldsInCategory(c)) {
-                    items.add(new ViewModelField(element.getContent().getField(c, f)));
+                items.add(element.getCategory(c));
+                for (String f : element.getFieldsInCategory(c)) {
+                    items.add(element.getField(c, f));
                 }
             }
         }

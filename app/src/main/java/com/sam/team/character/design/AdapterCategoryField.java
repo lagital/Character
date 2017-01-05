@@ -15,6 +15,7 @@ import com.sam.team.character.R;
 import com.sam.team.character.databinding.ItemCategoryBinding;
 import com.sam.team.character.databinding.ItemFieldBinding;
 import com.sam.team.character.viewmodel.ListItem;
+import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelCategory;
 import com.sam.team.character.viewmodel.ViewModelField;
 

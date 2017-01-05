@@ -1,8 +1,9 @@
 package com.sam.team.character.viewmodel;
 
 import android.content.Context;
-import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.Observable;
+import android.databinding.PropertyChangeRegistry;
 
 import com.sam.team.character.R;
 import com.sam.team.character.corev2.SB_Field;
@@ -11,40 +12,41 @@ import com.sam.team.character.corev2.SB_Field;
  * Created by pborisenko on 10/31/2016.
  */
 
-public class ViewModelField extends BaseObservable implements ListItem, ViewModelEnvelope<SB_Field> {
+public class ViewModelField extends SB_Field implements
+        ListItem,
+        ViewModelEnvelope,
+        Observable {
 
     private static final String TAG = "ViewModelField";
 
-    private SB_Field field;
+    private transient PropertyChangeRegistry callbacks;
 
+    // dummy constructor, normally not used
     public ViewModelField (SB_Field field) {
-        this.field = field;
+        super();
     }
 
     @Override
-    public SB_Field getContent() {
-        return field;
+    public void save() {
+        // create temporary Envelope to save changes into System file
+        ((ViewModelSystem) getCategory().getElement().getSystem()).save();
     }
 
     @Override
-    public void setContent(SB_Field field) {
-        this.field = field;
+    public boolean delete() {
+        getCategory().removeField(getName());
+        getCategory().notifyChange();
+        return true;
     }
-
-    @Override
-    public void save() {}
-
-    @Override
-    public void delete() {}
 
     @Bindable
     public String getName() {
-        return field.getName();
+        return super.getName();
     }
 
     @Bindable
     public String getValue() {
-        return field.getValue();
+        return super.getValue();
     }
 
     @Override
@@ -52,8 +54,15 @@ public class ViewModelField extends BaseObservable implements ListItem, ViewMode
         return TYPE_FIELD;
     }
 
+    /*
+     Change getters to avoid direct connection to Core entities
+     */
+    public ViewModelCategory getCategory() {
+        return (ViewModelCategory) super.getCategory();
+    }
+
     public String getFieldTypeName (Context c) {
-        return formatTypeToName(c, field.getType());
+        return formatTypeToName(c, super.getType());
     }
 
     public static String formatTypeToName (Context c, SB_Field.FieldType t) {
@@ -73,6 +82,45 @@ public class ViewModelField extends BaseObservable implements ListItem, ViewMode
             case 2: {return SB_Field.FieldType.NUMERIC;}
             case 3: {return SB_Field.FieldType.CALCULATED;}
             default: {return SB_Field.FieldType.SHORT_TEXT;}
+        }
+    }
+
+    @Override
+    public synchronized void addOnPropertyChangedCallback(OnPropertyChangedCallback onPropertyChangedCallback) {
+        if (callbacks == null) {
+            callbacks = new PropertyChangeRegistry();
+        }
+        callbacks.add(onPropertyChangedCallback);
+    }
+
+    @Override
+    public synchronized void removeOnPropertyChangedCallback(OnPropertyChangedCallback onPropertyChangedCallback) {
+        if (callbacks != null) {
+            callbacks.remove(onPropertyChangedCallback);
+        }
+    }
+
+    /**
+     * Notifies listeners that all properties of this instance have changed.
+     */
+    public synchronized void notifyChange() {
+        if (callbacks != null) {
+            callbacks.notifyCallbacks(this, 0, null);
+            save();
+        }
+    }
+
+    /**
+     * Notifies listeners that a specific property has changed. The getter for the property
+     * that changes should be marked with {@link Bindable} to generate a field in
+     * <code>BR</code> to be used as <code>fieldId</code>.
+     *
+     * @param fieldId The generated BR id for the Bindable field.
+     */
+    public void notifyPropertyChanged(int fieldId) {
+        if (callbacks != null) {
+            callbacks.notifyCallbacks(this, fieldId, null);
+            save();
         }
     }
 }

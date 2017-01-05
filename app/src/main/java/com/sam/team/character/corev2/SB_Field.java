@@ -26,6 +26,10 @@ import org.simpleframework.xml.Root;
         this.calcRule = calcRule;
         this.category = category;
     }
+
+    public SB_Category getCategory() {
+        return category;
+    }
     
     //work with field's name
     public void setName(String name) { this.name = name; }

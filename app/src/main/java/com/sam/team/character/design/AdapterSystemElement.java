@@ -15,10 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sam.team.character.R;
-import com.sam.team.character.corev2.SB_System;
 import com.sam.team.character.databinding.ItemElementBinding;
 import com.sam.team.character.databinding.ItemSystemBinding;
 import com.sam.team.character.viewmodel.ListItem;
+import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelSystem;
 
@@ -82,7 +82,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getName(), true));
                                     tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getVersion(), false));
                                     tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getCopyright(), false));
-                                    TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
+                                    new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,
                                             R.layout.dialog_settings_parameter,
@@ -99,9 +99,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     break;
                                 }
                                 case R.id.system_item_edit_menu_share: {
-                                    File result = ((ViewModelSystem) items.get(position)).exportXML(fragment.getActivity().getCacheDir().getAbsolutePath());
                                     Uri fileUri = FileProvider.getUriForFile(fragment.getActivity(),
-                                            "com.fileprovider", result);
+                                            "com.fileprovider", new File(((ViewModelSystem) items.get(position)).getSystemFilePath()));
                                     if (fileUri != null) {
 
                                         Intent shareIntent = new Intent();
@@ -175,7 +174,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     Log.d(TAG, "Edit element " + Integer.toString(position));
                     // cache System and Element variables before going into settings
-                    Session.getInstance().cacheSystem(new ViewModelSystem(((ViewModelElementType) items.get(position)).getContent().getSystem()));
+                    Session.getInstance().cacheSystem(((ViewModelElementType) items.get(position)).getSystem());
                     Session.getInstance().cacheElement(((ViewModelElementType) items.get(position)));
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_ELEMENT);
@@ -212,7 +211,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 }
                                 case R.id.sheet_item_edit_menu_edit: {
                                     // cache System and Element variables before going into settings
-                                    Session.getInstance().cacheSystem(new ViewModelSystem(((ViewModelElementType) items.get(position)).getContent().getSystem()));
+                                    Session.getInstance().cacheSystem(((ViewModelElementType) items.get(position)).getSystem());
                                     Session.getInstance().cacheElement(((ViewModelElementType) items.get(position)));
                                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                                             .FragmentType.EDIT_ELEMENT);

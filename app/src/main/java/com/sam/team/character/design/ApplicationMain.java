@@ -15,6 +15,9 @@ public class ApplicationMain extends Application{
 
     private static final String TAG = "ApplicationMain";
 
+    private static String appExternalStoragePath;
+    private static String appInternalStoragePath;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -22,6 +25,12 @@ public class ApplicationMain extends Application{
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "set debug locale");
             SamsaraCore.setLocale(this, null, R.string.locale);
+        }
+
+        appInternalStoragePath = this.getFilesDir().getAbsolutePath();
+
+        if (isExternalStorageReadable() && isExternalStorageWritable()) {
+            appExternalStoragePath = this.getExternalFilesDir(null).getAbsolutePath();
         }
     }
 
@@ -42,5 +51,13 @@ public class ApplicationMain extends Application{
             return true;
         }
         return false;
+    }
+
+    public static String getAppExternalStoragePath () {
+        return appExternalStoragePath;
+    }
+
+    public static String getAppInternalStoragePath () {
+        return appInternalStoragePath;
     }
 }

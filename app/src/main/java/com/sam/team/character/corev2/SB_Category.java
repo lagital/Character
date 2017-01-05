@@ -29,6 +29,10 @@ import org.simpleframework.xml.*;
         this.element = element;
         fields = new TreeMap<>();
     }
+
+    public SB_ElementType getElement() {
+        return element;
+    }
     
     //work with name
     public void setName(String name) { this.name = name; }
