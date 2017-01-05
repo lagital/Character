@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.sam.team.character"
         minSdkVersion 16
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }

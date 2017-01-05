@@ -1,9 +1,9 @@
-
-package sbcore;
+package com.sam.team.character.corev2;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -157,7 +157,7 @@ public class SB_System {
         for (String key : elements.keySet()) {
             tmp.add(key);
         }
-        tmp.sort(SortByIndex(this));
+        Collections.sort(tmp, SortByIndex(this));
         return tmp;
     }
     public int getAmountOfElements() { return elements.size(); }
@@ -227,18 +227,23 @@ public class SB_System {
             }
         };
     }
-    public void ExportXML(String path) {
+    public File exportXML(String path) {
         //prepare lists
         prepateLists();
         //generate xml
         Serializer serializer = new Persister();
         File result = new File(path);
-        try { serializer.write(this, result); }
-        catch(Exception e) {};
+        try {
+            serializer.write(this, result);
+            return result;
+        }
+        catch(Exception e) {
+            return null;
+        }
     }
     
     //custom comparator
-    private Comparator<String> SortByIndex(SB_System system) {   
+    private Comparator<String> SortByIndex(final SB_System system) {
         Comparator comp = new Comparator<String>(){
             @Override
             public int compare(String s1, String s2)

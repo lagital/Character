@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sam.team.character.R;
-import com.sam.team.character.databinding.ItemSyscategoryBinding;
-import com.sam.team.character.databinding.ItemSysfieldBinding;
+import com.sam.team.character.databinding.ItemCategoryBinding;
+import com.sam.team.character.databinding.ItemFieldBinding;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.SysCategory;
-import com.sam.team.character.viewmodel.SysField;
+import com.sam.team.character.viewmodel.ViewModelCategory;
+import com.sam.team.character.viewmodel.ViewModelField;
 
 import java.util.ArrayList;
 
@@ -29,11 +29,11 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "AdapterCategoryField";
 
     private ArrayList<ListItem> items;
-    private FragmentEditSheet fragment;
+    private FragmentEditElement fragment;
 
-    AdapterCategoryField(FragmentEditSheet fragment, ArrayList<ListItem> items) {
-        this.items = items;
+    AdapterCategoryField(FragmentEditElement fragment, ArrayList<ListItem> items) {
         this.fragment = fragment;
+        this.items = items;
     }
 
     @Override
@@ -41,11 +41,11 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if (viewType == ListItem.TYPE_CATEGORY) {
-            ItemSyscategoryBinding binding = ItemSyscategoryBinding.inflate(inflater, parent, false);
-            return new ViewHolderSysCategoryItem(binding.getRoot());
+            ItemCategoryBinding binding = ItemCategoryBinding.inflate(inflater, parent, false);
+            return new ViewHolderCategoryItem(binding.getRoot());
         } else {
-            ItemSysfieldBinding binding = ItemSysfieldBinding.inflate(inflater, parent, false);
-            return new ViewHolderSysFieldItem(binding.getRoot());
+            ItemFieldBinding binding = ItemFieldBinding.inflate(inflater, parent, false);
+            return new ViewHolderFieldItem(binding.getRoot());
         }
     }
 
@@ -53,13 +53,15 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_CATEGORY) {
-            ViewHolderSysCategoryItem h = (ViewHolderSysCategoryItem) holder;
-            h.binding.setCategory((SysCategory) items.get(position));
+            ViewHolderCategoryItem h = (ViewHolderCategoryItem) holder;
+            h.binding.setCategory((ViewModelCategory) items.get(position));
             h.binding.setPlusclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Add field " + Integer.toString(position));
-                    Session.getInstance().cacheCategory(((SysCategory) items.get(position)).getName());
+                    // cache Category variable before going into settings
+                    Session.getInstance().cacheCategory(((ViewModelCategory) items.get(position)));
+
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_FIELD);
                 }
@@ -68,7 +70,6 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit category " + Integer.toString(position));
-                    Session.getInstance().cacheCategory(((SysCategory) items.get(position)).getName());
                     PopupMenu pm = new PopupMenu(fragment.getActivity(), view);
                     pm.getMenu().add(1, R.id.category_item_edit_menu_edit,   1, R.string.category_item_edit_menu_edit);
                     pm.getMenu().add(1, R.id.category_item_edit_menu_delete, 2, R.string.category_item_edit_menu_delete);
@@ -78,7 +79,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             switch (item.getItemId()) {
                                 case R.id.category_item_edit_menu_edit: {
                                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                                    tpl.add(new TextParameter("", Session.getInstance().getCategoryFromCache(), true));
+                                    tpl.add(new TextParameter("", ((ViewModelCategory) items.get(position)).getName(), true));
                                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,
@@ -87,10 +88,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                             tpl) {
                                         @Override
                                         void applySettings() {
-                                            for (SysField f : Session.getInstance().getSheetFromCache()
-                                                    .getFieldsByCategory(Session.getInstance().getCategoryFromCache())) {
-                                                f.setCategory(getResults().get(0));
-                                            }
+                                            ((ViewModelCategory) items.get(position)).setName(getResults().get(0));
                                             fragment.fillList();
                                         }
                                     };
@@ -105,10 +103,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                     builder.setPositiveButton(R.string.dialog_btn_yes, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            for (SysField f : Session.getInstance().getSheetFromCache()
-                                                    .getFieldsByCategory(Session.getInstance().getCategoryFromCache())) {
-                                            Session.getInstance().getSheetFromCache().removeField(f.getTypeStr(), f.getName());
-                                            }
+                                            ((ViewModelCategory) items.get(position)).delete();
                                             fragment.fillList();
                                             alertDialog.dismiss();
                                         }
@@ -130,8 +125,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             });
         } else if (type == ListItem.TYPE_FIELD) {
-            ViewHolderSysFieldItem h = (ViewHolderSysFieldItem) holder;
-            h.binding.setField((SysField) items.get(position));
+            ViewHolderFieldItem h = (ViewHolderFieldItem) holder;
+            h.binding.setField((ViewModelField) items.get(position));
             h.binding.setCardclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -147,21 +142,21 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.size();
     }
 
-    private class ViewHolderSysCategoryItem extends RecyclerView.ViewHolder {
+    private class ViewHolderCategoryItem extends RecyclerView.ViewHolder {
 
-        ItemSyscategoryBinding binding;
+        ItemCategoryBinding binding;
 
-        ViewHolderSysCategoryItem(View v) {
+        ViewHolderCategoryItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }
     }
 
-    private class ViewHolderSysFieldItem extends RecyclerView.ViewHolder {
+    private class ViewHolderFieldItem extends RecyclerView.ViewHolder {
 
-        ItemSysfieldBinding binding;
+        ItemFieldBinding binding;
 
-        ViewHolderSysFieldItem(View v) {
+        ViewHolderFieldItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }

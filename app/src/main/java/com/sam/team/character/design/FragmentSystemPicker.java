@@ -18,10 +18,14 @@ import android.view.ViewGroup;
 import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
 import com.sam.team.character.core.Sheet;
+import com.sam.team.character.corev2.SB_ElementType;
+import com.sam.team.character.corev2.SB_Field;
+import com.sam.team.character.corev2.SB_System;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.SysSheet;
-import com.sam.team.character.viewmodel.SysField;
-import com.sam.team.character.viewmodel.SysRPSystem;
+import com.sam.team.character.viewmodel.ViewModelCategory;
+import com.sam.team.character.viewmodel.ViewModelElementType;
+import com.sam.team.character.viewmodel.ViewModelField;
+import com.sam.team.character.viewmodel.ViewModelSystem;
 
 import java.util.ArrayList;
 
@@ -41,7 +45,7 @@ public class FragmentSystemPicker extends Fragment{
     private FloatingActionButton mAddMiniFAB;
     private FloatingActionButton mLoadMiniFAB;
     private ArrayList<ListItem> items;
-    private ArrayList<SysRPSystem> systems;
+    private ArrayList<SB_System> systems;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -100,10 +104,13 @@ public class FragmentSystemPicker extends Fragment{
                         tpl) {
                     @Override
                     void applySettings() {
-                        systems.add(new SysRPSystem(
+                        // instantiate new System and create new ViewModel envelope for it
+                        ViewModelSystem tmp = new ViewModelSystem(new SB_System(
                                 getResults().get(0),
                                 getResults().get(1),
-                                getResults().get(2)));
+                                getResults().get(2))
+                        );
+                        items.add(tmp);
                         fillList();
                     }
                 };
@@ -122,22 +129,23 @@ public class FragmentSystemPicker extends Fragment{
         if (BuildConfig.DEBUG) {
             Log.d(TAG, "fill debug values");
 
-            int i;
-            SysRPSystem rps = new SysRPSystem("Game", "1.0", "Bla-bla");
-            SysSheet e = new SysSheet("Character Sheet", Sheet.SheetType.CHARACTER_SHEET, rps);
-            e.addField(new SysField("Main", "Name", SysField.FieldType.SHORT_TEXT, e));
-            e.addField(new SysField("Additional", "Knowledge", SysField.FieldType.LONG_TEXT, e));
-            SysField f = new SysField("Additional", "Power", SysField.FieldType.CALCULATED, e);
-            f.setValue("Test1");
-            f.setRule("Test");
-            e.addField(f);
-            e.addField(new SysField("Additional", "Ololo", SysField.FieldType.NUMERIC, e));
-            rps.addSheet(e);
+            SB_System rps = new SB_System("Game", "1.0", "Bla-bla");
+            rps.addElement("Character Sheet");
+            rps.getElement("Character Sheet").addCategory("Main");
+            rps.getElement("Character Sheet").addCategory("Additional");
+            rps.addField("Character Sheet", "Main", "Name");
+            rps.getField("Character Sheet", "Main", "Name").setType(SB_Field.FieldType.SHORT_TEXT);
+            rps.addField("Character Sheet", "Main", "Age");
+            rps.getField("Character Sheet", "Main", "Age").setType(SB_Field.FieldType.NUMERIC);
+            rps.addField("Character Sheet", "Additional", "Knowledge");
+            rps.getField("Character Sheet", "Additional", "Knowledge").setType(SB_Field.FieldType.LONG_TEXT);
+            rps.addField("Character Sheet", "Additional", "Power");
+            rps.getField("Character Sheet", "Additional", "Power").setType(SB_Field.FieldType.CALCULATED);
             systems.add(rps);
         }
         /* DEBUG */
 
-        mAdapter = new AdapterSystemSheet(this, items);
+        mAdapter = new AdapterSystemElement(this, items);
         mRecyclerView.setAdapter(mAdapter);
 
         fillList();
@@ -155,14 +163,16 @@ public class FragmentSystemPicker extends Fragment{
 
     public void fillList () {
         Log.d(TAG, "fillList");
-
         items.clear();
-        for (SysRPSystem s : systems) {
-            items.add(s);
-            for (SysSheet e : s.getSheets()) {
-                items.add(e);
+
+        // put model objects into ViewModel envelopes
+        for (SB_System s : systems) {
+            items.add(new ViewModelSystem(s));
+            for (String se : s.getElements()) {
+                items.add(new ViewModelElementType(s.getElement(se)));
             }
         }
+
         mAdapter.notifyDataSetChanged();
     }
 

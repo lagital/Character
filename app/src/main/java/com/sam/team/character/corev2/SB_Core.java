@@ -1,5 +1,4 @@
-
-package sbcore;
+package com.sam.team.character.corev2;
 
 import java.util.ArrayList;
 
@@ -54,6 +53,6 @@ public class SB_Core {
                 }
         }
         
-        rps.ExportXML("test.xml");
+        rps.exportXML("test.xml");
     }
 }

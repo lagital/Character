@@ -14,17 +14,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
-import android.widget.Switch;
 
 import com.sam.team.character.R;
 import com.sam.team.character.core.Field;
-import com.sam.team.character.viewmodel.CleanOnTouchListener;
-import com.sam.team.character.viewmodel.SysSheet;
-import com.sam.team.character.viewmodel.SysField;
+import com.sam.team.character.corev2.SB_Field;
+import com.sam.team.character.viewmodel.ViewModelElementType;
+import com.sam.team.character.viewmodel.ViewModelField;
 
 /**
  * Created by pborisenko on 11/5/2016.
@@ -36,15 +34,12 @@ public class FragmentEditField extends Fragment {
 
     private LinearLayout nameContainer;
     private LinearLayout typeContainer;
-    private LinearLayout editableContainer;
     private LinearLayout valueContainer;
 
     private EditText editTextName;
     private EditText editTextValue;
 
     private NumberPicker pickerType;
-
-    private Switch editableSwitch;
 
     private Button btnOK;
     private Button btnCancel;
@@ -93,30 +88,6 @@ public class FragmentEditField extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
         });
 
-        /*-------------------------------- EDITABLE STEP -----------------------------------*/
-        editableContainer = (LinearLayout) view.findViewById(R.id.stage_editable);
-        editableSwitch    = (Switch) view.findViewById(R.id.stage_editable_switch);
-        final Step editableStep = new Step(editableContainer) {
-            @Override
-            void enable() {
-                /* calculated fields are always uneditable */
-                if (currentTypeInt == 4) {
-                    setValid(true);
-                    editableSwitch.setChecked(false);
-                    editableContainer.setVisibility(View.GONE);
-                } else {
-                    super.enable();
-                }
-            }
-        };
-
-        editableSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.d(TAG, "Check changed");
-                editableStep.setValid(true);
-            }
-        });
         /*----------------------------------- TYPE STEP -----------------------------------*/
         typeContainer = (LinearLayout) view.findViewById(R.id.stage_type);
         pickerType = (NumberPicker) typeContainer.findViewById(R.id.stage_type_picker);
@@ -130,10 +101,10 @@ public class FragmentEditField extends Fragment {
 
         String[] stringTypes = new String[] {
                 getActivity().getResources().getString(R.string.edit_field_dflt_type),
-                SysField.formatTypeToName(getActivity(), Field.FieldType.SHORT_TEXT),
-                SysField.formatTypeToName(getActivity(), Field.FieldType.LONG_TEXT),
-                SysField.formatTypeToName(getActivity(), Field.FieldType.NUMERIC),
-                SysField.formatTypeToName(getActivity(), Field.FieldType.CALCULATED)
+                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.SHORT_TEXT),
+                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.LONG_TEXT),
+                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.NUMERIC),
+                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.CALCULATED)
         };
         pickerType.setMinValue(0);
         pickerType.setMaxValue(stringTypes.length - 1);
@@ -182,17 +153,17 @@ public class FragmentEditField extends Fragment {
                 }
 
                 // select sheet name
-                if (str.endsWith("@")) {
-                    generateSheetMenu(editTextValue).show();
+                if (str.endsWith("[")) {
+                    generateElementMenu(editTextValue).show();
                 }
 
                 // select category name
                 if (str.endsWith(".")) {
-                    // all between last @ and current dot
-                    str = str.substring(str.lastIndexOf("@") + 1, str.length() - 1);
+                    // all between last "[" and current dot
+                    str = str.substring(str.lastIndexOf("[") + 1, str.length() - 1);
                     Log.d(TAG, "String to analyze: " + str);
 
-                    if (str.contains("@") ||
+                    if (str.contains("[") ||
                             str.contains("(") ||
                             str.contains(")") ||
                             str.contains("+") ||
@@ -228,8 +199,7 @@ public class FragmentEditField extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "btnOK onClick");
-                Session.getInstance().getSheetFromCache().addField(
-                        settingsIntoField());
+                createFieldFromSettings();
                 getFragmentManager().popBackStack();
             }
         });
@@ -257,32 +227,32 @@ public class FragmentEditField extends Fragment {
 
         /*--------------------------------- RELATIONS -------------------------------------*/
         nameStep.addControlChild(typeStep);
-        typeStep.addControlChild(editableStep);
-        editableStep.addControlChild(valueStep);
+        typeStep.addControlChild(valueStep);
         valueStep.addControlChild(btnOKStep);
 
         return view;
     }
 
-    private SysField settingsIntoField () {
-        Log.d(TAG, "settingsIntoField");
-        SysField sf = new SysField(
-                Session.getInstance().getCategoryFromCache(),
-                editTextName.getText().toString(),
-                Field.getTypeFromInt(currentTypeInt),
-                Session.getInstance().getSheetFromCache());
-        // TODO: change after core refactoring
-        sf.setValue(editTextValue.getText().toString());
-
-        return sf;
+    private void createFieldFromSettings () {
+        Log.d(TAG, "createFieldFromSettings");
+        Session.getInstance().getSystemFromCache().addField(
+                Session.getInstance().getElementFromCache().getName(),
+                Session.getInstance().getCategoryFromCache().getName(),
+                editTextName.getText().toString()
+        );
+        Session.getInstance().getSystemFromCache().getContent().getField(
+                Session.getInstance().getElementFromCache().getName(),
+                Session.getInstance().getCategoryFromCache().getName(),
+                editTextName.getText().toString()
+        ).setType(ViewModelField.formatIntToType(currentTypeInt));
     }
 
-    private PopupMenu generateSheetMenu (final EditText textAnchor) {
+    private PopupMenu generateElementMenu(final EditText textAnchor) {
         PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
-        Log.d(TAG, "generateSheetMenu");
+        Log.d(TAG, "generateElementMenu");
 
-        for (SysSheet e : Session.getInstance().getCurrentSystem().getSheets()) {
-            pm.getMenu().add(e.getName());
+        for (String e : Session.getInstance().getSystemFromCache().getElements()) {
+            pm.getMenu().add(e);
         }
 
         pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor));
@@ -293,13 +263,13 @@ public class FragmentEditField extends Fragment {
         PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
 
         String eBuf = textAnchor.getText().toString();
-        eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
-        Log.d(TAG, "generateCategoryMenu: Sheet " + eBuf);
+        eBuf = eBuf.substring(eBuf.lastIndexOf('[') + 1, eBuf.lastIndexOf("."));
+        Log.d(TAG, "generateCategoryMenu: Element " + eBuf);
 
-        for (SysSheet e : Session.getInstance().getCurrentSystem().getSheets()) {
-            for (String c : e.getCategories()) {
-                pm.getMenu().add(c);
-            }
+        ViewModelElementType tmp = new ViewModelElementType(Session.getInstance().getSystemFromCache().getContent().getElement(eBuf));
+
+        for (String c : tmp.getCategories()) {
+            pm.getMenu().add(c);
         }
 
         pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor));
@@ -314,44 +284,25 @@ public class FragmentEditField extends Fragment {
         String eBuf = base.substring(0, base.length()-1);
         String cBuf = eBuf;
 
-        eBuf = eBuf.substring(eBuf.lastIndexOf('@') + 1, eBuf.lastIndexOf("."));
+        eBuf = eBuf.substring(eBuf.lastIndexOf('[') + 1, eBuf.lastIndexOf("."));
         cBuf = cBuf.substring(cBuf.lastIndexOf(".") + 1, cBuf.length());
-        Log.d(TAG, "generateFieldMenu: Sheet " + eBuf + " and Category " + cBuf);
+        Log.d(TAG, "generateFieldMenu: Element " + eBuf + " and Category " + cBuf);
 
-        for (SysSheet e : Session.getInstance().getCurrentSystem().getSheets()) {
-            if (e.getName().equals(eBuf)) {
-                for (String c : e.getCategories()) {
-                    if (c.equals(cBuf)) {
-                        for (SysField f : e.getFieldsByCategory(c)) {
-                            if (f.getType() == Field.FieldType.NUMERIC ||
-                                    f.getType() == Field.FieldType.CALCULATED) {
-                                pm.getMenu().add(f.getName());
-                            }
-                        }
-                    }
-                }
-            }
+        for (String f : Session.getInstance().getSystemFromCache().getFieldsInCategory(eBuf, cBuf)) {
+            pm.getMenu().add(f);
         }
 
-        pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor));
+        // after Field name we need to close "[" with "]"
+        pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor) {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                super.onMenuItemClick(item);
+                textAnchor.setText(textAnchor.getText() + "]");
+                return false;
+            }
+        });
         return pm;
     }
-
-    private class SaverMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
-        private EditText textAnchor;
-
-        SaverMenuItemClickListener (EditText textAnchor) {
-            this.textAnchor = textAnchor;
-        }
-
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            String buf = textAnchor.getText().toString() + item.getTitle();
-            textAnchor.setText(buf);
-            return false;
-        }
-    }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -368,5 +319,20 @@ public class FragmentEditField extends Fragment {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private class SaverMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
+        private EditText textAnchor;
+
+        SaverMenuItemClickListener (EditText textAnchor) {
+            this.textAnchor = textAnchor;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            String buf = textAnchor.getText().toString() + item.getTitle();
+            textAnchor.setText(buf);
+            return false;
+        }
     }
 }

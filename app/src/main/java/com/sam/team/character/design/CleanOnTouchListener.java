@@ -1,4 +1,4 @@
-package com.sam.team.character.viewmodel;
+package com.sam.team.character.design;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;

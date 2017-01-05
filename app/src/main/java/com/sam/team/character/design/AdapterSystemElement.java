@@ -14,15 +14,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
-import com.sam.team.character.core.Sheet;
-import com.sam.team.character.core.RPSystem;
-import com.sam.team.character.databinding.ItemSyssheetBinding;
-import com.sam.team.character.databinding.ItemSysrpsystemBinding;
+import com.sam.team.character.corev2.SB_System;
+import com.sam.team.character.databinding.ItemElementBinding;
+import com.sam.team.character.databinding.ItemSystemBinding;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.SysSheet;
-import com.sam.team.character.viewmodel.SysRPSystem;
+import com.sam.team.character.viewmodel.ViewModelElementType;
+import com.sam.team.character.viewmodel.ViewModelSystem;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -31,16 +29,16 @@ import java.util.ArrayList;
  * Created by pborisenko on 9/26/2016.
  */
 
-class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String TAG = "AdapterSystemSheet";
+    private static final String TAG = "AdapterSystemElement";
 
     private ArrayList<ListItem> items;
     private FragmentSystemPicker fragment;
 
-    AdapterSystemSheet(FragmentSystemPicker fragment, ArrayList<ListItem> items) {
-        this.items = items;
+    AdapterSystemElement(FragmentSystemPicker fragment, ArrayList<ListItem> items) {
         this.fragment = fragment;
+        this.items = items;
     }
 
     @Override
@@ -48,28 +46,28 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
         if (viewType == ListItem.TYPE_SYSTEM) {
-            ItemSysrpsystemBinding binding = ItemSysrpsystemBinding.inflate(inflater, parent, false);
-            return new AdapterSystemSheet.ViewHolderSysRPSystemItem(binding.getRoot());
+            ItemSystemBinding binding = ItemSystemBinding.inflate(inflater, parent, false);
+            return new AdapterSystemElement.ViewHolderSystemItem(binding.getRoot());
         } else if (viewType == ListItem.TYPE_ELEMENT) {
-            ItemSyssheetBinding binding = ItemSyssheetBinding.inflate(inflater, parent, false);
-            return new AdapterSystemSheet.ViewHolderSysSheetItem(binding.getRoot());
+            ItemElementBinding binding = ItemElementBinding.inflate(inflater, parent, false);
+            return new AdapterSystemElement.ViewHolderElementItem(binding.getRoot());
         }
 
-        ItemSysrpsystemBinding binding = ItemSysrpsystemBinding.inflate(inflater, parent, false);
-        return new ViewHolderSysRPSystemItem(binding.getRoot());
+        ItemSystemBinding binding = ItemSystemBinding.inflate(inflater, parent, false);
+        return new ViewHolderSystemItem(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         int type = getItemViewType(position);
         if (type == ListItem.TYPE_SYSTEM) {
-            AdapterSystemSheet.ViewHolderSysRPSystemItem h = (AdapterSystemSheet.ViewHolderSysRPSystemItem) holder;
-            h.binding.setSystem((SysRPSystem) items.get(position));
+            AdapterSystemElement.ViewHolderSystemItem h = (AdapterSystemElement.ViewHolderSystemItem) holder;
+            h.binding.setSystem((ViewModelSystem) items.get(position));
             h.binding.setEditclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "Edit system " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
+                    Session.getInstance().cacheSystem((ViewModelSystem) items.get(position));
                     PopupMenu pm = new PopupMenu(fragment.getActivity(), view);
                     pm.getMenu().add(1, R.id.system_item_edit_menu_edit,   1, R.string.system_item_edit_menu_edit);
                     pm.getMenu().add(1, R.id.system_item_edit_menu_share,  2, R.string.system_item_edit_menu_share);
@@ -81,9 +79,9 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                 case R.id.system_item_edit_menu_edit: {
                                     // show dialog to pass fill new system parameters.
                                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                                    tpl.add(new TextParameter("", Session.getInstance().getCurrentSystem().getName(), true));
-                                    tpl.add(new TextParameter("", Session.getInstance().getCurrentSystem().getVersion(), false));
-                                    tpl.add(new TextParameter("", Session.getInstance().getCurrentSystem().getCopyright(), false));
+                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getName(), true));
+                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getVersion(), false));
+                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getCopyright(), false));
                                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,
@@ -92,22 +90,18 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                             tpl) {
                                         @Override
                                         void applySettings() {
-                                            Session.getInstance().getCurrentSystem().setName(getResults().get(0));
-                                            Session.getInstance().getCurrentSystem().setVersion(getResults().get(1));
-                                            Session.getInstance().getCurrentSystem().setCopyright(getResults().get(2));
+                                            ((ViewModelSystem) items.get(position)).setName(getResults().get(0));
+                                            ((ViewModelSystem) items.get(position)).setVersion(getResults().get(1));
+                                            ((ViewModelSystem) items.get(position)).setCopyright(getResults().get(2));
                                             fragment.fillList();
                                         }
                                     };
                                     break;
                                 }
                                 case R.id.system_item_edit_menu_share: {
-                                    File systemFile = RPSystem.generateXML(Session.getInstance().getCurrentSystem(),
-                                            fragment.getActivity().getCacheDir().getAbsolutePath());
-                                    if (BuildConfig.DEBUG) {
-                                        Log.d(TAG, systemFile.toString());
-                                    }
+                                    File result = ((ViewModelSystem) items.get(position)).exportXML(fragment.getActivity().getCacheDir().getAbsolutePath());
                                     Uri fileUri = FileProvider.getUriForFile(fragment.getActivity(),
-                                            "com.fileprovider", systemFile);
+                                            "com.fileprovider", result);
                                     if (fileUri != null) {
 
                                         Intent shareIntent = new Intent();
@@ -129,7 +123,8 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     builder.setPositiveButton(R.string.dialog_btn_yes, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            // TODO: deleting system
+                                            ((ViewModelSystem) items.get(position)).delete();
+                                            fragment.fillList();
                                             alertDialog.dismiss();
                                         }
                                     });
@@ -154,7 +149,6 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View view) {
                     Log.d(TAG, "New sheet for system " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem((SysRPSystem) items.get(position));
                     ArrayList<TextParameter> tpl = new ArrayList<>();
                     tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), null, true));
                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
@@ -165,10 +159,7 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             tpl) {
                         @Override
                         void applySettings() {
-                            // TODO: work with sheet types
-                            Session.getInstance().getCurrentSystem().addSheet(
-                                    new SysSheet(getResults().get(0), Sheet.SheetType.CHARACTER_SHEET,
-                                            Session.getInstance().getCurrentSystem()));
+                            ((ViewModelSystem) items.get(position)).addElement(getResults().get(0));
                             fragment.fillList();
                         }
                     };
@@ -177,15 +168,15 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             });
         } else if (type == ListItem.TYPE_ELEMENT) {
             Log.d(TAG, "Bind sheet");
-            Session.getInstance().cacheSheet((SysSheet) items.get(position));
-            AdapterSystemSheet.ViewHolderSysSheetItem h = (AdapterSystemSheet.ViewHolderSysSheetItem) holder;
-            h.binding.setSheet(Session.getInstance().getSheetFromCache());
+            AdapterSystemElement.ViewHolderElementItem h = (AdapterSystemElement.ViewHolderElementItem) holder;
+            h.binding.setElement((ViewModelElementType) items.get(position));
             h.binding.setCardclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d(TAG, "Edit sheet " + Integer.toString(position));
-                    Session.getInstance().setCurrentSystem(Session.getInstance().getSheetFromCache().getSystem());
-                    Session.getInstance().cacheSheet(Session.getInstance().getSheetFromCache());
+                    Log.d(TAG, "Edit element " + Integer.toString(position));
+                    // cache System and Element variables before going into settings
+                    Session.getInstance().cacheSystem(new ViewModelSystem(((ViewModelElementType) items.get(position)).getContent().getSystem()));
+                    Session.getInstance().cacheElement(((ViewModelElementType) items.get(position)));
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_ELEMENT);
                 }
@@ -193,8 +184,6 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             h.binding.setEditclick(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Session.getInstance().setCurrentSystem(Session.getInstance().getSheetFromCache().getSystem());
-                    Session.getInstance().cacheSheet(Session.getInstance().getSheetFromCache());
                     PopupMenu pm = new PopupMenu(fragment.getActivity(), view);
                     pm.getMenu().add(1, R.id.sheet_item_edit_menu_rename,  1, R.string.sheet_item_edit_menu_rename);
                     pm.getMenu().add(1, R.id.sheet_item_edit_menu_edit,    2, R.string.sheet_item_edit_menu_edit);
@@ -205,7 +194,7 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                             switch (item.getItemId()) {
                                 case R.id.sheet_item_edit_menu_rename: {
                                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), Session.getInstance().getSheetFromCache().getName(), true));
+                                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), ((ViewModelElementType) items.get(position)).getName(), true));
                                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,
@@ -214,7 +203,7 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                             tpl) {
                                         @Override
                                         void applySettings() {
-                                            Session.getInstance().getSheetFromCache().setName(getResults().get(0));
+                                            ((ViewModelElementType) items.get(position)).setName(getResults().get(0));
                                             fragment.fillList();
                                         }
                                     };
@@ -222,6 +211,9 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     break;
                                 }
                                 case R.id.sheet_item_edit_menu_edit: {
+                                    // cache System and Element variables before going into settings
+                                    Session.getInstance().cacheSystem(new ViewModelSystem(((ViewModelElementType) items.get(position)).getContent().getSystem()));
+                                    Session.getInstance().cacheElement(((ViewModelElementType) items.get(position)));
                                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                                             .FragmentType.EDIT_ELEMENT);
                                     break;
@@ -233,9 +225,7 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                                     builder.setPositiveButton(R.string.dialog_btn_yes, new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
-                                            Session.getInstance().getCurrentSystem().removeSheet(
-                                                    Session.getInstance().getSheetFromCache().getType(),
-                                                    Session.getInstance().getSheetFromCache().getName());
+                                            ((ViewModelElementType) items.get(position)).delete();
                                             fragment.fillList();
                                             alertDialog.dismiss();
                                         }
@@ -265,21 +255,21 @@ class AdapterSystemSheet extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return items.size();
     }
 
-    private class ViewHolderSysRPSystemItem extends RecyclerView.ViewHolder {
+    private class ViewHolderSystemItem extends RecyclerView.ViewHolder {
 
-        ItemSysrpsystemBinding binding;
+        ItemSystemBinding binding;
 
-        ViewHolderSysRPSystemItem(View v) {
+        ViewHolderSystemItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }
     }
 
-    private class ViewHolderSysSheetItem extends RecyclerView.ViewHolder {
+    private class ViewHolderElementItem extends RecyclerView.ViewHolder {
 
-        ItemSyssheetBinding binding;
+        ItemElementBinding binding;
 
-        ViewHolderSysSheetItem(View v) {
+        ViewHolderElementItem(View v) {
             super(v);
             binding = DataBindingUtil.bind(v);
         }

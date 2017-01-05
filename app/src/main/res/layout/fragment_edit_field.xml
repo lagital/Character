@@ -57,33 +57,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/stage_editable"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:visibility="gone"
-                android:background="@drawable/change_step_to_enable"
-                android:animateLayoutChanges="true">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textColor="@color/colorPrimaryText"
-                    android:textSize="@dimen/text_headline_type"
-                    android:text="@string/edit_field_editable"/>
-
-                <Switch
-                    android:id="@+id/stage_editable_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textOn="@string/edit_field_editable_yes"
-                    android:textOff="@string/edit_field_editable_no"
-                    android:layout_marginBottom="10dp"
-                    android:checked="true"/>
-                    
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/stage_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

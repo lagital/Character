@@ -1,9 +1,9 @@
 package com.sam.team.character.design;
 
 import android.util.Log;
-
-import com.sam.team.character.viewmodel.SysSheet;
-import com.sam.team.character.viewmodel.SysRPSystem;
+import com.sam.team.character.viewmodel.ViewModelCategory;
+import com.sam.team.character.viewmodel.ViewModelElementType;
+import com.sam.team.character.viewmodel.ViewModelSystem;
 
 /**
  * Created by pborisenko on 10/8/2016.
@@ -15,9 +15,9 @@ class Session {
 
     private static Session instance;
 
-    private SysRPSystem currentSystem;
-    private SysSheet sheet;
-    private String category;
+    private ViewModelSystem currentSystem;
+    private ViewModelElementType elementType;
+    private ViewModelCategory category;
 
     static synchronized Session getInstance() {
         if (instance == null) {
@@ -27,32 +27,32 @@ class Session {
         return instance;
     }
 
-    SysRPSystem getCurrentSystem() {
-        Log.d(TAG, "getCurrentSystem");
+    ViewModelSystem getSystemFromCache() {
+        Log.d(TAG, "getSystemFromCache");
         return currentSystem;
     }
 
-    void setCurrentSystem(SysRPSystem system) {
-        Log.d(TAG, "setCurrentSystem");
+    void cacheSystem(ViewModelSystem system) {
+        Log.d(TAG, "cacheSystem");
         this.currentSystem = system;
     }
 
-    void cacheSheet(SysSheet sheet) {
-        Log.d(TAG, "cacheSheet");
-        this.sheet = sheet;
+    void cacheElement(ViewModelElementType elementType) {
+        Log.d(TAG, "cacheElementType");
+        this.elementType = elementType;
     }
 
-    SysSheet getSheetFromCache () {
-        Log.d(TAG, "getSheetFromCache");
-        return sheet;
+    ViewModelElementType getElementFromCache () {
+        Log.d(TAG, "getElementTypeFromCache");
+        return elementType;
     }
 
-    void cacheCategory (String category) {
+    void cacheCategory (ViewModelCategory category) {
         Log.d(TAG, "cacheCategory");
         this.category = category;
     }
 
-    String getCategoryFromCache () {
+    ViewModelCategory getCategoryFromCache () {
         Log.d(TAG, "getCategoryFromCache");
         return category;
     }

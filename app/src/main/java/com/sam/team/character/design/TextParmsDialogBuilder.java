@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel.CleanOnTouchListener;
 
 import java.util.ArrayList;
 

@@ -17,9 +17,9 @@ import android.view.ViewGroup;
 
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.SysCategory;
-import com.sam.team.character.viewmodel.SysSheet;
-import com.sam.team.character.viewmodel.SysField;
+import com.sam.team.character.viewmodel.ViewModelCategory;
+import com.sam.team.character.viewmodel.ViewModelElementType;
+import com.sam.team.character.viewmodel.ViewModelField;
 
 import java.util.ArrayList;
 
@@ -27,9 +27,9 @@ import java.util.ArrayList;
  * Created by pborisenko on 10/27/2016.
  */
 
-public class FragmentEditSheet extends Fragment {
+public class FragmentEditElement extends Fragment {
 
-    private static final String TAG = "FragmentEditSheet";
+    private static final String TAG = "FragmentEditElement";
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -39,7 +39,7 @@ public class FragmentEditSheet extends Fragment {
     /* Categories and fields: */
     private ArrayList<ListItem> items;
 
-    private SysSheet element;
+    private ViewModelElementType element;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +73,7 @@ public class FragmentEditSheet extends Fragment {
                 Log.d(TAG, "Main FAB click");
 
                 ArrayList<TextParameter> tpl = new ArrayList<>();
-                tpl.add(new TextParameter(FragmentEditSheet.this.getResources().getString(R.string.new_category_dflt_name), null, true));
+                tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true));
                 TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                         getActivity(),
                         R.layout.dialog_settings_container,
@@ -82,7 +82,9 @@ public class FragmentEditSheet extends Fragment {
                         tpl) {
                     @Override
                     void applySettings() {
-                        items.add(new SysCategory(getResults().get(0)));
+                        // instantiate new category and create new ViewModel envelope for it
+                        Session.getInstance().getElementFromCache().getContent().addCategory(getResults().get(0));
+                        items.add(new ViewModelCategory(Session.getInstance().getElementFromCache().getContent().getCategory(getResults().get(0))));
                         mAdapter.notifyDataSetChanged();
                     }
                 };
@@ -90,7 +92,7 @@ public class FragmentEditSheet extends Fragment {
         });
 
         items = new ArrayList<>();
-        element = Session.getInstance().getSheetFromCache();
+        element = Session.getInstance().getElementFromCache();
         fillList();
 
         mAdapter = new AdapterCategoryField(this, items);
@@ -104,10 +106,10 @@ public class FragmentEditSheet extends Fragment {
 
         items.clear();
         if (element != null) {
-            for (String s : element.getCategories()) {
-                items.add(new SysCategory(s, element));
-                for (SysField f : element.getFieldsByCategory(s)) {
-                    items.add(f);
+            for (String c : element.getCategories()) {
+                items.add(new ViewModelCategory(element.getContent().getCategory(c)));
+                for (String f : element.getContent().getFieldsInCategory(c)) {
+                    items.add(new ViewModelField(element.getContent().getField(c, f)));
                 }
             }
         }

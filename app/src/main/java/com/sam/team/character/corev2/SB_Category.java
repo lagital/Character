@@ -1,7 +1,7 @@
-
-package sbcore;
+package com.sam.team.character.corev2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -53,13 +53,13 @@ import org.simpleframework.xml.*;
         for (String key : fields.keySet()) {
             tmp.add(key);
         }
-        tmp.sort(SortByIndex(this));
+        Collections.sort(tmp, SortByIndex(this));
         return tmp;
     }
     public int getAmountOfFields(){ return fields.size(); }
     
     //custom comparator
-    private Comparator<String> SortByIndex(SB_Category category) {   
+    private Comparator<String> SortByIndex(final SB_Category category) {
         Comparator comp = new Comparator<String>(){
             @Override
             public int compare(String s1, String s2)

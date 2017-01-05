@@ -2,10 +2,10 @@
 
 <layout>
     <data>
-        <import type="com.sam.team.character.viewmodel.SysSheet"/>
+        <import type="com.sam.team.character.viewmodel.ViewModelElementType"/>
         <variable
-            name="sheet"
-            type="SysSheet" />
+            name="element"
+            type="ViewModelElementType" />
         <variable
             name="cardclick"
             type="android.view.View.OnClickListener" />
@@ -32,7 +32,7 @@
             android:textSize="@dimen/text_headline_type"
             android:layout_margin="@dimen/card_icons_margin"
             android:layout_gravity="center_vertical"
-            android:text="@{sheet.name}"/>
+            android:text="@{element.name}"/>
 
         <ImageButton
             android:id="@+id/btn_edit"

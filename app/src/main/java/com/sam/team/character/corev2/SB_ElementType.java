@@ -1,7 +1,7 @@
-
-package sbcore;
+package com.sam.team.character.corev2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +35,10 @@ public class SB_ElementType {
     
     //work with index
     public int getIndex(){ return index; }
-       
+
+    //work with system
+    public SB_System getSystem(){ return system; }
+
     //work with categories
     public void addCategory(String categoryName, boolean ... rewrite) {
         categories.put(categoryName, new SB_Category(getAmountOfCategories()+1, categoryName, this));
@@ -51,7 +54,7 @@ public class SB_ElementType {
         for (String key : categories.keySet()) {
             tmp.add(key);
         }
-        tmp.sort(SortByIndex(this));
+        Collections.sort(tmp, SortByIndex(this));
         return tmp;
     }
     public int getAmountOfCategories(){ return categories.size(); }
@@ -80,7 +83,7 @@ public class SB_ElementType {
     }
     
     //custom Comparator
-    private Comparator<String> SortByIndex(SB_ElementType elementType) {   
+    private Comparator<String> SortByIndex(final SB_ElementType elementType) {
         Comparator comp = new Comparator<String>(){
             @Override
             public int compare(String s1, String s2)

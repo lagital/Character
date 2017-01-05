@@ -21,7 +21,7 @@ public class ActivityContainer extends AppCompatActivity {
     FrameLayout container;
     FragmentManager mFragmentManager;
     FragmentSystemPicker mFragmentSystemPicker;
-    FragmentEditSheet mFragmentEditSheet;
+    FragmentEditElement mFragmentEditSheet;
     FragmentEditField mFragmentEditField;
     FragmentHelp mFragmentHelp;
 
@@ -52,7 +52,7 @@ public class ActivityContainer extends AppCompatActivity {
         shouldDisplayHomeUp();
 
         mFragmentSystemPicker = new FragmentSystemPicker();
-        mFragmentEditSheet = new FragmentEditSheet();
+        mFragmentEditSheet = new FragmentEditElement();
 
         if (savedInstanceState == null) {
             // on first run

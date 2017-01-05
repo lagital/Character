@@ -2,10 +2,10 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
-        <import type="com.sam.team.character.viewmodel.SysCategory"/>
+        <import type="com.sam.team.character.viewmodel.ViewModelCategory"/>
         <variable
             name="category"
-            type="SysCategory" />
+            type="ViewModelCategory" />
         <variable
             name="plusclick"
             type="android.view.View.OnClickListener" />
