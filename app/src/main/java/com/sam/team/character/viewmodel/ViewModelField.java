@@ -9,12 +9,15 @@ import android.util.Log;
 import com.sam.team.character.R;
 import com.sam.team.character.corev2.SB_Field;
 
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 
 /**
  * Created by pborisenko on 10/31/2016.
  */
 
+@Root(name="Field")
 public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
         implements
         ListItem,

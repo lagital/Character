@@ -8,12 +8,15 @@ import android.util.Log;
 import com.sam.team.character.BR;
 import com.sam.team.character.corev2.SB_ElementType;
 
+import org.simpleframework.xml.Root;
+
 import java.io.Serializable;
 
 /**
  * Created by pborisenko on 10/31/2016.
  */
 
+@Root(name = "Element")
 public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
         implements
         ListItem,

@@ -17,6 +17,7 @@ import com.sam.team.character.databinding.ItemFieldBinding;
 import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelCategory;
+import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelField;
 import com.sam.team.character.viewmodel.ViewModelSystem;
 
@@ -175,15 +176,13 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void renewItems() {
         Log.d(TAG, "renewItems");
         items.clear();
-        for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {
-            for (String se : s.getElements()) {
-                for (String sc : s.getElement(se).getCategories()) {
-                    items.add(s.getCategory(se, sc));
-                    for (String sf : s.getFieldsInCategory(se, sc)) {
-                        items.add(s.getField(se, sc, sf));
-                    }
-                };
+        ViewModelElementType tmpE = Session.getInstance().getElementFromCache();
+        for (String sc : tmpE.getCategories()) {
+            ViewModelCategory tmpC = tmpE.getCategory(sc);
+            items.add(tmpC);
+            for (String sf : tmpC.getFields()) {
+                items.add(tmpC.getField(sf));
             }
-        }
+        };
     }
 }

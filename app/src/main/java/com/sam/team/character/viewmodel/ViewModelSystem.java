@@ -10,6 +10,8 @@ import com.sam.team.character.BR;
 import com.sam.team.character.corev2.SB_System;
 import com.sam.team.character.design.ApplicationMain;
 
+import org.simpleframework.xml.Root;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
  * Created by pborisenko on 10/31/2016.
  */
 
+@Root(name = "System")
 public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
         implements
         ListItem,

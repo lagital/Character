@@ -1,10 +1,6 @@
 package com.sam.team.character.corev2;
 
-import android.util.Log;
-
-import java.io.File;
 import java.io.StringWriter;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

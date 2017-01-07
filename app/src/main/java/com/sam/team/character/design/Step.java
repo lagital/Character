@@ -3,6 +3,7 @@ package com.sam.team.character.design;
 import android.graphics.Interpolator;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +30,8 @@ class Step {
     Step (View container) {
         this.container = container;
         toControl = new ArrayList<>();
-        if ( container.getBackground() instanceof LayerDrawable) {
+
+        if ( container.getBackground() instanceof TransitionDrawable) {
             transition = (TransitionDrawable) container.getBackground();
         }
     }
@@ -61,7 +63,7 @@ class Step {
     }
 
     void setValidUI (Boolean v) {
-        if (v == valid) {
+        if (valid == v) {
             return;
         }
         if (v) {

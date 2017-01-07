@@ -8,7 +8,8 @@ import org.simpleframework.xml.Root;
  *
  * @author vaize
  */
-@Root(name="Field") public class SB_Field<
+@Root(name="Field")
+public class SB_Field<
         S extends SB_System,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,

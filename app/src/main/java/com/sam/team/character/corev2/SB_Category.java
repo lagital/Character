@@ -12,7 +12,8 @@ import org.simpleframework.xml.*;
  *
  * @author vaize
  */
-@Root(name="Category") public class SB_Category <
+@Root(name="Category")
+public class SB_Category <
         S extends SB_System,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
