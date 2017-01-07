@@ -18,6 +18,7 @@ import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelCategory;
 import com.sam.team.character.viewmodel.ViewModelField;
+import com.sam.team.character.viewmodel.ViewModelSystem;
 
 import java.util.ArrayList;
 
@@ -32,9 +33,10 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<ListItem> items;
     private FragmentEditElement fragment;
 
-    AdapterCategoryField(FragmentEditElement fragment, ArrayList<ListItem> items) {
+    AdapterCategoryField(FragmentEditElement fragment) {
         this.fragment = fragment;
-        this.items = items;
+        this.items = new ArrayList<>();
+        renewItems();
     }
 
     @Override
@@ -90,7 +92,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                         @Override
                                         void applySettings() {
                                             ((ViewModelCategory) items.get(position)).setName(getResults().get(0));
-                                            fragment.fillList();
+                                            renewItems();
+                                            notifyDataSetChanged();
                                         }
                                     };
                                     builder.getDialog().show();
@@ -105,7 +108,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             ((ViewModelCategory) items.get(position)).delete();
-                                            fragment.fillList();
+                                            renewItems();
+                                            notifyDataSetChanged();
                                             alertDialog.dismiss();
                                         }
                                     });
@@ -166,5 +170,20 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
         return items.get(position).getItemType();
+    }
+
+    public void renewItems() {
+        Log.d(TAG, "renewItems");
+        items.clear();
+        for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {
+            for (String se : s.getElements()) {
+                for (String sc : s.getElement(se).getCategories()) {
+                    items.add(s.getCategory(se, sc));
+                    for (String sf : s.getFieldsInCategory(se, sc)) {
+                        items.add(s.getField(se, sc, sf));
+                    }
+                };
+            }
+        }
     }
 }

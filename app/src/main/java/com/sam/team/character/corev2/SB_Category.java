@@ -12,26 +12,36 @@ import org.simpleframework.xml.*;
  *
  * @author vaize
  */
-@Root(name="Category") public class SB_Category {
+@Root(name="Category") public class SB_Category <
+        S extends SB_System,
+        E extends SB_ElementType<S, E, C, F>,
+        C extends SB_Category<S, E, C, F>,
+        F extends SB_Field<S, E, C, F>> {
     
     @Attribute(name = "index") private int index;
     @Element(name = "Name") private String name;
-    private Map<String, SB_Field> fields;
-    @ElementList(name = "Fields") private List<SB_Field> fieldsXML;
-    private SB_ElementType element;
+    private Map<String, F> fields;
+    @ElementList(name = "Fields") private List<F> fieldsXML;
+    private E element;
     
     //constructor to create temporary objects
-    public SB_Category() {}
+    public SB_Category() {
+        fields = new TreeMap<>();
+    }
     //constructor to create permanent objects
-    public SB_Category(int index, String name, SB_ElementType element) {
+    public SB_Category(int index, String name, E element) {
         this.index = index;
         this.name = name;
         this.element = element;
         fields = new TreeMap<>();
     }
 
-    public SB_ElementType getElement() {
+    public E getElement() {
         return element;
+    }
+
+    public void setElement(E element) {
+        this.element = element;
     }
     
     //work with name
@@ -43,13 +53,18 @@ import org.simpleframework.xml.*;
     public int getIndex() { return index; }
         
     //work with fields
-    public void addField(String fieldName, boolean ... rewrite) {
-        fields.put(fieldName, new SB_Field(getAmountOfFields()+1, fieldName, "", this));
+    public void addField(Class<F> clazz, String fieldName, boolean ... rewrite) throws Exception {
+        F tmp = clazz.getConstructor().newInstance();
+        tmp.setIndex(getAmountOfFields()+1);
+        tmp.setName(fieldName);
+        tmp.setRule("");
+        tmp.setCategory((C) this);
+        fields.put(fieldName, tmp);
     } 
     public void removeField(String fieldName) {
         fields.remove(fieldName);
     };
-    public SB_Field getField(String fieldName) { 
+    public F getField(String fieldName) {
         return fields.get(fieldName);
     }
     public ArrayList<String> getFields() {
@@ -81,7 +96,7 @@ import org.simpleframework.xml.*;
     
     //generateXML
     public void prepareListOfFields() {
-        fieldsXML = new ArrayList<SB_Field>();
+        fieldsXML = new ArrayList<F>();
         for(String s : getFields()){
             fieldsXML.add(fields.get(s));
         };

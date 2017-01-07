@@ -8,29 +8,37 @@ import org.simpleframework.xml.Root;
  *
  * @author vaize
  */
-@Root(name="Field") public class SB_Field {
+@Root(name="Field") public class SB_Field<
+        S extends SB_System,
+        E extends SB_ElementType<S, E, C, F>,
+        C extends SB_Category<S, E, C, F>,
+        F extends SB_Field<S, E, C, F>> {
 
     @Attribute(name = "index") private int index;
     @Element(name = "Name") private String name;
-    @Element(name = "Value") private String value;
+    @Element(name = "Value") private String value = "";
     @Element(name = "Type") private String type;
     @Element(name = "CalculationRule", required = false) private String calcRule;
-    private SB_Category category;
+    private C category;
 
     //constructor to create temporary objects
     public SB_Field() {}
     //constructor to create permanent objects
-    public SB_Field(int index, String name, String calcRule, SB_Category category) {
+    public SB_Field(int index, String name, String calcRule, C category) {
         this.index = index;
         this.name = name;
         this.calcRule = calcRule;
         this.category = category;
     }
 
-    public SB_Category getCategory() {
+    public C getCategory() {
         return category;
     }
-    
+
+    public void setCategory(C category) {
+        this.category = category;
+    }
+
     //work with field's name
     public void setName(String name) { this.name = name; }
     public String getName() { return name; }

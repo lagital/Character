@@ -9,21 +9,23 @@ import java.util.ArrayList;
 public class SB_Core {
     public static void main(String[] args) {
         SB_System rps = new SB_System("rps");
-        
-            rps.addElement("Investigator");
-            rps.addCategory("Investigator", "Common");
-            rps.addField("Investigator", "Common", "Name");
-            rps.addField("Investigator", "Common", "Player");
-            rps.addField("Investigator", "Common", "Age");
-            rps.addCategory("Investigator", "Skills");
-            
-            
-            rps.addElement("Weapon");
-            rps.addCategory("Weapon", "Common");
-            
-            rps.addElement("Skill");
-            rps.addCategory("Skill", "Common");
-            
+        try {
+            rps.addElement(SB_ElementType.class, "Investigator");
+            rps.addCategory(SB_Category.class, "Investigator", "Common");
+            rps.addField(SB_Field.class, "Investigator", "Common", "Name");
+            rps.addField(SB_Field.class, "Investigator", "Common", "Player");
+            rps.addField(SB_Field.class, "Investigator", "Common", "Age");
+            rps.addCategory(SB_Category.class, "Investigator", "Skills");
+
+
+            rps.addElement(SB_ElementType.class, "Weapon");
+            rps.addCategory(SB_Category.class, "Weapon", "Common");
+
+            rps.addElement(SB_ElementType.class, "Skill");
+            rps.addCategory(SB_Category.class, "Skill", "Common");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
             
         ArrayList<String> el_list = new ArrayList<String>();
         el_list = rps.getElements();
@@ -53,6 +55,6 @@ public class SB_Core {
                 }
         }
         
-        rps.exportXML("test.xml");
+        rps.generateXML();
     }
 }

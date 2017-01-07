@@ -4,36 +4,38 @@ import android.content.Context;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
+import android.util.Log;
 
 import com.sam.team.character.R;
 import com.sam.team.character.corev2.SB_Field;
+
+import java.io.Serializable;
 
 /**
  * Created by pborisenko on 10/31/2016.
  */
 
-public class ViewModelField extends SB_Field implements
+public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
+        implements
         ListItem,
         ViewModelEnvelope,
-        Observable {
+        Observable,
+        Serializable {
 
     private static final String TAG = "ViewModelField";
 
     private transient PropertyChangeRegistry callbacks;
 
-    // dummy constructor, normally not used
-    public ViewModelField (SB_Field field) {
-        super();
-    }
-
     @Override
     public void save() {
+        Log.d(TAG, "save");
         // create temporary Envelope to save changes into System file
-        ((ViewModelSystem) getCategory().getElement().getSystem()).save();
+        getCategory().getElement().getSystem().save();
     }
 
     @Override
     public boolean delete() {
+        Log.d(TAG, "delete");
         getCategory().removeField(getName());
         getCategory().notifyChange();
         return true;
@@ -54,11 +56,17 @@ public class ViewModelField extends SB_Field implements
         return TYPE_FIELD;
     }
 
+    @Override
+    public void setValue(String value) {
+        super.setValue(value);
+        save();
+    }
+
     /*
-     Change getters to avoid direct connection to Core entities
-     */
+         Change getters to avoid direct connection to Core entities
+         */
     public ViewModelCategory getCategory() {
-        return (ViewModelCategory) super.getCategory();
+        return super.getCategory();
     }
 
     public String getFieldTypeName (Context c) {

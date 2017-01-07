@@ -4,22 +4,27 @@ import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.sam.team.character.BR;
 import com.sam.team.character.corev2.SB_System;
 import com.sam.team.character.design.ApplicationMain;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by pborisenko on 10/31/2016.
  */
 
-public class ViewModelSystem extends SB_System implements
+public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
+        implements
         ListItem,
         ViewModelEnvelope,
-        Observable {
+        Observable,
+        Serializable{
 
     private static final String TAG = "ViewModelSystem";
 
@@ -35,12 +40,14 @@ public class ViewModelSystem extends SB_System implements
 
     @Override
     public void save() {
+        Log.d(TAG, "save");
         AsyncTaskFileSave task = new AsyncTaskFileSave(this);
         task.execute();
     }
 
     @Override
     public boolean delete() {
+        Log.d(TAG, "delete");
         Session.getInstance().getSystemStorage().remove(this);
         return new File(systemFilePath).delete();
     }
@@ -53,7 +60,7 @@ public class ViewModelSystem extends SB_System implements
     public void setName(String name) {
         super.setName(name);
         // rename system file
-        Boolean result = new File(systemFilePath).renameTo(new File(generateSystemFilePath()));
+        new File(systemFilePath).renameTo(new File(generateSystemFilePath()));
         this.systemFilePath = generateSystemFilePath();
         notifyPropertyChanged(BR.name);
     }
@@ -78,8 +85,20 @@ public class ViewModelSystem extends SB_System implements
         notifyPropertyChanged(BR.copyright);
     }
 
-    public File exportXML (String path) {
-        return super.exportXML(path + "/" + getName() + "." + SYSTEM_FILE_TYPE);
+    public File exportSystemXML () {
+        Log.d(TAG, "exportSystemXML");
+        String xml = generateXML();
+        Log.d(TAG, xml);
+        File tmp = new File(systemFilePath);
+        try {
+            FileOutputStream fos = new FileOutputStream(tmp);
+            fos.write(xml.getBytes());
+            fos.close();
+            return tmp;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ArrayList<String> getElements () {
@@ -87,12 +106,21 @@ public class ViewModelSystem extends SB_System implements
     }
 
     public void addElement (String name) {
-        super.addElement(name);
+        try {
+            super.addElement(ViewModelElementType.class, name);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         notifyChange();
     }
 
     public void addField (String elementName, String categoryName, String fieldName) {
-        super.addField(elementName, categoryName, fieldName);
+        try {
+            super.addField(ViewModelField.class, elementName, categoryName, fieldName);
+            getField(elementName, categoryName, fieldName).setValue("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         notifyChange();
     }
 
@@ -109,7 +137,7 @@ public class ViewModelSystem extends SB_System implements
      Change getters to avoid direct connection to Core entities
      */
     public ViewModelElementType getElement (String elementName) {
-        return (ViewModelElementType) super.getElement(elementName);
+        return super.getElement(elementName);
     }
 
     public String getSystemFilePath() {
@@ -117,6 +145,7 @@ public class ViewModelSystem extends SB_System implements
     }
 
     private String generateSystemFilePath() {
+        Log.d(TAG, "generateSystemFilePath");
         if (ApplicationMain.getAppExternalStoragePath() != null) {
             return ApplicationMain.getAppExternalStoragePath()
                     + "/"
@@ -131,7 +160,7 @@ public class ViewModelSystem extends SB_System implements
     }
 
     private class AsyncTaskFileSave extends AsyncTask<Void, Void, Void> {
-
+        private static final String TAG = "AsyncTaskFileSave";
         private ViewModelSystem system;
 
         AsyncTaskFileSave(ViewModelSystem system) {
@@ -140,7 +169,8 @@ public class ViewModelSystem extends SB_System implements
 
         @Override
         protected Void doInBackground(Void... params) {
-            system.exportXML(system.systemFilePath);
+            Log.d(TAG, "doInBackground");
+            exportSystemXML();
             return null;
         }
     }

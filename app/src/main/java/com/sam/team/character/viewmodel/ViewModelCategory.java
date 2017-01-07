@@ -3,18 +3,25 @@ package com.sam.team.character.viewmodel;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
+import android.util.Log;
 
 import com.sam.team.character.BR;
 import com.sam.team.character.corev2.SB_Category;
+
+import java.io.Serializable;
 
 /**
  * Created by pborisenko on 10/4/2016.
  */
 
-public class ViewModelCategory extends SB_Category implements
+public class ViewModelCategory extends SB_Category <ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
+        implements
         ListItem,
         ViewModelEnvelope,
-        Observable {
+        Observable,
+        Serializable {
+
+    private static final String TAG = "ViewModelCategory";
 
     private transient PropertyChangeRegistry callbacks;
 
@@ -25,14 +32,15 @@ public class ViewModelCategory extends SB_Category implements
 
     @Override
     public void save() {
+        Log.d(TAG, "save");
         // create temporary Envelope to save changes into System file
-        ((ViewModelSystem) getElement().getSystem()).save();
+        getElement().getSystem().save();
     }
 
     @Override
     public boolean delete() {
+        Log.d(TAG, "delete");
         getElement().removeCategory(getName());
-        getElement().notifyChange();
         return true;
     }
 
@@ -55,7 +63,7 @@ public class ViewModelCategory extends SB_Category implements
      Change getters to avoid direct connection to Core entities
      */
     public ViewModelElementType getElement() {
-        return (ViewModelElementType) super.getElement();
+        return super.getElement();
     }
 
     @Override

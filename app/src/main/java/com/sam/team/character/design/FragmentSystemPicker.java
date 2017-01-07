@@ -15,10 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.sam.team.character.BuildConfig;
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel.ListItem;
-import com.sam.team.character.viewmodel.ViewModelField;
+import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelSystem;
 
 import java.util.ArrayList;
@@ -33,13 +31,11 @@ public class FragmentSystemPicker extends Fragment{
 
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private AdapterSystemElement mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mMainFAB;
     private FloatingActionButton mAddMiniFAB;
     private FloatingActionButton mLoadMiniFAB;
-    private ArrayList<ListItem> items;
-    private ArrayList<ViewModelSystem> systems;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -60,7 +56,6 @@ public class FragmentSystemPicker extends Fragment{
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fillList();
                 mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -77,9 +72,6 @@ public class FragmentSystemPicker extends Fragment{
                 animateMiniFAB(mLoadMiniFAB, mAddMiniFAB.getVisibility());
             }
         });
-
-        items = new ArrayList<>();
-        systems = new ArrayList<>();
 
         mAddMiniFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +95,9 @@ public class FragmentSystemPicker extends Fragment{
                                 getResults().get(0),
                                 getResults().get(1),
                                 getResults().get(2));
-                        items.add(tmp);
-                        fillList();
+                        Session.getInstance().getSystemStorage().add(tmp);
+                        mAdapter.renewItems();
+                        mAdapter.notifyDataSetChanged();
                     }
                 };
             }
@@ -118,28 +111,7 @@ public class FragmentSystemPicker extends Fragment{
             }
         });
 
-        /* DEBUG */
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "fill debug values");
-
-            ViewModelSystem rps = new ViewModelSystem("Game", "1.0", "Bla-bla");
-            rps.addElement("Character Sheet");
-            rps.getElement("Character Sheet").addCategory("Main");
-            rps.getElement("Character Sheet").addCategory("Additional");
-            rps.addField("Character Sheet", "Main", "Name");
-            rps.getField("Character Sheet", "Main", "Name").setType(ViewModelField.FieldType.SHORT_TEXT);
-            rps.addField("Character Sheet", "Main", "Age");
-            rps.getField("Character Sheet", "Main", "Age").setType(ViewModelField.FieldType.NUMERIC);
-            rps.addField("Character Sheet", "Additional", "Knowledge");
-            rps.getField("Character Sheet", "Additional", "Knowledge").setType(ViewModelField.FieldType.LONG_TEXT);
-            rps.addField("Character Sheet", "Additional", "Power");
-            rps.getField("Character Sheet", "Additional", "Power").setType(ViewModelField.FieldType.CALCULATED);
-            systems.add(rps);
-        }
-        /* DEBUG */
-
-        fillList();
-        mAdapter = new AdapterSystemElement(this, items);
+        mAdapter = new AdapterSystemElement(this);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
@@ -151,21 +123,6 @@ public class FragmentSystemPicker extends Fragment{
         } else {
             miniFAB.show();
         }
-    }
-
-    public void fillList () {
-        Log.d(TAG, "fillList");
-        items.clear();
-
-        // put model objects into ViewModel envelopes
-        for (ViewModelSystem s : systems) {
-            items.add(s);
-            for (String se : s.getElements()) {
-                items.add(s.getElement(se));
-            }
-        }
-
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override

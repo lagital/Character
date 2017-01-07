@@ -16,11 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sam.team.character.R;
-import com.sam.team.character.viewmodel.ListItem;
 import com.sam.team.character.viewmodel.Session;
-import com.sam.team.character.viewmodel.ViewModelCategory;
-import com.sam.team.character.viewmodel.ViewModelElementType;
-import com.sam.team.character.viewmodel.ViewModelField;
 
 import java.util.ArrayList;
 
@@ -33,14 +29,10 @@ public class FragmentEditElement extends Fragment {
     private static final String TAG = "FragmentEditElement";
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private AdapterCategoryField mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mMainFAB;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    /* Categories and fields: */
-    private ArrayList<ListItem> items;
-
-    private ViewModelElementType element;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +52,7 @@ public class FragmentEditElement extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fillList();
+                mAdapter.renewItems();
                 mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
@@ -83,37 +75,18 @@ public class FragmentEditElement extends Fragment {
                         tpl) {
                     @Override
                     void applySettings() {
-                        // instantiate new category and create new ViewModel envelope for it
                         Session.getInstance().getElementFromCache().addCategory(getResults().get(0));
-                        items.add(Session.getInstance().getElementFromCache().getCategory(getResults().get(0)));
+                        mAdapter.renewItems();
                         mAdapter.notifyDataSetChanged();
                     }
                 };
             }
         });
 
-        items = new ArrayList<>();
-        element = Session.getInstance().getElementFromCache();
-        fillList();
-
-        mAdapter = new AdapterCategoryField(this, items);
+        mAdapter = new AdapterCategoryField(this);
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
-    }
-
-    public void fillList () {
-        Log.d(TAG, "fillList");
-
-        items.clear();
-        if (element != null) {
-            for (String c : element.getCategories()) {
-                items.add(element.getCategory(c));
-                for (String f : element.getFieldsInCategory(c)) {
-                    items.add(element.getField(c, f));
-                }
-            }
-        }
     }
 
     @Override

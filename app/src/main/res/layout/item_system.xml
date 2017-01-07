@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_build_black_36dp"
+                android:src="@drawable/ic_build_black_24dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/system_item_edit_icon"
                 android:layout_margin="4dp"

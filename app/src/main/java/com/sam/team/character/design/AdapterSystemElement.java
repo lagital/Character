@@ -25,6 +25,8 @@ import com.sam.team.character.viewmodel.ViewModelSystem;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.sam.team.character.viewmodel.ViewModelSystem.SYSTEM_FILE_TYPE;
+
 /**
  * Created by pborisenko on 9/26/2016.
  */
@@ -36,9 +38,10 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private ArrayList<ListItem> items;
     private FragmentSystemPicker fragment;
 
-    AdapterSystemElement(FragmentSystemPicker fragment, ArrayList<ListItem> items) {
+    AdapterSystemElement(FragmentSystemPicker fragment) {
         this.fragment = fragment;
-        this.items = items;
+        this.items = new ArrayList<>();
+        renewItems();
     }
 
     @Override
@@ -93,22 +96,24 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                             ((ViewModelSystem) items.get(position)).setName(getResults().get(0));
                                             ((ViewModelSystem) items.get(position)).setVersion(getResults().get(1));
                                             ((ViewModelSystem) items.get(position)).setCopyright(getResults().get(2));
-                                            fragment.fillList();
+                                            renewItems();
+                                            notifyDataSetChanged();
                                         }
                                     };
                                     break;
                                 }
                                 case R.id.system_item_edit_menu_share: {
-                                    Uri fileUri = FileProvider.getUriForFile(fragment.getActivity(),
-                                            "com.fileprovider", new File(((ViewModelSystem) items.get(position)).getSystemFilePath()));
+                                    File tmp = ((ViewModelSystem) items.get(position)).exportSystemXML();
+                                    Uri fileUri = Uri.fromFile(tmp);
                                     if (fileUri != null) {
 
                                         Intent shareIntent = new Intent();
                                         shareIntent.setAction(Intent.ACTION_SEND);
+                                        shareIntent.setType("application/" + SYSTEM_FILE_TYPE);
                                         // temp permission for receiving app to read the file
                                         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                        shareIntent.setDataAndType(fileUri,
-                                                fragment.getActivity().getContentResolver().getType(fileUri));
+                                        //shareIntent.setDataAndType(fileUri,
+                                         //       fragment.getActivity().getContentResolver().getType(fileUri));
                                         shareIntent.putExtra(Intent.EXTRA_STREAM, fileUri);
                                         fragment.startActivity(Intent.createChooser(shareIntent,
                                                 fragment.getResources().getString(R.string.system_item_share_title)));
@@ -123,7 +128,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             ((ViewModelSystem) items.get(position)).delete();
-                                            fragment.fillList();
+                                            renewItems();
+                                            notifyDataSetChanged();
                                             alertDialog.dismiss();
                                         }
                                     });
@@ -159,7 +165,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         @Override
                         void applySettings() {
                             ((ViewModelSystem) items.get(position)).addElement(getResults().get(0));
-                            fragment.fillList();
+                            renewItems();
+                            notifyDataSetChanged();
                         }
                     };
                     builder.getDialog().show();
@@ -203,7 +210,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                         @Override
                                         void applySettings() {
                                             ((ViewModelElementType) items.get(position)).setName(getResults().get(0));
-                                            fragment.fillList();
+                                            renewItems();
+                                            notifyDataSetChanged();
                                         }
                                     };
                                     builder.getDialog().show();
@@ -225,7 +233,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
                                             ((ViewModelElementType) items.get(position)).delete();
-                                            fragment.fillList();
+                                            renewItems();
+                                            notifyDataSetChanged();
                                             alertDialog.dismiss();
                                         }
                                     });
@@ -277,5 +286,16 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
         return items.get(position).getItemType();
+    }
+
+    public void renewItems() {
+        Log.d(TAG, "renewItems");
+        items.clear();
+        for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {
+            items.add(s);
+            for (String se : s.getElements()) {
+                items.add(s.getElement(se));
+            }
+        }
     }
 }

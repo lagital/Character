@@ -11,6 +11,10 @@
     <string name="dialog_mandatory_parms_missing">Please complete mandatory parameters</string>
     <string name="dialog_are_you_sure">Are you sure?</string>
 
+    <!-- Fragment Load Systems -->
+    <string name="load_systems_title">RPG Builder</string>
+    <string name="load_systems_text">Loading games &#8203;</string>
+
     <!-- Fragment System Picker -->
     <string name="system_picker_title">Games</string>
     <string name="fab_add_system_dscr">Create a game</string>

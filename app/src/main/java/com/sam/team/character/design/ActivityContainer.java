@@ -20,8 +20,9 @@ public class ActivityContainer extends AppCompatActivity {
 
     FrameLayout container;
     FragmentManager mFragmentManager;
+    FragmentLoadSystems mFragmentLoadSystems;
     FragmentSystemPicker mFragmentSystemPicker;
-    FragmentEditElement mFragmentEditSheet;
+    FragmentEditElement mFragmentEditElement;
     FragmentEditField mFragmentEditField;
     FragmentHelp mFragmentHelp;
 
@@ -51,15 +52,16 @@ public class ActivityContainer extends AppCompatActivity {
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp();
 
+        mFragmentLoadSystems = new FragmentLoadSystems();
         mFragmentSystemPicker = new FragmentSystemPicker();
-        mFragmentEditSheet = new FragmentEditElement();
+        mFragmentEditElement = new FragmentEditElement();
 
         if (savedInstanceState == null) {
             // on first run
             FragmentTransaction fragmentTransaction = mFragmentManager
                     .beginTransaction();
             // add to container
-            fragmentTransaction.add(R.id.container, mFragmentSystemPicker);
+            fragmentTransaction.add(R.id.container, mFragmentLoadSystems);
             fragmentTransaction.commit();
         }
     }
@@ -70,6 +72,11 @@ public class ActivityContainer extends AppCompatActivity {
 
         if (toFragment != null) {
             switch (toFragment) {
+                case LOAD_SYSTEMS: {
+                    fragmentTransaction.replace(R.id.container,
+                            mFragmentLoadSystems);
+                    break;
+                }
                 case SYSTEM_PICKER: {
                     fragmentTransaction.replace(R.id.container,
                             mFragmentSystemPicker);
@@ -77,7 +84,7 @@ public class ActivityContainer extends AppCompatActivity {
                 }
                 case EDIT_ELEMENT: {
                     fragmentTransaction.replace(R.id.container,
-                            mFragmentEditSheet);
+                            mFragmentEditElement);
                     break;
                 }
                 case EDIT_FIELD: {
@@ -103,6 +110,7 @@ public class ActivityContainer extends AppCompatActivity {
     }
 
     public enum FragmentType {
+        LOAD_SYSTEMS,
         SYSTEM_PICKER,
         EDIT_ELEMENT,
         EDIT_FIELD,

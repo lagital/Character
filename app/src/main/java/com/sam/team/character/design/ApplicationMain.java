@@ -18,6 +18,10 @@ public class ApplicationMain extends Application{
     private static String appExternalStoragePath;
     private static String appInternalStoragePath;
 
+    public ApplicationMain () {
+        Log.d(TAG, "Application started");
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,6 +36,8 @@ public class ApplicationMain extends Application{
         if (isExternalStorageReadable() && isExternalStorageWritable()) {
             appExternalStoragePath = this.getExternalFilesDir(null).getAbsolutePath();
         }
+
+        Log.d(TAG, appInternalStoragePath + appExternalStoragePath);
     }
 
     /* Checks if external storage is available for read and write */

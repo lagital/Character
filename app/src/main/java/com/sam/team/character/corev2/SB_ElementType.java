@@ -13,19 +13,28 @@ import org.simpleframework.xml.*;
  * @author vaize
  */
 @Root(name = "Element")
-public class SB_ElementType {
+public class SB_ElementType<
+        S extends SB_System,
+        E extends SB_ElementType<S, E, C, F>,
+        C extends SB_Category<S, E, C, F>,
+        F extends SB_Field<S, E, C, F>> {
     
     @Attribute(name = "index") private int index;
     @Element(name = "Name") private String name;
-    private Map<String, SB_Category> categories;
-    @ElementList(name="Categories") private List<SB_Category> categoriesXML;
-    private SB_System system;
+    private Map<String, C> categories;
+    @ElementList(name="Categories") private List<C> categoriesXML;
+    private S system;
     
     //full constructor
-    public SB_ElementType(int index, String name, SB_System system) {
+    public SB_ElementType(int index, String name, S system) {
         this.index = index;
         this.name = name;
         this.system = system;
+        categories = new TreeMap<>();
+    }
+
+    //dummy constructor
+    public SB_ElementType() {
         categories = new TreeMap<>();
     }
     
@@ -37,16 +46,21 @@ public class SB_ElementType {
     public int getIndex(){ return index; }
 
     //work with system
-    public SB_System getSystem(){ return system; }
+    public S getSystem(){ return system; }
+    public void setSystem(S system){ this.system = system; }
 
     //work with categories
-    public void addCategory(String categoryName, boolean ... rewrite) {
-        categories.put(categoryName, new SB_Category(getAmountOfCategories()+1, categoryName, this));
+    public void addCategory(Class<C> clazz, String categoryName, boolean ... rewrite) throws Exception {
+        C tmp = clazz.getConstructor().newInstance();
+        tmp.setIndex(getAmountOfCategories()+1);
+        tmp.setName(categoryName);
+        tmp.setElement((E) this);
+        categories.put(categoryName, tmp);
     } 
     public void removeCategory(String categoryName) {
         categories.remove(categoryName);
     };
-    public SB_Category getCategory(String categoryName) { 
+    public C getCategory(String categoryName) {
         return categories.get(categoryName);
     }
     public ArrayList<String> getCategories() {
@@ -60,13 +74,13 @@ public class SB_ElementType {
     public int getAmountOfCategories(){ return categories.size(); }
     
     //work with fields
-    public void addField(String categoryName, String fieldName, boolean ... rewrite) {
-        categories.get(categoryName).addField(fieldName, rewrite);
+    public void addField(Class<F> clazz, String categoryName, String fieldName, boolean ... rewrite) throws Exception{
+        categories.get(categoryName).addField(clazz, fieldName, rewrite);
     } 
     public void removeField(String categoryName, String fieldName) {
         categories.get(categoryName).removeField(fieldName);
     }
-    public SB_Field getField(String categoryName, String fieldName) {
+    public F getField(String categoryName, String fieldName) {
         return categories.get(categoryName).getField(fieldName);
     }
     public ArrayList<String> getFieldsInCategory(String categoryName) {
@@ -101,7 +115,7 @@ public class SB_ElementType {
     
     //generateXML
     public void prepareListOfCategories() {
-        categoriesXML = new ArrayList<SB_Category>();
+        categoriesXML = new ArrayList<C>();
         for(String s : getCategories()){
             categoriesXML.add(categories.get(s));
         };
