@@ -1,8 +1,12 @@
 package com.sam.team.character.corev2;
 
+import com.sam.team.character.viewmodel.ViewModelField;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
+
+import java.util.Arrays;
 
 /**
  *
@@ -15,21 +19,35 @@ public class SB_Field<
         C extends SB_Category<S, E, C, F>,
         F extends SB_Field<S, E, C, F>> {
 
+    /* symbols for typing formulas and values
+     * [] - link to field used in formulas
+     * {} - mentioning field's name in text
+     */
+    public static final String LINK_OPEN_SYMBOL = "[";
+    public static final String LINK_CLOSE_SYMBOL = "]";
+    public static final String MENTION_OPEN_SYMBOL = "{";
+    public static final String MENTION_CLOSE_SYMBOL = "}";
+
+    // delimiter used in typing Links and Mentions
+    public static final String DELIMITER = ".";
+
+    // only fields of registered types a to be used for typing in formulas
+    public static final FieldType[] LINK_COMPATIBLE_TYPES = {FieldType.CALCULATED, FieldType.NUMERIC};
+
     @Attribute(name = "index") private int index;
     @Element(name = "Name") private String name;
     @Element(name = "Value") private String value = "";
     @Element(name = "Type") private String type;
-    @Element(name = "CalculationRule", required = false) private String calcRule;
     private C category;
 
     //constructor to create temporary objects
     public SB_Field() {}
     //constructor to create permanent objects
-    public SB_Field(int index, String name, String calcRule, C category) {
+    public SB_Field(int index, String name, FieldType type, C category) {
         this.index = index;
         this.name = name;
-        this.calcRule = calcRule;
         this.category = category;
+        this.type = type.name();
     }
 
     public C getCategory() {
@@ -55,11 +73,11 @@ public class SB_Field<
     //work with type
     public void setType(FieldType type) { this.type = type.name(); }
     public FieldType getType() { return FieldType.valueOf(type); }
-    
-    //work with field's calculation rule
-    public void setRule(String calcRule) { this.calcRule = calcRule; }
-    public String getRule() { return calcRule; }
-    public void removeRule() { calcRule = null; }
+
+
+    public boolean isLinkCompatible() {
+        return Arrays.asList(ViewModelField.LINK_COMPATIBLE_TYPES).contains(this.getType());
+    }
 
     public enum FieldType {
         SHORT_TEXT,

@@ -5,10 +5,16 @@ import android.util.Log;
 import android.view.View;
 
 import com.sam.team.character.BuildConfig;
+import com.sam.team.character.corev2.SB_Field;
 import com.sam.team.character.design.ApplicationMain;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
+import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
+import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
 
 /**
  * Created by pborisenko on 10/8/2016.
@@ -24,6 +30,7 @@ public class Session {
     private ViewModelSystem currentSystem;
     private ViewModelElementType elementType;
     private ViewModelCategory category;
+    private ViewModelField field;
 
     public static synchronized Session getInstance() {
         if (instance == null) {
@@ -72,6 +79,16 @@ public class Session {
         return category;
     }
 
+    public void cacheField (ViewModelField field) {
+        Log.d(TAG, "cacheField");
+        this.field = field;
+    }
+
+    public ViewModelField getFieldFromCache () {
+        Log.d(TAG, "getFieldFromCache");
+        return field;
+    }
+
     public void collectAvailableSystems (Context context) {
         if (ApplicationMain.isExternalStorageReadable()) {
             for (File f : context.getExternalFilesDir(null).listFiles()) {
@@ -91,22 +108,14 @@ public class Session {
             rps.addElement("Character Sheet");
             rps.getElement("Character Sheet").addCategory("Main");
             rps.getElement("Character Sheet").addCategory("Additional");
-            rps.addField("Character Sheet", "Main", "Name");
-            rps.getField("Character Sheet", "Main", "Name").setType(ViewModelField.FieldType.SHORT_TEXT);
+            rps.addField("Character Sheet", "Main", "Name", SHORT_TEXT);
             rps.getField("Character Sheet", "Main", "Name").setValue("Test");
-            rps.getField("Character Sheet", "Main", "Name").setRule("Test");
-            rps.addField("Character Sheet", "Main", "Age");
-            rps.getField("Character Sheet", "Main", "Age").setType(ViewModelField.FieldType.NUMERIC);
+            rps.addField("Character Sheet", "Main", "Age", NUMERIC);
             rps.getField("Character Sheet", "Main", "Age").setValue("1");
-            rps.getField("Character Sheet", "Main", "Age").setRule("Test");
-            rps.addField("Character Sheet", "Additional", "Knowledge");
-            rps.getField("Character Sheet", "Additional", "Knowledge").setType(ViewModelField.FieldType.LONG_TEXT);
+            rps.addField("Character Sheet", "Additional", "Knowledge", LONG_TEXT);
             rps.getField("Character Sheet", "Additional", "Knowledge").setValue("Test");
-            rps.getField("Character Sheet", "Additional", "Knowledge").setRule("Test");
-            rps.addField("Character Sheet", "Additional", "Power");
-            rps.getField("Character Sheet", "Additional", "Power").setType(ViewModelField.FieldType.CALCULATED);
-            rps.getField("Character Sheet", "Additional", "Power").setRule("100500");
-            rps.getField("Character Sheet", "Additional", "Power").setRule("Test");
+            rps.addField("Character Sheet", "Additional", "Power", CALCULATED);
+            rps.getField("Character Sheet", "Additional", "Power").setValue("[Character Sheet.Main.Age]");
             systemStorage.add(rps);
         }
         /* DEBUG */

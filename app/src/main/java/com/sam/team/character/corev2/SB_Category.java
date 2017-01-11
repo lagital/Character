@@ -54,11 +54,11 @@ public class SB_Category <
     public int getIndex() { return index; }
         
     //work with fields
-    public void addField(Class<F> clazz, String fieldName, boolean ... rewrite) throws Exception {
+    public void addField(Class<F> clazz, String fieldName, SB_Field.FieldType type, boolean ... rewrite) throws Exception {
         F tmp = clazz.getConstructor().newInstance();
         tmp.setIndex(getAmountOfFields()+1);
         tmp.setName(fieldName);
-        tmp.setRule("");
+        tmp.setType(type);
         tmp.setCategory((C) this);
         fields.put(fieldName, tmp);
     } 
@@ -80,7 +80,7 @@ public class SB_Category <
     
     //custom comparator
     private Comparator<String> SortByIndex(final SB_Category category) {
-        Comparator comp = new Comparator<String>(){
+        return new Comparator<String>(){
             @Override
             public int compare(String s1, String s2)
             {
@@ -92,7 +92,6 @@ public class SB_Category <
                 return tmp;
             }        
         };
-        return comp;
     }
     
     //generateXML

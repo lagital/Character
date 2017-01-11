@@ -2,6 +2,9 @@ package com.sam.team.character.corev2;
 
 import java.util.ArrayList;
 
+import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
+
 /**
  *
  * @author vaize
@@ -12,9 +15,9 @@ public class SB_Core {
         try {
             rps.addElement(SB_ElementType.class, "Investigator");
             rps.addCategory(SB_Category.class, "Investigator", "Common");
-            rps.addField(SB_Field.class, "Investigator", "Common", "Name");
-            rps.addField(SB_Field.class, "Investigator", "Common", "Player");
-            rps.addField(SB_Field.class, "Investigator", "Common", "Age");
+            rps.addField(SB_Field.class, "Investigator", "Common", "Name", SHORT_TEXT);
+            rps.addField(SB_Field.class, "Investigator", "Common", "Player", SHORT_TEXT);
+            rps.addField(SB_Field.class, "Investigator", "Common", "Age", NUMERIC);
             rps.addCategory(SB_Category.class, "Investigator", "Skills");
 
 

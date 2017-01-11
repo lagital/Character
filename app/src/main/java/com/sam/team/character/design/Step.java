@@ -1,16 +1,11 @@
 package com.sam.team.character.design;
 
-import android.graphics.Interpolator;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.util.Log;
 import android.view.View;
 
-import com.sam.team.character.R;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by pborisenko on 11/12/2016.
@@ -27,7 +22,7 @@ class Step {
     private Boolean valid = false;
     private TransitionDrawable transition;
 
-    Step (View container) {
+    Step(View container) {
         this.container = container;
         toControl = new ArrayList<>();
 
@@ -36,22 +31,34 @@ class Step {
         }
     }
 
-    void enable () {
+    void enable() {
         Log.d(TAG, "enable");
         container.setVisibility(View.VISIBLE);
+        validate();
     }
 
-    void disable () {
+    void disable() {
         Log.d(TAG, "disable");
-        setValid(false);
+        for (Step s : toControl) {
+            s.disable();
+        }
         container.setVisibility(View.GONE);
     }
 
-    void setValid (Boolean v) {
-        Log.d(TAG, "setValid - " + v.toString());
-        setValidUI(v);
-        valid = v;
-        if (v) {
+    /*
+    * method to Override for each step specifically
+    */
+    boolean prevalidate() {
+        Log.d(TAG, "validate");
+        return true;
+    }
+
+    void validate() {
+        Log.d(TAG, "validate");
+        boolean result = prevalidate();
+        setValidUI(result);
+        valid = result;
+        if (result) {
             for (Step s : toControl) {
                 s.enable();
             }
@@ -67,9 +74,9 @@ class Step {
             return;
         }
         if (v) {
-            transition.startTransition(250);
+            transition.startTransition(transitionTime);
         } else {
-            transition.reverseTransition(250);
+            transition.reverseTransition(transitionTime);
         }
     }
 
@@ -77,16 +84,14 @@ class Step {
         return valid;
     }
 
-    void addControlChild (Step s) {
-        Log.d(TAG, "addControlChild");
-        this.toControl.add(s);
+    void addControlChildren (Step[] children) {
+        Log.d(TAG, "addControlChildren");
+        for (Step s : Arrays.asList(children)) {
+            this.toControl.add(s);
+        }
     }
 
-    public static Integer getTransitionTime() {
-        return transitionTime;
-    }
-
-    public static void setTransitionTime(Integer transitionTime) {
+    static void setTransitionTime(Integer transitionTime) {
         Step.transitionTime = transitionTime;
     }
 }

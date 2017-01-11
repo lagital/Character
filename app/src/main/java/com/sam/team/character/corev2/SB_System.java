@@ -194,8 +194,8 @@ public class SB_System <
     }
     
     //work with fields
-    public void addField(Class<F> clazz, String elementName, String categoryName, String fieldName, boolean ... rewrite) throws Exception {
-        elements.get(elementName).getCategory(categoryName).addField(clazz, fieldName, rewrite);
+    public void addField(Class<F> clazz, String elementName, String categoryName, String fieldName, SB_Field.FieldType type, boolean ... rewrite) throws Exception {
+        elements.get(elementName).getCategory(categoryName).addField(clazz, fieldName, type, rewrite);
     }
     public void removeField(String elementName, String categoryName, String fieldName) {
         elements.get(elementName).getCategory(categoryName).removeField(fieldName);

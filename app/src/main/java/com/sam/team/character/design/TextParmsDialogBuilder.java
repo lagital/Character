@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -30,8 +32,9 @@ class TextParmsDialogBuilder extends AlertDialog.Builder{
         super(context);
         // construct view for dialog
         final LinearLayout l = (LinearLayout) View.inflate(context, containerRes, null);
+        LayoutInflater li = LayoutInflater.from(context);
         for (TextParameter p : parameters) {
-            EditText e = (EditText) View.inflate(context, parameterRes, null);
+            EditTextEndCursor e = (EditTextEndCursor) li.inflate(R.layout.text_parameter, null);
             e.setText(p.getCurrentValue());
 
             if (p.isMandatory()) {

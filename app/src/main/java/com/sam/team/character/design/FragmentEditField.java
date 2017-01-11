@@ -3,6 +3,7 @@ package com.sam.team.character.design;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -21,8 +22,11 @@ import android.widget.NumberPicker;
 import com.sam.team.character.R;
 import com.sam.team.character.corev2.SB_Field;
 import com.sam.team.character.viewmodel.Session;
-import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelField;
+
+import java.util.ArrayList;
+
+import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
 
 /**
  * Created by pborisenko on 11/5/2016.
@@ -32,19 +36,28 @@ public class FragmentEditField extends Fragment {
 
     private static final String TAG = "FragmentEditField";
 
+    private ViewModelField field;
+
     private LinearLayout nameContainer;
     private LinearLayout typeContainer;
     private LinearLayout valueContainer;
 
-    private EditText editTextName;
-    private EditText editTextValue;
+    private AppCompatEditText editTextName;
+    private AppCompatEditText editTextValue;
 
     private NumberPicker pickerType;
+    private NumberPicker.OnValueChangeListener pickerListener;
 
     private Button btnOK;
     private Button btnCancel;
 
+    private Step nameStep;
+    private Step typeStep;
+    private Step valueStep;
+    private Step btnOKStep;
+
     private Integer currentTypeInt;
+    private String currentOpenSymbol;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,16 +69,15 @@ public class FragmentEditField extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_field_title);
 
-        Step.setTransitionTime((int) getResources().getInteger(R.integer.step_transition_time));
+        Step.setTransitionTime(getResources().getInteger(R.integer.step_transition_time));
 
         /*----------------------------------- NAME STEP -----------------------------------*/
         nameContainer = (LinearLayout) view.findViewById(R.id.stage_name);
-        editTextName = (EditText) nameContainer.findViewById(R.id.stage_name_text);
-        final Step nameStep = new Step(nameContainer) {
+        editTextName = (AppCompatEditText) nameContainer.findViewById(R.id.stage_name_text);
+        nameStep = new Step(nameContainer) {
             @Override
-            void disable() {
-                super.disable();
-                editTextName.setText(getResources().getString(R.string.edit_field_dflt_name));
+            boolean prevalidate() {
+                return isNameValid();
             }
         };
 
@@ -76,13 +88,7 @@ public class FragmentEditField extends Fragment {
             public void afterTextChanged(Editable s) {
                 String str = editTextName.getText().toString();
                 Log.d(TAG, "afterTextChanged to " + str);
-
-                if (CleanOnTouchListener.isValidString(FragmentEditField.this.getActivity(), str,
-                        R.string.edit_field_dflt_name)) {
-                    nameStep.setValid(true);
-                } else {
-                    nameStep.setValid(false);
-                }
+                nameStep.validate();
             }
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
@@ -91,11 +97,18 @@ public class FragmentEditField extends Fragment {
         /*----------------------------------- TYPE STEP -----------------------------------*/
         typeContainer = (LinearLayout) view.findViewById(R.id.stage_type);
         pickerType = (NumberPicker) typeContainer.findViewById(R.id.stage_type_picker);
-        final Step typeStep = new Step(typeContainer) {
+        pickerListener = new NumberPicker.OnValueChangeListener() {
             @Override
-            void disable() {
-                super.disable();
-                pickerType.setValue(0);
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                Log.d(TAG, "Picker - onValueChange " + Integer.toString(newVal));
+                currentTypeInt = newVal;
+                typeStep.validate();
+            }
+        };
+        typeStep = new Step(typeContainer) {
+            @Override
+            boolean prevalidate() {
+                return isTypeValid();
             }
         };
 
@@ -104,34 +117,23 @@ public class FragmentEditField extends Fragment {
                 ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.SHORT_TEXT),
                 ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.LONG_TEXT),
                 ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.NUMERIC),
-                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.CALCULATED)
+                ViewModelField.formatTypeToName(getActivity(), CALCULATED)
         };
         pickerType.setMinValue(0);
+        pickerType.setValue(0);
         pickerType.setMaxValue(stringTypes.length - 1);
         pickerType.setWrapSelectorWheel(false);
         pickerType.setDisplayedValues(stringTypes);
-
-        pickerType.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-                Log.d(TAG, "Picker - setOnValueChangedListener " + Integer.toString(newVal));
-                currentTypeInt = newVal;
-                if (newVal != 0) {
-                    typeStep.setValid(true);
-                } else {
-                    typeStep.setValid(false);
-                }
-            }
-        });
+        pickerType.setOnValueChangedListener(pickerListener);
 
         /*----------------------------------- VALUE STEP -----------------------------------*/
+
         valueContainer = (LinearLayout) view.findViewById(R.id.stage_value);
-        editTextValue = (EditText) valueContainer.findViewById(R.id.stage_value_text);
-        final Step valueStep = new Step(valueContainer) {
+        editTextValue = (AppCompatEditText) valueContainer.findViewById(R.id.stage_value_text);
+        valueStep = new Step(valueContainer) {
             @Override
-            void disable() {
-                super.disable();
-                editTextValue.setText(R.string.edit_field_dflt_value);
+            boolean prevalidate() {
+                return isValueValid();
             }
         };
 
@@ -139,49 +141,40 @@ public class FragmentEditField extends Fragment {
                 getActivity().getResources().getString(R.string.edit_field_dflt_value)));
         editTextValue.addTextChangedListener(new TextWatcher() {
 
+            @Override
             public void afterTextChanged(Editable s) {
                 String str = editTextValue.getText().toString();
-                Boolean stringValid = true;
-                int dotCounter = 0;
+                int dotCounter;
                 Log.d(TAG, "Value - afterTextChanged on " + str);
+                valueStep.validate();
 
-                if (CleanOnTouchListener.isValidString(FragmentEditField.this.getActivity(), str,
-                        R.string.edit_field_dflt_value)) {
-                    valueStep.setValid(true);
-                } else {
-                    valueStep.setValid(false);
+                // select element name if user begins typing Mention or Link
+                if (str.endsWith(ViewModelField.MENTION_OPEN_SYMBOL) || str.endsWith(ViewModelField.LINK_OPEN_SYMBOL)) {
+                    currentOpenSymbol = str.substring(str.length() - 1);
+                    Log.d(TAG, currentOpenSymbol);
+
+                    if (currentOpenSymbol.equals(ViewModelField.LINK_OPEN_SYMBOL) &&
+                            ViewModelField.formatIntToType(currentTypeInt).equals(CALCULATED)) {
+                        generateElementMenu(editTextValue).show();
+                    }
+                    if (currentOpenSymbol.equals(ViewModelField.MENTION_OPEN_SYMBOL) &&
+                            !ViewModelField.formatIntToType(currentTypeInt).equals(CALCULATED)) {
+                        generateElementMenu(editTextValue).show();
+                    }
                 }
 
-                // select sheet name
-                if (str.endsWith("[")) {
-                    generateElementMenu(editTextValue).show();
-                }
+                if (str.endsWith(ViewModelField.DELIMITER)) {
+                    str = str.substring(str.lastIndexOf(currentOpenSymbol) + 1, str.length() - 1);
+                    // all between last "{" or "[" and current dot
+                    dotCounter = str.length() - str.replace(ViewModelField.DELIMITER, "").length();
 
-                // select category name
-                if (str.endsWith(".")) {
-                    // all between last "[" and current dot
-                    str = str.substring(str.lastIndexOf("[") + 1, str.length() - 1);
-                    Log.d(TAG, "String to analyze: " + str);
-
-                    if (str.contains("[") ||
-                            str.contains("(") ||
-                            str.contains(")") ||
-                            str.contains("+") ||
-                            str.contains("-") ||
-                            str.contains("*") ||
-                            str.contains("/")) {
-                        stringValid = false;
-                        Log.d(TAG, "String validation failed.");
-                    };
-
-                    int num = str.length() - str.replace(".", "").length();
-                    if (stringValid) {
+                    if (valueStep.isValid()) {
                         // no previous dots - select category
-                        if (num == 0) {
-                            generateCategoryMenu(editTextValue).show();
+                        if (dotCounter == 0) {
+                           generateCategoryMenu(editTextValue).show();
                         }
                         // one previous dot - select field
-                        if (num == 1) {
+                        if (dotCounter == 1) {
                             generateFieldMenu(editTextValue).show();
                         }
                     }
@@ -199,12 +192,18 @@ public class FragmentEditField extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "btnOK onClick");
-                createFieldFromSettings();
+                if (field != null) {
+                    field.setName(editTextName.getText().toString());
+                    field.setType(ViewModelField.formatIntToType(currentTypeInt));
+                    field.setValue(editTextValue.getText().toString());
+                } else {
+                    createFieldFromSettings();
+                }
                 getFragmentManager().popBackStack();
             }
         });
 
-        final Step btnOKStep = new Step(btnOK) {
+        btnOKStep = new Step(btnOK) {
             @Override
             void enable() {
                 btnOK.setVisibility(View.VISIBLE);
@@ -226,30 +225,53 @@ public class FragmentEditField extends Fragment {
         });
 
         /*--------------------------------- RELATIONS -------------------------------------*/
-        nameStep.addControlChild(typeStep);
-        typeStep.addControlChild(valueStep);
-        valueStep.addControlChild(btnOKStep);
+        nameStep.addControlChildren(new Step[]{typeStep});
+        typeStep.addControlChildren(new Step[]{valueStep});
+        valueStep.addControlChildren(new Step[]{btnOKStep});
+
+        /*
+         * Edit mode for existing field
+        */
+        field = Session.getInstance().getFieldFromCache();
+        if (field != null) {
+            createSettingsFromField();
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(field.getName());
+        }
 
         return view;
     }
 
-    private void createFieldFromSettings () {
+    private void createFieldFromSettings() {
         Log.d(TAG, "createFieldFromSettings");
         Session.getInstance().getSystemFromCache().addField(
                 Session.getInstance().getElementFromCache().getName(),
                 Session.getInstance().getCategoryFromCache().getName(),
-                editTextName.getText().toString()
+                editTextName.getText().toString(),
+                ViewModelField.formatIntToType(currentTypeInt)
         );
-        Session.getInstance().getSystemFromCache().getField(
+        ViewModelField tmp = Session.getInstance().getSystemFromCache().getField(
                 Session.getInstance().getElementFromCache().getName(),
                 Session.getInstance().getCategoryFromCache().getName(),
-                editTextName.getText().toString()
-        ).setType(ViewModelField.formatIntToType(currentTypeInt));
+                editTextName.getText().toString());
+        tmp.setValue(editTextValue.getText().toString());
+    }
+
+    private void createSettingsFromField() {
+        Log.d(TAG, "createSettingsFromField");
+
+        editTextName.setText(field.getName());
+        currentTypeInt = ViewModelField.formatTypeToInt(field.getType());
+        if (currentTypeInt.equals(null)) {
+            currentTypeInt = 0;
+        }
+        pickerType.setValue(currentTypeInt);
+        pickerListener.onValueChange(pickerType, 0, currentTypeInt);
+        editTextValue.setText(field.getValue());
     }
 
     private PopupMenu generateElementMenu(final EditText textAnchor) {
+        Log.d(TAG, "generateElementMenu - " + textAnchor.getText().toString());
         PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
-        Log.d(TAG, "generateElementMenu");
 
         for (String e : Session.getInstance().getSystemFromCache().getElements()) {
             pm.getMenu().add(e);
@@ -263,12 +285,10 @@ public class FragmentEditField extends Fragment {
         PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
 
         String eBuf = textAnchor.getText().toString();
-        eBuf = eBuf.substring(eBuf.lastIndexOf('[') + 1, eBuf.lastIndexOf("."));
+        eBuf = eBuf.substring(eBuf.lastIndexOf(currentOpenSymbol) + 1, eBuf.lastIndexOf(ViewModelField.DELIMITER));
         Log.d(TAG, "generateCategoryMenu: Element " + eBuf);
 
-        ViewModelElementType tmp = Session.getInstance().getSystemFromCache().getElement(eBuf);
-
-        for (String c : tmp.getCategories()) {
+        for (String c : Session.getInstance().getSystemFromCache().getElement(eBuf).getCategories()) {
             pm.getMenu().add(c);
         }
 
@@ -284,20 +304,33 @@ public class FragmentEditField extends Fragment {
         String eBuf = base.substring(0, base.length()-1);
         String cBuf = eBuf;
 
-        eBuf = eBuf.substring(eBuf.lastIndexOf('[') + 1, eBuf.lastIndexOf("."));
-        cBuf = cBuf.substring(cBuf.lastIndexOf(".") + 1, cBuf.length());
+        eBuf = eBuf.substring(eBuf.lastIndexOf(currentOpenSymbol) + 1, eBuf.lastIndexOf(ViewModelField.DELIMITER));
+        cBuf = cBuf.substring(cBuf.lastIndexOf(ViewModelField.DELIMITER) + 1, cBuf.length());
         Log.d(TAG, "generateFieldMenu: Element " + eBuf + " and Category " + cBuf);
 
         for (String f : Session.getInstance().getSystemFromCache().getFieldsInCategory(eBuf, cBuf)) {
-            pm.getMenu().add(f);
+            ViewModelField tmp = Session.getInstance().getSystemFromCache().getField(eBuf, cBuf, f);
+            if (currentOpenSymbol.equals(ViewModelField.LINK_OPEN_SYMBOL) &&
+                    ViewModelField.formatIntToType(currentTypeInt) == CALCULATED) {
+                if (tmp.isLinkCompatible()) {
+                    pm.getMenu().add(f);
+                }
+            } else {
+                pm.getMenu().add(f);
+            }
         }
 
-        // after Field name we need to close "[" with "]"
+        // after Field name we need to close "[" with "]" or "{" with "}"
         pm.setOnMenuItemClickListener(new SaverMenuItemClickListener(textAnchor) {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 super.onMenuItemClick(item);
-                textAnchor.setText(textAnchor.getText() + "]");
+                if (currentOpenSymbol.equals(ViewModelField.LINK_OPEN_SYMBOL)) {
+                    textAnchor.setText(textAnchor.getText() + ViewModelField.LINK_CLOSE_SYMBOL);
+                }
+                if (currentOpenSymbol.equals(ViewModelField.MENTION_OPEN_SYMBOL)) {
+                    textAnchor.setText(textAnchor.getText() + ViewModelField.MENTION_CLOSE_SYMBOL);
+                }
                 return false;
             }
         });
@@ -334,5 +367,22 @@ public class FragmentEditField extends Fragment {
             textAnchor.setText(buf);
             return false;
         }
+    }
+
+    boolean isNameValid() {
+        Log.d(TAG, "isNameValid");
+        return CleanOnTouchListener.isValidString(this.getActivity(),
+                editTextName.getText().toString(), R.string.edit_field_dflt_name);
+    }
+
+    boolean isTypeValid() {
+        Log.d(TAG, "isTypeValid");
+        return pickerType.getValue() != 0;
+    }
+
+    boolean isValueValid() {
+        Log.d(TAG, "isValueValid");
+        return CleanOnTouchListener.isValidString(this.getActivity(),
+                editTextValue.getText().toString(), R.string.edit_field_dflt_value);
     }
 }

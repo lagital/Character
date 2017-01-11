@@ -74,8 +74,8 @@ public class SB_ElementType<
     public int getAmountOfCategories(){ return categories.size(); }
     
     //work with fields
-    public void addField(Class<F> clazz, String categoryName, String fieldName, boolean ... rewrite) throws Exception{
-        categories.get(categoryName).addField(clazz, fieldName, rewrite);
+    public void addField(Class<F> clazz, String categoryName, String fieldName, SB_Field.FieldType type, boolean ... rewrite) throws Exception{
+        categories.get(categoryName).addField(clazz, fieldName, type, rewrite);
     } 
     public void removeField(String categoryName, String fieldName) {
         categories.get(categoryName).removeField(fieldName);

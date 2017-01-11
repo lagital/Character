@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 import android.util.Log;
+import android.view.View;
 
 import com.sam.team.character.R;
 import com.sam.team.character.corev2.SB_Field;
@@ -12,6 +13,9 @@ import com.sam.team.character.corev2.SB_Field;
 import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by pborisenko on 10/31/2016.
@@ -83,6 +87,16 @@ public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementT
             case NUMERIC:    {return c.getResources().getString(R.string.field_type_numeric);}
             case CALCULATED: {return c.getResources().getString(R.string.field_type_calculated);}
             default:         {return c.getResources().getString(R.string.field_type_short_text);}
+        }
+    }
+
+    public static int formatTypeToInt (SB_Field.FieldType t) {
+        switch (t) {
+            case SHORT_TEXT: {return 0;}
+            case LONG_TEXT:  {return 1;}
+            case NUMERIC:    {return 2;}
+            case CALCULATED: {return 3;}
+            default:         {return 0;}
         }
     }
 

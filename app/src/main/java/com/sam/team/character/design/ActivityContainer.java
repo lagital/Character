@@ -1,6 +1,8 @@
 package com.sam.team.character.design;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.widget.FrameLayout;
 import com.sam.team.character.R;
 
 /**
+ * Main Activity is container for fragments
  * Created by pborisenko on 10/27/2016.
  */
 
@@ -20,11 +23,8 @@ public class ActivityContainer extends AppCompatActivity {
 
     FrameLayout container;
     FragmentManager mFragmentManager;
-    FragmentLoadSystems mFragmentLoadSystems;
     FragmentSystemPicker mFragmentSystemPicker;
     FragmentEditElement mFragmentEditElement;
-    FragmentEditField mFragmentEditField;
-    FragmentHelp mFragmentHelp;
 
     private Toolbar mToolbar;
 
@@ -52,7 +52,6 @@ public class ActivityContainer extends AppCompatActivity {
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp();
 
-        mFragmentLoadSystems = new FragmentLoadSystems();
         mFragmentSystemPicker = new FragmentSystemPicker();
         mFragmentEditElement = new FragmentEditElement();
 
@@ -61,7 +60,7 @@ public class ActivityContainer extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = mFragmentManager
                     .beginTransaction();
             // add to container
-            fragmentTransaction.add(R.id.container, mFragmentLoadSystems);
+            fragmentTransaction.add(R.id.container, new FragmentLoadSystems());
             fragmentTransaction.commit();
         }
     }
@@ -70,42 +69,35 @@ public class ActivityContainer extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = mFragmentManager
                 .beginTransaction();
 
-        if (toFragment != null) {
-            switch (toFragment) {
-                case LOAD_SYSTEMS: {
-                    fragmentTransaction.replace(R.id.container,
-                            mFragmentLoadSystems);
-                    break;
-                }
-                case SYSTEM_PICKER: {
-                    fragmentTransaction.replace(R.id.container,
-                            mFragmentSystemPicker);
-                    break;
-                }
-                case EDIT_ELEMENT: {
-                    fragmentTransaction.replace(R.id.container,
-                            mFragmentEditElement);
-                    break;
-                }
-                case EDIT_FIELD: {
-                    // recreate because normally this fragment one-time-used
-                    mFragmentEditField = new FragmentEditField();
-                    fragmentTransaction.replace(R.id.container,
-                            mFragmentEditField);
-                    break;
-                }
-                case HELP: {
-                    // recreate because normally this fragment one-time-used
-                    mFragmentHelp = new FragmentHelp();
-                    fragmentTransaction.replace(R.id.container,
-                            mFragmentHelp);
-                    break;
-                }
+        fragmentTransaction.replace(R.id.container,
+                getFragmentByType(toFragment));
+
+        Log.d(TAG, "replaceFragment to " + toFragment.name());
+        fragmentTransaction.addToBackStack(toFragment.name());
+        fragmentTransaction.commit();
+    }
+
+    Fragment getFragmentByType(FragmentType type) {
+        switch (type) {
+            case LOAD_SYSTEMS: {
+                return new FragmentLoadSystems();
+            }
+            case SYSTEM_PICKER: {
+                return mFragmentSystemPicker;
+            }
+            case EDIT_ELEMENT: {
+                return mFragmentEditElement;
+            }
+            case EDIT_FIELD: {
+                return new FragmentEditField();
+            }
+            case HELP: {
+                return new FragmentHelp();
+            }
+            default: {
+                return new FragmentLoadSystems();
             }
 
-            Log.d(TAG, "replaceFragment to " + toFragment.name());
-            fragmentTransaction.addToBackStack(toFragment.name());
-            fragmentTransaction.commit();
         }
     }
 
@@ -120,16 +112,19 @@ public class ActivityContainer extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (mFragmentManager.getBackStackEntryCount() > 1){
-            mFragmentManager.popBackStackImmediate();
+            mFragmentManager.popBackStack();
         } else {
-            super.onBackPressed();
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
         }
     }
 
     public void shouldDisplayHomeUp(){
-        //Enable Up button only  if there are entries in the back stack
-        boolean canback = mFragmentManager.getBackStackEntryCount()>0;
-        getSupportActionBar().setDisplayHomeAsUpEnabled(canback);
+        //Enable Up button only if there are entries in the back stack
+        Log.d(TAG, "shouldDisplayHomeUp - " + Integer.toString(mFragmentManager.getBackStackEntryCount()));
+        getSupportActionBar().setDisplayHomeAsUpEnabled(mFragmentManager.getBackStackEntryCount() > 1);
     }
 
     @Override

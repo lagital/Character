@@ -19,7 +19,6 @@ import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelCategory;
 import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelField;
-import com.sam.team.character.viewmodel.ViewModelSystem;
 
 import java.util.ArrayList;
 
@@ -65,6 +64,8 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Log.d(TAG, "Add field " + Integer.toString(position));
                     // cache Category variable before going into settings
                     Session.getInstance().cacheCategory(((ViewModelCategory) items.get(position)));
+                    // clear cached field
+                    Session.getInstance().cacheField(null);
 
                     ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
                             .FragmentType.EDIT_FIELD);
@@ -137,7 +138,12 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "Click on field " + Integer.toString(position));
-                    // TODO: changing field
+                    // cache field for further changing in fragment
+                    Session.getInstance().cacheCategory(((ViewModelField) items.get(position)).getCategory());
+                    Session.getInstance().cacheField((ViewModelField) items.get(position));
+
+                    ((ActivityContainer) fragment.getActivity()).replaceFragment(ActivityContainer
+                            .FragmentType.EDIT_FIELD);
                 }
             });
         }

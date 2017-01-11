@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.sam.team.character.BR;
+import com.sam.team.character.corev2.SB_Field;
 import com.sam.team.character.corev2.SB_System;
 import com.sam.team.character.design.ApplicationMain;
 
@@ -117,9 +118,9 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
         notifyChange();
     }
 
-    public void addField (String elementName, String categoryName, String fieldName) {
+    public void addField (String elementName, String categoryName, String fieldName, SB_Field.FieldType type) {
         try {
-            super.addField(ViewModelField.class, elementName, categoryName, fieldName);
+            super.addField(ViewModelField.class, elementName, categoryName, fieldName, type);
             getField(elementName, categoryName, fieldName).setValue("");
         } catch (Exception e) {
             e.printStackTrace();

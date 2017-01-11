@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.sam.team.character.BR;
 import com.sam.team.character.corev2.SB_ElementType;
+import com.sam.team.character.corev2.SB_Field;
 
 import org.simpleframework.xml.Root;
 
@@ -74,9 +75,9 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
         return super.getField(categoryName, fieldName);
     }
 
-    public void addField(String categoryName, String fieldName, boolean... rewrite) throws Exception {
+    public void addField(String categoryName, String fieldName, SB_Field.FieldType type, boolean... rewrite) throws Exception {
         try {
-            super.addField(ViewModelField.class, categoryName, fieldName, rewrite);
+            super.addField(ViewModelField.class, categoryName, fieldName, type, rewrite);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -26,7 +26,7 @@
                 android:background="@drawable/change_step_to_enable"
                 android:animateLayoutChanges="true">
                 
-                <EditText
+                <com.sam.team.character.design.EditTextEndCursor
                     android:id="@+id/stage_name_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                 android:background="@drawable/change_step_to_enable"
                 android:animateLayoutChanges="true">
 
-                <EditText
+                <com.sam.team.character.design.EditTextEndCursor
                     android:id="@+id/stage_value_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
