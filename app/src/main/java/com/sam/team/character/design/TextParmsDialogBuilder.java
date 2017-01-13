@@ -71,6 +71,7 @@ class TextParmsDialogBuilder extends AlertDialog.Builder{
             @Override
             public void onClick(View v)
             {
+                results.clear();
                 // validate each parameter
                 boolean validSettings = true;
                 for (int i = 0; i < parameters.size(); i++) {
