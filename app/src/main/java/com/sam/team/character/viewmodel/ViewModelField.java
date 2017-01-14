@@ -119,6 +119,12 @@ public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementT
         }
     }
 
+    public String getPath() {
+        return this.getCategory().getElement().getName() + "." +
+                this.getCategory().getName() + "." +
+                this.getName();
+    }
+
     @Override
     public synchronized void addOnPropertyChangedCallback(OnPropertyChangedCallback onPropertyChangedCallback) {
         if (callbacks == null) {

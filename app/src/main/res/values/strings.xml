@@ -85,6 +85,9 @@
     <string name="url_EDIT_ELEMENT">http://rpgames.herokuapp.com/</string>
     <string name="url_EDIT_FIELD">http://rpgames.herokuapp.com/</string>
 
+    <!-- Fragment Element -->
+    <string name="element_fragment_title">Choose</string>
+
     <!-- DEBUG -->
     <string name="locale">EN</string>
 

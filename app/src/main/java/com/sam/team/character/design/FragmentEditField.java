@@ -1,5 +1,6 @@
 package com.sam.team.character.design;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -14,23 +15,25 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 
 import com.sam.team.character.R;
-import com.sam.team.character.corev2.SB_Field;
 import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelField;
 
-import java.util.ArrayList;
-
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
 import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
 import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
 import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
 import static com.sam.team.character.corev2.SB_Field.FieldType.UNDEFINED;
+import static com.sam.team.character.design.ActivityFieldPicker.RESULT_FIELD;
 
 /**
  * Created by pborisenko on 11/5/2016.
@@ -52,6 +55,8 @@ public class FragmentEditField extends Fragment {
     private NumberPicker pickerType;
     private NumberPicker.OnValueChangeListener pickerListener;
 
+    private ImageView btnAddLink;
+    private ImageView btnAddMention;
     private Button btnOK;
     private Button btnCancel;
 
@@ -62,6 +67,7 @@ public class FragmentEditField extends Fragment {
 
     private Integer currentTypeInt;
     private String currentOpenSymbol;
+    private String currentCloseSymbol;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,6 +145,22 @@ public class FragmentEditField extends Fragment {
             boolean prevalidate() {
                 return isValueValid();
             }
+
+            @Override
+            void enable() {
+                super.enable();
+                if (ViewModelField.formatIntToType(currentTypeInt) == CALCULATED) {
+                    btnAddLink.setVisibility(View.VISIBLE);
+                    btnAddMention.setVisibility(View.GONE);
+                } else if (ViewModelField.formatIntToType(currentTypeInt) == SHORT_TEXT ||
+                        ViewModelField.formatIntToType(currentTypeInt) == LONG_TEXT) {
+                    btnAddMention.setVisibility(View.VISIBLE);
+                    btnAddLink.setVisibility(View.GONE);
+                } else {
+                    btnAddMention.setVisibility(View.GONE);
+                    btnAddLink.setVisibility(View.GONE);
+                }
+            }
         };
 
         editTextValue.setOnTouchListener(new CleanOnTouchListener(getActivity(), editTextValue,
@@ -189,6 +211,34 @@ public class FragmentEditField extends Fragment {
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
             public void afterTextChanged(Editable e) {}
+        });
+
+        btnAddLink = (ImageView) view.findViewById(R.id.btn_add_link);
+        btnAddLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "btnAddLink onClick");
+                currentOpenSymbol = ViewModelField.LINK_OPEN_SYMBOL;
+                currentCloseSymbol = ViewModelField.LINK_CLOSE_SYMBOL;
+                Intent intent = new Intent(FragmentEditField.this.getActivity(), ActivityFieldPicker.class);
+                String[] tmp = {CALCULATED.name()};
+                intent.putExtra(ActivityFieldPicker.EXTRA_FILTER, tmp);
+                startActivityForResult(intent, ActivityFieldPicker.REQUEST_CODE);
+            }
+        });
+
+        btnAddMention = (ImageView) view.findViewById(R.id.btn_add_mention);
+        btnAddMention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "btnAddMention onClick");
+                currentOpenSymbol = ViewModelField.MENTION_OPEN_SYMBOL;
+                currentCloseSymbol = ViewModelField.MENTION_CLOSE_SYMBOL;
+                Intent intent = new Intent(FragmentEditField.this.getActivity(), ActivityFieldPicker.class);
+                String[] tmp = {SHORT_TEXT.name(), LONG_TEXT.name()};
+                intent.putExtra(ActivityFieldPicker.EXTRA_FILTER, tmp);
+                startActivityForResult(intent, ActivityFieldPicker.REQUEST_CODE);
+            }
         });
 
         /*---------------------------------- BUTTONS --------------------------------------*/
@@ -390,5 +440,22 @@ public class FragmentEditField extends Fragment {
         Log.d(TAG, "isValueValid");
         return CleanOnTouchListener.isValidString(this.getActivity(),
                 editTextValue.getText().toString(), R.string.edit_field_dflt_value);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ActivityFieldPicker.REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                if (data.hasExtra(RESULT_FIELD)) {
+                    editTextValue.setText(editTextValue.getText() +
+                            currentOpenSymbol +
+                            data.getStringExtra(RESULT_FIELD) +
+                            currentCloseSymbol);
+                    editTextValue.requestFocus();
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                }
+            }
+        }
     }
 }
