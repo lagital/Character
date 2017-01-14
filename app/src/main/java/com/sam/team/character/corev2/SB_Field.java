@@ -83,7 +83,8 @@ public class SB_Field<
         SHORT_TEXT,
         LONG_TEXT,
         NUMERIC,
-        CALCULATED
+        CALCULATED,
+        UNDEFINED
     }
     
 }

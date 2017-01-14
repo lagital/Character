@@ -17,6 +17,12 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
+import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
+import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
+import static com.sam.team.character.corev2.SB_Field.FieldType.UNDEFINED;
+
 /**
  * Created by pborisenko on 10/31/2016.
  */
@@ -86,27 +92,30 @@ public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementT
             case LONG_TEXT:  {return c.getResources().getString(R.string.field_type_long_text);}
             case NUMERIC:    {return c.getResources().getString(R.string.field_type_numeric);}
             case CALCULATED: {return c.getResources().getString(R.string.field_type_calculated);}
-            default:         {return c.getResources().getString(R.string.field_type_short_text);}
+            case UNDEFINED:  {return c.getResources().getString(R.string.field_type_undefined);}
+            default:         {return c.getResources().getString(R.string.field_type_undefined);}
         }
     }
 
     public static int formatTypeToInt (SB_Field.FieldType t) {
         switch (t) {
-            case SHORT_TEXT: {return 0;}
-            case LONG_TEXT:  {return 1;}
-            case NUMERIC:    {return 2;}
-            case CALCULATED: {return 3;}
+            case UNDEFINED:  {return 0;}
+            case SHORT_TEXT: {return 1;}
+            case LONG_TEXT:  {return 2;}
+            case NUMERIC:    {return 3;}
+            case CALCULATED: {return 4;}
             default:         {return 0;}
         }
     }
 
     public static SB_Field.FieldType formatIntToType (int i) {
         switch (i) {
-            case 0: {return SB_Field.FieldType.SHORT_TEXT;}
-            case 1: {return SB_Field.FieldType.LONG_TEXT;}
-            case 2: {return SB_Field.FieldType.NUMERIC;}
-            case 3: {return SB_Field.FieldType.CALCULATED;}
-            default: {return SB_Field.FieldType.SHORT_TEXT;}
+            case 0: {return UNDEFINED;}
+            case 1: {return SHORT_TEXT;}
+            case 2: {return LONG_TEXT;}
+            case 3: {return NUMERIC;}
+            case 4: {return CALCULATED;}
+            default:{return UNDEFINED;}
         }
     }
 

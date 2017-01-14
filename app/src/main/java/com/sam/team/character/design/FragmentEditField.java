@@ -27,6 +27,10 @@ import com.sam.team.character.viewmodel.ViewModelField;
 import java.util.ArrayList;
 
 import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
+import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
+import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
+import static com.sam.team.character.corev2.SB_Field.FieldType.UNDEFINED;
 
 /**
  * Created by pborisenko on 11/5/2016.
@@ -113,10 +117,10 @@ public class FragmentEditField extends Fragment {
         };
 
         String[] stringTypes = new String[] {
-                getActivity().getResources().getString(R.string.edit_field_dflt_type),
-                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.SHORT_TEXT),
-                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.LONG_TEXT),
-                ViewModelField.formatTypeToName(getActivity(), SB_Field.FieldType.NUMERIC),
+                ViewModelField.formatTypeToName(getActivity(), UNDEFINED),
+                ViewModelField.formatTypeToName(getActivity(), SHORT_TEXT),
+                ViewModelField.formatTypeToName(getActivity(), LONG_TEXT),
+                ViewModelField.formatTypeToName(getActivity(), NUMERIC),
                 ViewModelField.formatTypeToName(getActivity(), CALCULATED)
         };
         pickerType.setMinValue(0);
@@ -141,29 +145,31 @@ public class FragmentEditField extends Fragment {
                 getActivity().getResources().getString(R.string.edit_field_dflt_value)));
         editTextValue.addTextChangedListener(new TextWatcher() {
 
-            @Override
-            public void afterTextChanged(Editable s) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String str = editTextValue.getText().toString();
                 int dotCounter;
-                Log.d(TAG, "Value - afterTextChanged on " + str);
+                Log.d(TAG, "Value - onTextChanged " + str);
                 valueStep.validate();
 
                 // select element name if user begins typing Mention or Link
-                if (str.endsWith(ViewModelField.MENTION_OPEN_SYMBOL) || str.endsWith(ViewModelField.LINK_OPEN_SYMBOL)) {
+                if (before == 0 &&
+                        (str.endsWith(ViewModelField.MENTION_OPEN_SYMBOL) || str.endsWith(ViewModelField.LINK_OPEN_SYMBOL))) {
                     currentOpenSymbol = str.substring(str.length() - 1);
-                    Log.d(TAG, currentOpenSymbol);
+                    Log.d(TAG, "Open symbol: " + currentOpenSymbol);
+                    Log.d(TAG, ViewModelField.formatIntToType(currentTypeInt).toString());
 
                     if (currentOpenSymbol.equals(ViewModelField.LINK_OPEN_SYMBOL) &&
                             ViewModelField.formatIntToType(currentTypeInt).equals(CALCULATED)) {
                         generateElementMenu(editTextValue).show();
                     }
                     if (currentOpenSymbol.equals(ViewModelField.MENTION_OPEN_SYMBOL) &&
-                            !ViewModelField.formatIntToType(currentTypeInt).equals(CALCULATED)) {
+                            !ViewModelField.formatIntToType(currentTypeInt).equals(CALCULATED) &&
+                            !ViewModelField.formatIntToType(currentTypeInt).equals(NUMERIC)) {
                         generateElementMenu(editTextValue).show();
                     }
                 }
 
-                if (str.endsWith(ViewModelField.DELIMITER)) {
+                if (before == 0 && str.endsWith(ViewModelField.DELIMITER)) {
                     str = str.substring(str.lastIndexOf(currentOpenSymbol) + 1, str.length() - 1);
                     // all between last "{" or "[" and current dot
                     dotCounter = str.length() - str.replace(ViewModelField.DELIMITER, "").length();
@@ -182,7 +188,7 @@ public class FragmentEditField extends Fragment {
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void afterTextChanged(Editable e) {}
         });
 
         /*---------------------------------- BUTTONS --------------------------------------*/
