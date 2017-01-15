@@ -92,7 +92,6 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
     public File exportSystemXML () {
         Log.d(TAG, "exportSystemXML");
         String xml = generateXML();
-        Log.d(TAG, xml);
         File tmp = new File(systemFilePath);
         try {
             FileOutputStream fos = new FileOutputStream(tmp);

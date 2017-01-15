@@ -1,7 +1,11 @@
 <resources>
 
     <!-- Application -->
-    <string name="app_name">RPG Builder</string>
+    <string name="app_name">RPG Heroes</string>
+
+    <!-- ActivityContainer -->
+    <string name="drawer_open">Open menu</string>
+    <string name="drawer_close">Close menu</string>
 
     <!-- Settings Dialogs -->
     <string name="dialog_btn_ok">OK</string>
@@ -12,8 +16,10 @@
     <string name="dialog_are_you_sure">Are you sure?</string>
 
     <!-- Fragment Load Systems -->
-    <string name="load_systems_title">RPG Builder</string>
+    <string name="load_systems_title">RPG Heroes</string>
     <string name="load_systems_text">Loading games &#8203;</string>
+    <string name="load_systems_add_character">New character</string>
+    <string name="new_character_dflt_name">Name</string>
 
     <!-- Fragment System Picker -->
     <string name="system_picker_title">Games</string>
@@ -85,7 +91,7 @@
     <string name="url_EDIT_ELEMENT">http://rpgames.herokuapp.com/</string>
     <string name="url_EDIT_FIELD">http://rpgames.herokuapp.com/</string>
 
-    <!-- Fragment Element -->
+    <!-- Fragment Simple Picker -->
     <string name="element_fragment_title">Choose</string>
 
     <!-- DEBUG -->

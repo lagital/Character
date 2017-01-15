@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <import type="com.sam.team.character.viewmodel.ViewModelSystem"/>
+        <variable
+            name="system"
+            type="ViewModelSystem" />
+        <variable
+            name="addclick"
+            type="android.view.View.OnClickListener" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/system_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/colorPrimaryText"
+            android:textSize="@dimen/text_display1_type"
+            android:layout_marginLeft="@dimen/head_text_margin_start"
+            android:layout_marginStart="@dimen/head_text_margin_start"
+            android:text="@{system.name}"/>
+
+        <TextView
+            android:id="@+id/system_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/system_name"
+            android:textColor="@color/colorPrimaryText"
+            android:textStyle="italic"
+            android:fontFamily="sans-serif-thin"
+            android:textSize="@dimen/text_subheading1_type"
+            android:layout_marginLeft="@dimen/card_margin_start"
+            android:layout_marginStart="@dimen/card_margin_start"
+            android:text="@{@string/system_item_version + ' ' + system.version}"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal"
+            android:layout_centerVertical="true">
+
+            <ImageButton
+                android:id="@+id/btn_add_element"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_add_black_36dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/system_item_add_icon"
+                android:layout_margin="4dp"
+                android:onClick="@{addclick}"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>
