@@ -7,11 +7,14 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,6 +35,7 @@ public class FragmentEditElement extends Fragment {
     private AdapterCategoryField mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private FloatingActionButton mMainFAB;
+    private EditTextEndCursor searchBox;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
@@ -58,8 +62,42 @@ public class FragmentEditElement extends Fragment {
             }
         });
 
-        mMainFAB = (FloatingActionButton) view.findViewById(R.id.fab_main);
+        searchBox = (EditTextEndCursor) view.findViewById(R.id.search_box);
+        searchBox.addTextChangedListener(new TextWatcher() {
+            public void afterTextChanged(Editable s) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mAdapter.setNamePart(s.toString());
+                mAdapter.notifyDataSetChanged();
+                // change left icon to Clear after the first typed symbol
+                if (start == 0 && before == 0 && count > 0) {
+                    searchBox.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_clear_black_36dp, 0, 0, 0);
+                }
+                // change left icon to Search after the first typed symbol
+                if (start == 0 && count == 0) {
+                    searchBox.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_black_36dp, 0, 0, 0);
+                }
+            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        });
+        searchBox.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP) {
+                    if(event.getRawX() <= searchBox.getCompoundDrawables()[0].getBounds().width() +
+                            getActivity().getResources().getDimension(R.dimen.search_margin_left)) {
+                        Log.d(TAG, "Clear search box");
+                        // clear search box after clicking Cancel
+                        if (!searchBox.getText().toString().equals("")) {
+                            searchBox.setText("");
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
+        mMainFAB = (FloatingActionButton) view.findViewById(R.id.fab_main);
         mMainFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -31,4 +31,24 @@
         style="@style/floating_action_button"
         android:layout_gravity="end|bottom"/>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/search_margin_left"
+        android:layout_marginStart="@dimen/search_margin_left"
+        android:layout_marginRight="@dimen/search_margin_right"
+        android:layout_marginEnd="@dimen/search_margin_right"
+        android:layout_marginBottom="@dimen/search_margin_bottom"
+        android:layout_gravity="start|bottom">
+
+        <com.sam.team.character.design.EditTextEndCursor
+            android:id="@+id/search_box"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_search_black_36dp"
+            android:drawableStart="@drawable/ic_search_black_36dp"
+            style="@style/Widget.AppCompat.EditText"/>
+
+    </android.support.v7.widget.CardView>
+
 </android.support.design.widget.CoordinatorLayout>

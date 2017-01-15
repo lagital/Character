@@ -32,10 +32,13 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private ArrayList<ListItem> items;
     private FragmentEditElement fragment;
+    private String namePart;
 
     AdapterCategoryField(FragmentEditElement fragment) {
         this.fragment = fragment;
         this.items = new ArrayList<>();
+        // by default filter for fields is not applied
+        this.namePart = "";
         renewItems();
     }
 
@@ -179,7 +182,13 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.get(position).getItemType();
     }
 
-    public void renewItems() {
+    void setNamePart(String namePart) {
+        Log.d(TAG, "New namePart: " + namePart);
+        this.namePart = namePart;
+        renewItems();
+    }
+
+    void renewItems() {
         Log.d(TAG, "renewItems");
         items.clear();
         ViewModelElementType tmpE = Session.getInstance().getElementFromCache();
@@ -187,7 +196,9 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ViewModelCategory tmpC = tmpE.getCategory(sc);
             items.add(tmpC);
             for (String sf : tmpC.getFields()) {
-                items.add(tmpC.getField(sf));
+                if (tmpC.getField(sf).getName().toUpperCase().contains(namePart.toUpperCase())) {
+                    items.add(tmpC.getField(sf));
+                }
             }
         };
     }
