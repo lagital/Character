@@ -23,7 +23,7 @@ public class FragmentFieldPicker extends Fragment {
     private static final String TAG = "FragmentFieldPicker";
 
     private RecyclerView mRecyclerView;
-    private AdapterPicker mAdapter;
+    private AdapterFieldPicker mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -40,7 +40,11 @@ public class FragmentFieldPicker extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new AdapterPicker(this, ((ActivityFieldPicker) getActivity()).getElement());
+        /*
+         * In case getElement returns null we will show list of elements.
+         * List of fields and categories - otherwise.
+        **/
+        mAdapter = new AdapterFieldPicker(this, ((ActivityFieldPicker) getActivity()).getElement());
         mRecyclerView.setAdapter(mAdapter);
 
         return view;
