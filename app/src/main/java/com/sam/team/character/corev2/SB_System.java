@@ -1,5 +1,6 @@
 package com.sam.team.character.corev2;
 
+import java.io.File;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +26,7 @@ public class SB_System <
     @Element(name = "Name") private String name;
     private String version, copyright;
     private Map<String, E> elements;
-    @ElementList(name="Elements") private List<E> elementsXML;
+    @ElementList(name = "Elements") private List<E> elementsXML;
 
     //constructors
     public SB_System(String name) {
@@ -56,7 +57,7 @@ public class SB_System <
     public String parseExp(String exp){
     	if (!validateExp(exp)) return "not valid";
         String tmp;
-	while(exp.contains("(")){
+	    while(exp.contains("(")){
             tmp = exp.substring(exp.lastIndexOf("("),exp.length()); 
             exp = exp.substring(0, exp.lastIndexOf("(")) +
                   calculateExp(tmp.substring(tmp.lastIndexOf("(")+1, tmp.indexOf(")"))) +
@@ -73,7 +74,7 @@ public class SB_System <
         operands.addAll(Arrays.asList(exp.split("[\\+\\-\\*\\/)]+")));
         ArrayList<String> operators = new ArrayList();
         operators.addAll(Arrays.asList(exp.split("[\\w@:().]+")));
-        //delete space (need improve regex)
+        //delete space (needs improvement regex)
         operators.remove(0);
         int tmp = 0;
         while(operators.size() > 0){
@@ -244,7 +245,12 @@ public class SB_System <
             return null;
         }
     }
-    
+    public static SB_System readXML(String path) throws Exception {
+        Serializer serializer = new Persister();
+        File source = new File(path);
+        return serializer.read(SB_System.class, source);
+    }
+
     //custom comparator
     private Comparator<String> SortByIndex(final SB_System system) {
         Comparator comp = new Comparator<String>(){

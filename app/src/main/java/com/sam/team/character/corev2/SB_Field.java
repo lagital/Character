@@ -36,7 +36,7 @@ public class SB_Field<
 
     @Attribute(name = "index") private int index;
     @Element(name = "Name") private String name;
-    @Element(name = "Value") private String value = "";
+    @Element(name = "Value") private String value;
     @Element(name = "Type") private String type;
     private C category;
 
@@ -48,6 +48,7 @@ public class SB_Field<
         this.name = name;
         this.category = category;
         this.type = type.name();
+        this.value = "";
     }
 
     public C getCategory() {

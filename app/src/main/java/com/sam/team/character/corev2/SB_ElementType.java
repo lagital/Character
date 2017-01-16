@@ -24,6 +24,8 @@ public class SB_ElementType<
     private Map<String, C> categories;
     @ElementList(name="Categories") private List<C> categoriesXML;
     private S system;
+    @Attribute(name = "is_Character") private boolean isCharacter;
+    @Attribute(name = "is_Template") private boolean isTemplate;
     
     //full constructor
     public SB_ElementType(int index, String name, S system) {
@@ -31,13 +33,23 @@ public class SB_ElementType<
         this.name = name;
         this.system = system;
         categories = new TreeMap<>();
+        this.isCharacter = false;
+        this.isTemplate = false;
     }
 
     //dummy constructor
     public SB_ElementType() {
         categories = new TreeMap<>();
     }
-    
+
+    //work with character flag
+    public void isCharacter(boolean isCharacter) { this.isCharacter = isCharacter; }
+    public boolean isCharacter() { return isCharacter; }
+
+    //work with template flag
+    public void isTemplate(boolean isTemplate) { this.isTemplate = isTemplate; }
+    public boolean isTemplate() { return isTemplate; };
+
     //work with name
     public void setName(String name) { this.name = name; }
     public String getName() { return name; }
