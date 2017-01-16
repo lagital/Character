@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +27,8 @@ import java.util.ArrayList;
 import static com.sam.team.character.viewmodel.ViewModelSystem.SYSTEM_FILE_TYPE;
 
 /**
+ * Adapter representing Systems and their child Elements.
+ * Only template Elements are shown.
  * Created by pborisenko on 9/26/2016.
  */
 
@@ -288,7 +289,8 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return items.get(position).getItemType();
     }
 
-    public void renewItems() {
+    void renewItems() {
+        // TODO: show only template elements
         Log.d(TAG, "renewItems");
         items.clear();
         for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {

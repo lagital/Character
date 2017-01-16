@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.FrameLayout;
 
@@ -34,7 +33,7 @@ public class ActivityFieldPicker extends AppCompatActivity {
 
     FrameLayout container;
     FragmentManager mFragmentManager;
-    private ViewModelElementType element;
+    private ViewModelElementType element = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,7 @@ public class ActivityFieldPicker extends AppCompatActivity {
             FragmentTransaction fragmentTransaction = mFragmentManager
                     .beginTransaction();
             // add to container
-            fragmentTransaction.add(R.id.container, new FragmentElementPicker());
+            fragmentTransaction.add(R.id.container, new FragmentFieldPicker());
             fragmentTransaction.commit();
         }
     }

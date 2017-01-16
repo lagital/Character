@@ -29,7 +29,6 @@ public class FragmentSystemPicker extends Fragment{
 
     private static final String TAG = "FragmentSystemPicker";
 
-
     private RecyclerView mRecyclerView;
     private AdapterSystemElement mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -56,6 +55,7 @@ public class FragmentSystemPicker extends Fragment{
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                mAdapter.renewItems();
                 mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }

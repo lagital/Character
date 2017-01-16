@@ -165,8 +165,9 @@ public class FragmentEditField extends Fragment {
 
         editTextValue.setOnTouchListener(new CleanOnTouchListener(getActivity(), editTextValue,
                 getActivity().getResources().getString(R.string.edit_field_dflt_value)));
-        editTextValue.addTextChangedListener(new TextWatcher() {
 
+        editTextValue.addTextChangedListener(new TextWatcher() {
+            @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String str = editTextValue.getText().toString();
                 int dotCounter;
@@ -208,8 +209,9 @@ public class FragmentEditField extends Fragment {
                     }
                 }
             }
-
+            @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
             public void afterTextChanged(Editable e) {}
         });
 

@@ -23,14 +23,14 @@ import java.util.ArrayList;
  * Created by pborisenko on 1/14/2017.
  */
 
-class AdapterPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+class AdapterFieldPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final String TAG = "AdapterPicker";
 
     private ArrayList<ListItem> items;
     private Fragment fragment;
 
-    AdapterPicker(Fragment fragment, ViewModelElementType element) {
+    AdapterFieldPicker(Fragment fragment, ViewModelElementType element) {
         this.fragment = fragment;
         this.items = new ArrayList<>();
         renewItems(element);
@@ -43,19 +43,19 @@ class AdapterPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch(viewType) {
             case ListItem.TYPE_ELEMENT: {
                 SimpleItemElementBinding binding = SimpleItemElementBinding.inflate(inflater, parent, false);
-                return new AdapterPicker.ViewHolderSimpleElementItem(binding.getRoot());
+                return new AdapterFieldPicker.ViewHolderSimpleElementItem(binding.getRoot());
             }
             case ListItem.TYPE_CATEGORY: {
                 SimpleItemCategoryBinding binding = SimpleItemCategoryBinding.inflate(inflater, parent, false);
-                return new AdapterPicker.ViewHolderSimpleCategoryItem(binding.getRoot());
+                return new AdapterFieldPicker.ViewHolderSimpleCategoryItem(binding.getRoot());
             }
             case ListItem.TYPE_FIELD: {
                 SimpleItemFieldBinding binding = SimpleItemFieldBinding.inflate(inflater, parent, false);
-                return new AdapterPicker.ViewHolderSimpleFieldItem(binding.getRoot());
+                return new AdapterFieldPicker.ViewHolderSimpleFieldItem(binding.getRoot());
             }
             default: {
                 SimpleItemElementBinding binding = SimpleItemElementBinding.inflate(inflater, parent, false);
-                return new AdapterPicker.ViewHolderSimpleElementItem(binding.getRoot());
+                return new AdapterFieldPicker.ViewHolderSimpleElementItem(binding.getRoot());
             }
         }
     }
@@ -65,7 +65,7 @@ class AdapterPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         int type = getItemViewType(position);
         switch (type) {
             case ListItem.TYPE_ELEMENT: {
-                AdapterPicker.ViewHolderSimpleElementItem h = (AdapterPicker.ViewHolderSimpleElementItem) holder;
+                AdapterFieldPicker.ViewHolderSimpleElementItem h = (AdapterFieldPicker.ViewHolderSimpleElementItem) holder;
                 h.binding.setElement((ViewModelElementType) items.get(position));
                 h.binding.setCardclick(new View.OnClickListener() {
                     @Override
@@ -76,12 +76,12 @@ class AdapterPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 break;
             }
             case ListItem.TYPE_CATEGORY: {
-                AdapterPicker.ViewHolderSimpleCategoryItem h = (AdapterPicker.ViewHolderSimpleCategoryItem) holder;
+                AdapterFieldPicker.ViewHolderSimpleCategoryItem h = (AdapterFieldPicker.ViewHolderSimpleCategoryItem) holder;
                 h.binding.setCategory((ViewModelCategory) items.get(position));
                 break;
             }
             case ListItem.TYPE_FIELD: {
-                AdapterPicker.ViewHolderSimpleFieldItem h = (AdapterPicker.ViewHolderSimpleFieldItem) holder;
+                AdapterFieldPicker.ViewHolderSimpleFieldItem h = (AdapterFieldPicker.ViewHolderSimpleFieldItem) holder;
                 h.binding.setField((ViewModelField) items.get(position));
                 h.binding.setCardclick(new View.OnClickListener() {
                     @Override

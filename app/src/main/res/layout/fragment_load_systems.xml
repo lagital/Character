@@ -1,32 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/app_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/progress_bar"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/ic_app_logo"/>
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loader_contaner"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:indeterminate="true"
-        style="@android:style/Widget.ProgressBar.Horizontal" />
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:visibility="visible">
 
-    <TextView
-        android:id="@+id/loading_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/progress_bar"
-        android:text="@string/load_systems_text"/>
+        <ImageView
+            android:id="@+id/app_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/progress_bar"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_app_logo"/>
 
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:indeterminate="true"
+            style="@android:style/Widget.ProgressBar.Horizontal" />
+
+        <TextView
+            android:id="@+id/loading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/progress_bar"
+            android:text="@string/load_systems_text"/>
+    </RelativeLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/list_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/systems_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.design.widget.CoordinatorLayout>
