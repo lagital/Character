@@ -3,6 +3,7 @@ package com.sam.team.character.design;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,6 +24,9 @@ import com.sam.team.character.viewmodel.Session;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by pborisenko on 10/27/2016.
  */
@@ -31,28 +35,28 @@ public class FragmentEditElement extends Fragment {
 
     private static final String TAG = "FragmentEditElement";
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.categories_list) RecyclerView mRecyclerView;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.fab_main) FloatingActionButton mMainFAB;
+    @BindView(R.id.search_box) EditTextEndCursor searchBox;
+
     private AdapterCategoryField mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private FloatingActionButton mMainFAB;
-    private EditTextEndCursor searchBox;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_sheet, null);
-
+        ButterKnife.bind(this, view);
         Log.d(TAG, "onCreateView");
 
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_sheet_title);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.categories_list);
+        ViewCompat.setNestedScrollingEnabled(mRecyclerView, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -62,7 +66,6 @@ public class FragmentEditElement extends Fragment {
             }
         });
 
-        searchBox = (EditTextEndCursor) view.findViewById(R.id.search_box);
         searchBox.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -97,14 +100,13 @@ public class FragmentEditElement extends Fragment {
             }
         });
 
-        mMainFAB = (FloatingActionButton) view.findViewById(R.id.fab_main);
         mMainFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "Main FAB click");
 
                 ArrayList<TextParameter> tpl = new ArrayList<>();
-                tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true));
+                tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true, null));
                 new TextParmsDialogBuilder(
                         getActivity(),
                         R.layout.dialog_settings_container,
@@ -124,6 +126,7 @@ public class FragmentEditElement extends Fragment {
         mAdapter = new AdapterCategoryField(this);
         mRecyclerView.setAdapter(mAdapter);
 
+        ButterKnife.bind(this, view);
         return view;
     }
 

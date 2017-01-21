@@ -87,7 +87,7 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             switch (item.getItemId()) {
                                 case R.id.category_item_edit_menu_edit: {
                                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                                    tpl.add(new TextParameter("", ((ViewModelCategory) items.get(position)).getName(), true));
+                                    tpl.add(new TextParameter("", ((ViewModelCategory) items.get(position)).getName(), true, null));
                                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,

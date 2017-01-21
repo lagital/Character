@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/go_to_load_systems"
+        android:id="@+id/go_to_builder"
         app:showAsAction="ifRoom"
-        android:title="@string/system_picker_go_to_characters"
-        android:icon="@drawable/ic_face_black_24dp"
+        android:title="@string/load_systems_go_to_builder"
+        android:icon="@drawable/ic_extension_black_24dp"
         android:visible="true"/>
     <item
-        android:id="@+id/help_system_picker"
+        android:id="@+id/help_load_systems"
         app:showAsAction="ifRoom"
         android:title="@string/help_icon_description"
         android:icon="@drawable/ic_help_outline_black_24dp"

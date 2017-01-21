@@ -36,4 +36,6 @@ dependencies {
         exclude group: 'stax', module: 'stax'
     }
     compile 'com.github.lagital:SamsaraLib:1.0.7'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 }

@@ -26,6 +26,9 @@ import com.sam.team.character.R;
 import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelField;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
@@ -36,6 +39,7 @@ import static com.sam.team.character.corev2.SB_Field.FieldType.UNDEFINED;
 import static com.sam.team.character.design.ActivityFieldPicker.RESULT_FIELD;
 
 /**
+ * Fragment to configure or edit Field.
  * Created by pborisenko on 11/5/2016.
  */
 
@@ -45,20 +49,21 @@ public class FragmentEditField extends Fragment {
 
     private ViewModelField field;
 
-    private LinearLayout nameContainer;
-    private LinearLayout typeContainer;
-    private LinearLayout valueContainer;
+    @BindView(R.id.stage_name) LinearLayout nameContainer;
+    @BindView(R.id.stage_type) LinearLayout typeContainer;
+    @BindView(R.id.stage_value) LinearLayout valueContainer;
 
-    private AppCompatEditText editTextName;
-    private AppCompatEditText editTextValue;
+    @BindView(R.id.stage_name_text) AppCompatEditText editTextName;
+    @BindView(R.id.stage_value_text) AppCompatEditText editTextValue;
 
-    private NumberPicker pickerType;
+    @BindView(R.id.stage_type_picker) NumberPicker pickerType;
+
+    @BindView(R.id.btn_add_link) ImageView btnAddLink;
+    @BindView(R.id.btn_add_mention) ImageView btnAddMention;
+    @BindView(R.id.btn_ok) Button btnOK;
+    @BindView(R.id.btn_cancel) Button btnCancel;
+
     private NumberPicker.OnValueChangeListener pickerListener;
-
-    private ImageView btnAddLink;
-    private ImageView btnAddMention;
-    private Button btnOK;
-    private Button btnCancel;
 
     private Step nameStep;
     private Step typeStep;
@@ -73,7 +78,7 @@ public class FragmentEditField extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_field, null);
-
+        ButterKnife.bind(this, view);
         Log.d(TAG, "onCreateView");
 
         setHasOptionsMenu(true);
@@ -82,8 +87,6 @@ public class FragmentEditField extends Fragment {
         Step.setTransitionTime(getResources().getInteger(R.integer.step_transition_time));
 
         /*----------------------------------- NAME STEP -----------------------------------*/
-        nameContainer = (LinearLayout) view.findViewById(R.id.stage_name);
-        editTextName = (AppCompatEditText) nameContainer.findViewById(R.id.stage_name_text);
         nameStep = new Step(nameContainer) {
             @Override
             boolean prevalidate() {
@@ -94,7 +97,6 @@ public class FragmentEditField extends Fragment {
         editTextName.setOnTouchListener(new CleanOnTouchListener(getActivity(), editTextName,
                 getActivity().getResources().getString(R.string.edit_field_dflt_name)));
         editTextName.addTextChangedListener(new TextWatcher() {
-
             public void afterTextChanged(Editable s) {
                 String str = editTextName.getText().toString();
                 Log.d(TAG, "afterTextChanged to " + str);
@@ -105,8 +107,6 @@ public class FragmentEditField extends Fragment {
         });
 
         /*----------------------------------- TYPE STEP -----------------------------------*/
-        typeContainer = (LinearLayout) view.findViewById(R.id.stage_type);
-        pickerType = (NumberPicker) typeContainer.findViewById(R.id.stage_type_picker);
         pickerListener = new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
@@ -137,9 +137,6 @@ public class FragmentEditField extends Fragment {
         pickerType.setOnValueChangedListener(pickerListener);
 
         /*----------------------------------- VALUE STEP -----------------------------------*/
-
-        valueContainer = (LinearLayout) view.findViewById(R.id.stage_value);
-        editTextValue = (AppCompatEditText) valueContainer.findViewById(R.id.stage_value_text);
         valueStep = new Step(valueContainer) {
             @Override
             boolean prevalidate() {
@@ -215,7 +212,6 @@ public class FragmentEditField extends Fragment {
             public void afterTextChanged(Editable e) {}
         });
 
-        btnAddLink = (ImageView) view.findViewById(R.id.btn_add_link);
         btnAddLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -229,7 +225,6 @@ public class FragmentEditField extends Fragment {
             }
         });
 
-        btnAddMention = (ImageView) view.findViewById(R.id.btn_add_mention);
         btnAddMention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -244,8 +239,6 @@ public class FragmentEditField extends Fragment {
         });
 
         /*---------------------------------- BUTTONS --------------------------------------*/
-
-        btnOK = (Button) view.findViewById(R.id.btn_ok);
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -273,7 +266,6 @@ public class FragmentEditField extends Fragment {
             }
         };
 
-        btnCancel = (Button) view.findViewById(R.id.btn_cancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

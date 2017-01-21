@@ -63,7 +63,7 @@ class AdapterSystemCharacter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     Log.d(TAG, "New character for system " + Integer.toString(position));
                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_character_dflt_name), null, true));
+                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_character_dflt_name), null, true, null));
                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                             fragment.getActivity(),
                             R.layout.dialog_settings_container,
@@ -72,8 +72,9 @@ class AdapterSystemCharacter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             tpl) {
                         @Override
                         void applySettings() {
-                            // TODO: create live Character
                             ((ViewModelSystem) items.get(position)).addElement(getResults().get(0));
+                            ((ViewModelSystem) items.get(position)).getElement(getResults().get(0)).setIsCharacter(true);
+                            ((ViewModelSystem) items.get(position)).getElement(getResults().get(0)).setIsTemplate(false);
                             renewItems();
                             notifyDataSetChanged();
                         }
@@ -130,13 +131,15 @@ class AdapterSystemCharacter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     void renewItems() {
-        // TODO: show only live characters (not character templates)
         Log.d(TAG, "renewItems");
         items.clear();
         for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {
             items.add(s);
             for (String se : s.getElements()) {
-                items.add(s.getElement(se));
+                ViewModelElementType tmp = s.getElement(se);
+                if (tmp.isCharacter() && !tmp.isTemplate()) {
+                    items.add(tmp);
+                }
             }
         }
     }

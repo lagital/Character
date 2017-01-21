@@ -4,10 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.AppCompatSpinner;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,6 +18,7 @@ import com.sam.team.character.R;
 import java.util.ArrayList;
 
 /**
+ * Dialog builder.
  * Created by pborisenko on 11/26/2016.
  */
 
@@ -34,17 +36,27 @@ class TextParmsDialogBuilder extends AlertDialog.Builder{
         final LinearLayout l = (LinearLayout) View.inflate(context, containerRes, null);
         LayoutInflater li = LayoutInflater.from(context);
         for (TextParameter p : parameters) {
-            EditTextEndCursor e = (EditTextEndCursor) li.inflate(R.layout.text_parameter, null);
-            e.setText(p.getCurrentValue());
+            if (p.getDropDown() == null) {
+                EditTextEndCursor e = (EditTextEndCursor) li.inflate(R.layout.text_parameter, null);
+                e.setText(p.getCurrentValue());
 
-            if (p.isMandatory()) {
-                e.setTypeface(null, Typeface.BOLD);
+                if (p.isMandatory()) {
+                    e.setTypeface(null, Typeface.BOLD);
+                }
+
+                Log.d(TAG, e.getText().toString());
+                e.setOnTouchListener(new CleanOnTouchListener(context, e,
+                        p.getDfltValue()));
+                l.addView(e);
+            } else {
+                AppCompatSpinner e = (AppCompatSpinner) li.inflate(R.layout.text_parameter_drop_down, null);
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_item, p.getDropDown());
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                e.setAdapter(adapter);
+
+                //Log.d(TAG, e.getgetText().toString());
+                l.addView(e);
             }
-
-            Log.d(TAG, e.getText().toString());
-            e.setOnTouchListener(new CleanOnTouchListener(context, e,
-                    p.getDfltValue()));
-            l.addView(e);
         }
         this.setView(l);
         this.setTitle(titleRes);
@@ -75,8 +87,15 @@ class TextParmsDialogBuilder extends AlertDialog.Builder{
                 // validate each parameter
                 boolean validSettings = true;
                 for (int i = 0; i < parameters.size(); i++) {
-                    EditText e = (EditText) l.getChildAt(i);
-                    String s = e.getText().toString();
+                    String s;
+                    if (parameters.get(i).getDropDown() != null) {
+                        AppCompatSpinner e = (AppCompatSpinner) l.getChildAt(i);
+                        s = e.getSelectedItem().toString();
+                    } else {
+                        EditText e = (EditText) l.getChildAt(i);
+                        s = e.getText().toString();
+                    }
+
                     if (s.isEmpty() || s.equalsIgnoreCase(parameters.get(i).getDfltValue())) {
                         if (parameters.get(i).isMandatory()) {
                             validSettings = false;

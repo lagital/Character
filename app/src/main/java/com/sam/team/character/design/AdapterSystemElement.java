@@ -83,9 +83,9 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                                 case R.id.system_item_edit_menu_edit: {
                                     // show dialog to pass fill new system parameters.
                                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getName(), true));
-                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getVersion(), false));
-                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getCopyright(), false));
+                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getName(), true, null));
+                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getVersion(), false, null));
+                                    tpl.add(new TextParameter("", ((ViewModelSystem) items.get(position)).getCopyright(), false, null));
                                     new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,
@@ -156,7 +156,10 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 public void onClick(View view) {
                     Log.d(TAG, "New sheet for system " + Integer.toString(position));
                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), null, true));
+                    final String[] isCharacterList = {fragment.getResources().getString(R.string.new_sheet_character_type),
+                            fragment.getResources().getString(R.string.new_sheet_other_type)};
+                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), null, true, null));
+                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_type), null, true, isCharacterList));
                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                             fragment.getActivity(),
                             R.layout.dialog_settings_container,
@@ -166,6 +169,13 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                         @Override
                         void applySettings() {
                             ((ViewModelSystem) items.get(position)).addElement(getResults().get(0));
+                            ((ViewModelSystem) items.get(position)).getElement(getResults().get(0)).setIsTemplate(true);
+                            // user chooses - character sheet or not
+                            if (getResults().get(1).equals(isCharacterList[0])) {
+                                ((ViewModelSystem) items.get(position)).getElement(getResults().get(0)).setIsCharacter(true);
+                            } else {
+                                ((ViewModelSystem) items.get(position)).getElement(getResults().get(0)).setIsCharacter(false);
+                            }
                             renewItems();
                             notifyDataSetChanged();
                         }
@@ -201,7 +211,7 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                             switch (item.getItemId()) {
                                 case R.id.sheet_item_edit_menu_rename: {
                                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), ((ViewModelElementType) items.get(position)).getName(), true));
+                                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_sheet_dflt_name), ((ViewModelElementType) items.get(position)).getName(), true, null));
                                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                                             fragment.getActivity(),
                                             R.layout.dialog_settings_container,
@@ -290,13 +300,15 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     void renewItems() {
-        // TODO: show only template elements
         Log.d(TAG, "renewItems");
         items.clear();
         for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {
             items.add(s);
             for (String se : s.getElements()) {
-                items.add(s.getElement(se));
+                ViewModelElementType tmp = s.getElement(se);
+                if (tmp.isTemplate()) {
+                    items.add(s.getElement(se));
+                }
             }
         }
     }

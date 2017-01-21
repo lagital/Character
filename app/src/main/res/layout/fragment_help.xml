@@ -1,65 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/help_container"
-    android:fitsSystemWindows="true">
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <RelativeLayout
+
+        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/webview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/ok_cancel"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"/>
 
-            <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/webview"
-                android:layout_width="match_parent"
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ok_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:gravity="bottom|center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <Button
+                android:id="@+id/btn_got_it"
+                style="?buttonBarButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/ok_cancel"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true">
-            </WebView>
+                android:layout_weight="0.5"
+                android:animateLayoutChanges="true"
+                android:gravity="center_vertical"
+                android:text="@string/help_btn_got_it" />
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/btn_contact_us"
+                style="?buttonBarButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/ok_cancel"
-                android:gravity="bottom|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentBottom="true"
-                android:weightSum="1">
-
-                <Button
-                    android:id="@+id/btn_got_it"
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_btn_got_it"
-                    android:gravity="center_vertical"
-                    style="?buttonBarButtonStyle"
-                    android:animateLayoutChanges="true"/>
-
-                <Button
-                    android:id="@+id/btn_contact_us"
-                    android:layout_weight="0.5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/help_btn_contact_us"
-                    android:gravity="center_vertical"
-                    style="?buttonBarButtonStyle"/>
-            </LinearLayout>
-        </RelativeLayout>
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-</android.support.design.widget.CoordinatorLayout>
+                android:layout_weight="0.5"
+                android:gravity="center_vertical"
+                android:text="@string/help_btn_contact_us" />
+        </LinearLayout>
+    </RelativeLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

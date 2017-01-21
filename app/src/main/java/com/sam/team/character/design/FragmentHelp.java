@@ -18,6 +18,9 @@ import android.widget.ProgressBar;
 
 import com.sam.team.character.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by pborisenko on 11/27/2016.
  */
@@ -25,13 +28,14 @@ import com.sam.team.character.R;
 public class FragmentHelp extends Fragment {
     private static final String TAG = "FragmentHelp";
 
-    private Button mBtnGotIt;
-    private Button mBtnContactUs;
-    private WebView webView;
+    @BindView(R.id.btn_got_it) Button mBtnGotIt;
+    @BindView(R.id.btn_contact_us) Button mBtnContactUs;
+    @BindView(R.id.webview) WebView webView;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
+
     private WebViewClient webViewClient;
     private String url;
-    private ProgressBar progressBar;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private Boolean initialLoad = true;
 
@@ -39,8 +43,11 @@ public class FragmentHelp extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_help, null);
+        ButterKnife.bind(this, view);
 
-        webView = (WebView) view.findViewById(R.id.webview);
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.help_fragment_title);
+
         webViewClient = new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -63,9 +70,6 @@ public class FragmentHelp extends Fragment {
         };
         webView.setWebViewClient(webViewClient);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar);
-
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -75,9 +79,6 @@ public class FragmentHelp extends Fragment {
                 }
             }
         });
-
-        setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.help_fragment_title);
 
         int index = getActivity().getSupportFragmentManager().getBackStackEntryCount() - 1;
         String name;
@@ -105,9 +106,6 @@ public class FragmentHelp extends Fragment {
         }
 
         webView.loadUrl(url);
-
-        mBtnGotIt = (Button) view.findViewById(R.id.btn_got_it);
-        mBtnContactUs = (Button) view.findViewById(R.id.btn_contact_us);
 
         mBtnGotIt.setOnClickListener(new View.OnClickListener() {
             @Override

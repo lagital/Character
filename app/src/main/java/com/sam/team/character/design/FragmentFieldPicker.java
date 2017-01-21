@@ -12,6 +12,9 @@ import android.view.ViewGroup;
 
 import com.sam.team.character.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Fragment to choose field.
  * Created by pborisenko on 1/14/2017.
@@ -22,7 +25,8 @@ public class FragmentFieldPicker extends Fragment {
 
     private static final String TAG = "FragmentFieldPicker";
 
-    private RecyclerView mRecyclerView;
+    @BindView(R.id.systems_list) RecyclerView mRecyclerView;
+
     private AdapterFieldPicker mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -30,13 +34,12 @@ public class FragmentFieldPicker extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_simple_picker, null);
-
+        ButterKnife.bind(this, view);
         Log.d(TAG, "onCreateView");
 
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.element_fragment_title);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.systems_list);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 

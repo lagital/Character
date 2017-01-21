@@ -112,6 +112,8 @@ public class Session {
 
                 ViewModelSystem rps = new ViewModelSystem("Game", "1.0", "Bla-bla");
                 rps.addElement("Character Sheet");
+                rps.getElement("Character Sheet").setIsCharacter(true);
+                rps.getElement("Character Sheet").setIsTemplate(true);
                 rps.getElement("Character Sheet").addCategory("Main");
                 rps.getElement("Character Sheet").addCategory("Additional");
                 rps.addField("Character Sheet", "Main", "Name", SHORT_TEXT);

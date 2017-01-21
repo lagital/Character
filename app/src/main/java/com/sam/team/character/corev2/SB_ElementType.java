@@ -43,11 +43,11 @@ public class SB_ElementType<
     }
 
     //work with character flag
-    public void isCharacter(boolean isCharacter) { this.isCharacter = isCharacter; }
+    public void setIsCharacter(boolean isCharacter) { this.isCharacter = isCharacter; }
     public boolean isCharacter() { return isCharacter; }
 
     //work with template flag
-    public void isTemplate(boolean isTemplate) { this.isTemplate = isTemplate; }
+    public void setIsTemplate(boolean isTemplate) { this.isTemplate = isTemplate; }
     public boolean isTemplate() { return isTemplate; };
 
     //work with name

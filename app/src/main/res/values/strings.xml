@@ -20,9 +20,10 @@
     <string name="load_systems_text">Loading games &#8203;</string>
     <string name="load_systems_add_character">New character</string>
     <string name="new_character_dflt_name">Name</string>
+    <string name="load_systems_go_to_builder">Game Builder</string>
 
     <!-- Fragment System Picker -->
-    <string name="system_picker_title">Games</string>
+    <string name="system_picker_title">RPG Builder</string>
     <string name="fab_add_system_dscr">Create a game</string>
     <string name="fab_load_system_dscr">Load a game</string>
     <string name="system_item_share_icon">Share</string>
@@ -44,9 +45,13 @@
     <string name="edit_sheet_dialog_title">Edit page</string>
     <string name="new_sheet_empty_name">Title is empty</string>
     <string name="new_sheet_dflt_name">Title</string>
+    <string name="new_sheet_dflt_type">Choose type</string>
+    <string name="new_sheet_character_type">Character</string>
+    <string name="new_sheet_other_type">Other</string>
     <string name="sheet_item_edit_menu_rename">Rename</string>
     <string name="sheet_item_edit_menu_edit">Edit</string>
     <string name="sheet_item_edit_menu_delete">Delete</string>
+    <string name="system_picker_go_to_characters">Characters</string>
 
     <!-- Fragment Edit Element -->
     <string name="edit_sheet_title">Page</string>

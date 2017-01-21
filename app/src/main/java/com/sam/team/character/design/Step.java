@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
+ * Step entities are intended for creating lists of depending settings.
  * Created by pborisenko on 11/12/2016.
  */
 

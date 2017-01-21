@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.FrameLayout;
 
 import com.sam.team.character.R;
 import com.sam.team.character.corev2.SB_Field;
@@ -31,7 +30,6 @@ public class ActivityFieldPicker extends AppCompatActivity {
 
     private ArrayList<SB_Field.FieldType> typeFilter = new ArrayList<>();
 
-    FrameLayout container;
     FragmentManager mFragmentManager;
     private ViewModelElementType element = null;
 
@@ -39,10 +37,7 @@ public class ActivityFieldPicker extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_field_picker);
-
         Log.d(TAG, "onCreate");
-
-        container = (FrameLayout) findViewById(R.id.container);
 
         // by default activity allows to choose any field, but you can override the filter
         for (SB_Field.FieldType t : Arrays.asList(SB_Field.FieldType.values())) {
