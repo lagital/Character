@@ -1,4 +1,4 @@
-package com.sam.team.character.corev2;
+package com.sam.team.character.core;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -25,6 +25,7 @@ public class SB_System <
     @ElementList(name = "Elements") private List<E> elementsXML;
 
     //constructors
+    public SB_System() {}
     public SB_System(String name) {
         this.name = name;
         version = copyright = null;
@@ -147,14 +148,14 @@ public class SB_System <
         tmp.setSystem((S) this);
         elements.put(elementName, tmp);
     }
-    public void removeElement(String elementName) {// throws ElementExistException {
-        //if (!elements.containsKey(elementName)) 
-        //    throw new ElementExistException("Element does not exist");
+    public void removeElement(String elementName) throws ElementExistException {
+        if (!elements.containsKey(elementName)) throw new ElementExistException("Element doesn't exist");
         elements.remove(elementName);
     }
-    public E getElement(String elementName) {//throws ElementExistException {
+    public E getElement(String elementName) throws ElementExistException {//throws ElementExistException {
         //if (!elements.containsKey(elementName)) 
         //    throw new ElementExistException("Element does not exist");
+        if (!elements.containsKey(elementName)) throw new ElementExistException("Element doesn't exist");
         return elements.get(elementName);
     }
     public ArrayList<String> getElements() {
@@ -171,11 +172,13 @@ public class SB_System <
     public void addCategory(Class<C> clazz, String elementName, String categoryName, boolean ... rewrite) throws Exception {
         elements.get(elementName).addCategory(clazz, categoryName, rewrite);
     }
-    public void removeCategory(String elementName, String categoryName) {
-        elements.get(elementName).removeCategory(categoryName);
+    public void removeCategory(String elementName, String categoryName) throws CategoryExistException {
+        try { elements.get(elementName).removeCategory(categoryName); }
+        catch(CategoryExistException e) { throw new CategoryExistException("Category doesn't exist"); }
     }
-    public C getCategory(String elementName, String categoryName) {
-        return elements.get(elementName).getCategory(categoryName);
+    public C getCategory(String elementName, String categoryName) throws CategoryExistException {
+        try { return elements.get(elementName).getCategory(categoryName); }
+        catch(CategoryExistException e) { throw new CategoryExistException("Category doesn't exist"); }
     }
     public ArrayList<String> getCategories(String elementName) {
         return elements.get(elementName).getCategories();
@@ -194,11 +197,13 @@ public class SB_System <
     public void addField(Class<F> clazz, String elementName, String categoryName, String fieldName, SB_Field.FieldType type, boolean ... rewrite) throws Exception {
         elements.get(elementName).getCategory(categoryName).addField(clazz, fieldName, type, rewrite);
     }
-    public void removeField(String elementName, String categoryName, String fieldName) {
-        elements.get(elementName).getCategory(categoryName).removeField(fieldName);
+    public void removeField(String elementName, String categoryName, String fieldName) throws FieldExistException {
+        try { elements.get(elementName).getCategory(categoryName).removeField(fieldName); }
+        catch(Exception e) { throw new FieldExistException("Field doesn't exist"); }
     }
-    public F getField(String elementName, String categoryName, String fieldName) {
-        return elements.get(elementName).getCategory(categoryName).getField(fieldName);
+    public F getField(String elementName, String categoryName, String fieldName) throws FieldExistException {
+        try { return elements.get(elementName).getCategory(categoryName).getField(fieldName); }
+        catch(Exception e) { throw new FieldExistException("Field doesn't exist"); }
     }
     public ArrayList<String> getFieldsInCategory(String elementName, String categoryName) {
         return elements.get(elementName).getFieldsInCategory(categoryName);
@@ -222,9 +227,10 @@ public class SB_System <
             //prepare lists of categories
             elements.get(e).prepareListOfCategories();
             for(String c : elements.get(e).getCategories()) {
-                elements.get(e).getCategory(c).prepareListOfFields();
+                try { elements.get(e).getCategory(c).prepareListOfFields(); }
+                catch(CategoryExistException exp) {}
             }
-        };
+        }
     }
     public String generateXML() {
         //prepare lists

@@ -1,4 +1,4 @@
-package com.sam.team.character.corev2;
+package com.sam.team.character.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,11 +57,14 @@ public class SB_Category <
         tmp.setType(type);
         tmp.setCategory((C) this);
         fields.put(fieldName, tmp);
+
     } 
-    public void removeField(String fieldName) {
+    public void removeField(String fieldName) throws FieldExistException {
+        if(!fields.containsKey(fieldName)) throw new FieldExistException("Field doesn't exist");
         fields.remove(fieldName);
     };
-    public F getField(String fieldName) {
+    public F getField(String fieldName) throws FieldExistException {
+        if(!fields.containsKey(fieldName)) throw new FieldExistException("Field doesn't exist");
         return fields.get(fieldName);
     }
     public ArrayList<String> getFields() {

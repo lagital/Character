@@ -9,10 +9,10 @@ import com.sam.team.character.design.ApplicationMain;
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
-import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
-import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
-import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
+import static com.sam.team.character.core.SB_Field.FieldType.CALCULATED;
+import static com.sam.team.character.core.SB_Field.FieldType.LONG_TEXT;
+import static com.sam.team.character.core.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.core.SB_Field.FieldType.SHORT_TEXT;
 
 /**
  * Created by pborisenko on 10/8/2016.
@@ -107,25 +107,27 @@ public class Session {
             loadDone = true;
 
             /* DEBUG */
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "fill debug values");
+            try {
+                if (BuildConfig.DEBUG) {
+                    Log.d(TAG, "fill debug values");
 
-                ViewModelSystem rps = new ViewModelSystem("Game", "1.0", "Bla-bla");
-                rps.addElement("Character Sheet");
-                rps.getElement("Character Sheet").setIsCharacter(true);
-                rps.getElement("Character Sheet").setIsTemplate(true);
-                rps.getElement("Character Sheet").addCategory("Main");
-                rps.getElement("Character Sheet").addCategory("Additional");
-                rps.addField("Character Sheet", "Main", "Name", SHORT_TEXT);
-                rps.getField("Character Sheet", "Main", "Name").setValue("Test");
-                rps.addField("Character Sheet", "Main", "Age", NUMERIC);
-                rps.getField("Character Sheet", "Main", "Age").setValue("1");
-                rps.addField("Character Sheet", "Additional", "Knowledge", LONG_TEXT);
-                rps.getField("Character Sheet", "Additional", "Knowledge").setValue("Test");
-                rps.addField("Character Sheet", "Additional", "Power", CALCULATED);
-                rps.getField("Character Sheet", "Additional", "Power").setValue("[Character Sheet.Main.Age]");
-                systemStorage.add(rps);
-            }
+                    ViewModelSystem rps = new ViewModelSystem("Game", "1.0", "Bla-bla");
+                    rps.addElement("Character Sheet");
+                    rps.getElement("Character Sheet").setIsCharacter(true);
+                    rps.getElement("Character Sheet").setIsTemplate(true);
+                    rps.getElement("Character Sheet").addCategory("Main");
+                    rps.getElement("Character Sheet").addCategory("Additional");
+                    rps.addField("Character Sheet", "Main", "Name", SHORT_TEXT);
+                    rps.getField("Character Sheet", "Main", "Name").setValue("Test");
+                    rps.addField("Character Sheet", "Main", "Age", NUMERIC);
+                    rps.getField("Character Sheet", "Main", "Age").setValue("1");
+                    rps.addField("Character Sheet", "Additional", "Knowledge", LONG_TEXT);
+                    rps.getField("Character Sheet", "Additional", "Knowledge").setValue("Test");
+                    rps.addField("Character Sheet", "Additional", "Power", CALCULATED);
+                    rps.getField("Character Sheet", "Additional", "Power").setValue("[Character Sheet.Main.Age]");
+                    systemStorage.add(rps);
+                }
+            } catch(Exception e) {}
             /* DEBUG */
         }
     }

@@ -5,10 +5,11 @@ import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 
 import com.sam.team.character.BR;
-import com.sam.team.character.corev2.SB_Field;
-import com.sam.team.character.corev2.SB_System;
+import com.sam.team.character.core.SB_Field;
+import com.sam.team.character.core.SB_System;
 import com.sam.team.character.design.ApplicationMain;
 
 import org.simpleframework.xml.Root;
@@ -36,6 +37,8 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
 
     private transient PropertyChangeRegistry callbacks;
     private String systemFilePath;
+
+    public ViewModelSystem() {}
 
     public ViewModelSystem (String name, String version, String copyright) {
         super(name, version, copyright);
@@ -140,7 +143,10 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
      Change getters to avoid direct connection to Core entities
      */
     public ViewModelElementType getElement (String elementName) {
-        return super.getElement(elementName);
+        ViewModelElementType tmp = new ViewModelElementType();
+        try { tmp =  super.getElement(elementName); }
+        catch(Exception e) {}
+        return tmp;
     }
 
     public String getSystemFilePath() {

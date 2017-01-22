@@ -6,8 +6,8 @@ import android.databinding.PropertyChangeRegistry;
 import android.util.Log;
 
 import com.sam.team.character.BR;
-import com.sam.team.character.corev2.SB_ElementType;
-import com.sam.team.character.corev2.SB_Field;
+import com.sam.team.character.core.SB_ElementType;
+import com.sam.team.character.core.SB_Field;
 
 import org.simpleframework.xml.Root;
 
@@ -48,7 +48,8 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
     @Override
     public boolean delete() {
         Log.d(TAG, "delete");
-        getSystem().removeElement(getName());
+        try { getSystem().removeElement(getName()); }
+        catch(Exception e) {}
         getSystem().notifyChange();
         return true;
     }
@@ -72,7 +73,10 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
     }
 
     public ViewModelField getField(String categoryName, String fieldName) {
-        return super.getField(categoryName, fieldName);
+        ViewModelField tmp = new ViewModelField();
+        try { tmp = super.getField(categoryName, fieldName); }
+        catch(Exception e) {}
+        return tmp;
     }
 
     public void addField(String categoryName, String fieldName, SB_Field.FieldType type, boolean... rewrite) throws Exception {

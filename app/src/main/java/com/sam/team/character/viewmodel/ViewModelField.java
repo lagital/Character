@@ -5,23 +5,19 @@ import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 import android.util.Log;
-import android.view.View;
 
 import com.sam.team.character.R;
-import com.sam.team.character.corev2.SB_Field;
+import com.sam.team.character.core.SB_Field;
 
 import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
-import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
-import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
-import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
-import static com.sam.team.character.corev2.SB_Field.FieldType.UNDEFINED;
+import static com.sam.team.character.core.SB_Field.FieldType.CALCULATED;
+import static com.sam.team.character.core.SB_Field.FieldType.LONG_TEXT;
+import static com.sam.team.character.core.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.core.SB_Field.FieldType.SHORT_TEXT;
+import static com.sam.team.character.core.SB_Field.FieldType.UNDEFINED;
 
 /**
  * Created by pborisenko on 10/31/2016.
@@ -49,9 +45,11 @@ public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementT
     @Override
     public boolean delete() {
         Log.d(TAG, "delete");
-        getCategory().removeField(getName());
-        getCategory().notifyChange();
-        return true;
+        try {
+            getCategory().removeField(getName());
+            getCategory().notifyChange();
+            return true;
+        } catch(Exception e) { return false; }
     }
 
     @Bindable
@@ -71,8 +69,10 @@ public class ViewModelField extends SB_Field <ViewModelSystem, ViewModelElementT
 
     @Override
     public void setValue(String value) {
-        super.setValue(value);
-        save();
+        try {
+            super.setValue(value);
+            save();
+        } catch(Exception e) {}
     }
 
     /*

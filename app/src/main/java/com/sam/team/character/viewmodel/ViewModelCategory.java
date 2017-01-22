@@ -6,7 +6,7 @@ import android.databinding.PropertyChangeRegistry;
 import android.util.Log;
 
 import com.sam.team.character.BR;
-import com.sam.team.character.corev2.SB_Category;
+import com.sam.team.character.core.SB_Category;
 
 import org.simpleframework.xml.Root;
 
@@ -43,8 +43,10 @@ public class ViewModelCategory extends SB_Category <ViewModelSystem, ViewModelEl
     @Override
     public boolean delete() {
         Log.d(TAG, "delete");
-        getElement().removeCategory(getName());
-        return true;
+        try {
+            getElement().removeCategory(getName());
+            return true;
+        } catch(Exception e) { return false; }
     }
 
     @Bindable

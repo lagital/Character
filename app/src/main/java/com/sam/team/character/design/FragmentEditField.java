@@ -31,11 +31,11 @@ import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.sam.team.character.corev2.SB_Field.FieldType.CALCULATED;
-import static com.sam.team.character.corev2.SB_Field.FieldType.LONG_TEXT;
-import static com.sam.team.character.corev2.SB_Field.FieldType.NUMERIC;
-import static com.sam.team.character.corev2.SB_Field.FieldType.SHORT_TEXT;
-import static com.sam.team.character.corev2.SB_Field.FieldType.UNDEFINED;
+import static com.sam.team.character.core.SB_Field.FieldType.CALCULATED;
+import static com.sam.team.character.core.SB_Field.FieldType.LONG_TEXT;
+import static com.sam.team.character.core.SB_Field.FieldType.NUMERIC;
+import static com.sam.team.character.core.SB_Field.FieldType.SHORT_TEXT;
+import static com.sam.team.character.core.SB_Field.FieldType.UNDEFINED;
 import static com.sam.team.character.design.ActivityFieldPicker.RESULT_FIELD;
 
 /**
@@ -299,11 +299,14 @@ public class FragmentEditField extends Fragment {
                 editTextName.getText().toString(),
                 ViewModelField.formatIntToType(currentTypeInt)
         );
-        ViewModelField tmp = Session.getInstance().getSystemFromCache().getField(
-                Session.getInstance().getElementFromCache().getName(),
-                Session.getInstance().getCategoryFromCache().getName(),
-                editTextName.getText().toString());
-        tmp.setValue(editTextValue.getText().toString());
+        ViewModelField tmp = new ViewModelField();
+        try {
+            tmp = Session.getInstance().getSystemFromCache().getField(
+                  Session.getInstance().getElementFromCache().getName(),
+                  Session.getInstance().getCategoryFromCache().getName(),
+                  editTextName.getText().toString());
+            tmp.setValue(editTextValue.getText().toString());
+        } catch(Exception e) {}
     }
 
     private void createSettingsFromField() {
@@ -359,15 +362,18 @@ public class FragmentEditField extends Fragment {
         Log.d(TAG, "generateFieldMenu: Element " + eBuf + " and Category " + cBuf);
 
         for (String f : Session.getInstance().getSystemFromCache().getFieldsInCategory(eBuf, cBuf)) {
-            ViewModelField tmp = Session.getInstance().getSystemFromCache().getField(eBuf, cBuf, f);
-            if (currentOpenSymbol.equals(ViewModelField.LINK_OPEN_SYMBOL) &&
-                    ViewModelField.formatIntToType(currentTypeInt) == CALCULATED) {
-                if (tmp.isLinkCompatible()) {
+            ViewModelField tmp = new ViewModelField();
+            try {
+                Session.getInstance().getSystemFromCache().getField(eBuf, cBuf, f);
+                if (currentOpenSymbol.equals(ViewModelField.LINK_OPEN_SYMBOL) &&
+                        ViewModelField.formatIntToType(currentTypeInt) == CALCULATED) {
+                    if (tmp.isLinkCompatible()) {
+                        pm.getMenu().add(f);
+                    }
+                } else {
                     pm.getMenu().add(f);
                 }
-            } else {
-                pm.getMenu().add(f);
-            }
+            } catch(Exception e) {}
         }
 
         // after Field name we need to close "[" with "]" or "{" with "}"
