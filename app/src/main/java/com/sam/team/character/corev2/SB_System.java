@@ -12,10 +12,6 @@ import java.util.TreeMap;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
 
-/**
- *
- * @author Vaize
- */
 @Root(name = "System")
 public class SB_System <
         S extends SB_System<S, E, C, F>,
@@ -249,6 +245,14 @@ public class SB_System <
         Serializer serializer = new Persister();
         File source = new File(path);
         return serializer.read(SB_System.class, source);
+    }
+    public void listToMap() {
+        if(elementsXML.size() == 0) return;
+        elements.clear();
+        for(E e: elementsXML) {
+            elements.put(e.getName(), e);
+            elements.get(e.getName()).listToMap();
+        }
     }
 
     //custom comparator

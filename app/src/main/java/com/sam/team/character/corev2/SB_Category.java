@@ -8,10 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.simpleframework.xml.*;
 
-/**
- *
- * @author vaize
- */
 @Root(name="Category")
 public class SB_Category <
         S extends SB_System,
@@ -100,5 +96,12 @@ public class SB_Category <
         for(String s : getFields()){
             fieldsXML.add(fields.get(s));
         };
+    }
+    public void listToMap() {
+        if(fieldsXML.size() == 0) return;
+        fields.clear();
+        for(F f: fieldsXML) {
+            fields.put(f.getName(), f);
+        }
     }
 }

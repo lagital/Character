@@ -8,10 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.simpleframework.xml.*;
 
-/**
- *
- * @author vaize
- */
 @Root(name = "Element")
 public class SB_ElementType<
         S extends SB_System,
@@ -131,5 +127,13 @@ public class SB_ElementType<
         for(String s : getCategories()){
             categoriesXML.add(categories.get(s));
         };
+    }
+    public void listToMap() {
+        if(categoriesXML.size() == 0) return;
+        categories.clear();
+        for (C c : categoriesXML) {
+            categories.put(c.getName(), c);
+            categories.get(c.getName()).listToMap();
+        }
     }
 }

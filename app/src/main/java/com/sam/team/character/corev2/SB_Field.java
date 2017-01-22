@@ -7,11 +7,8 @@ import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
 import java.util.Arrays;
+import java.util.Map;
 
-/**
- *
- * @author vaize
- */
 @Root(name="Field")
 public class SB_Field<
         S extends SB_System,
@@ -38,6 +35,7 @@ public class SB_Field<
     @Element(name = "Name") private String name;
     @Element(name = "Value") private String value;
     @Element(name = "Type") private String type;
+    private Map<String, SB_Field> mentionedIn;
     private C category;
 
     //constructor to create temporary objects
@@ -64,7 +62,21 @@ public class SB_Field<
     public String getName() { return name; }
 
     //work with field's value
-    public void setValue(String value) { this.value = value; }
+    public void setValue(String value) {
+        this.value = value;
+        //search mentions
+        String tmp = "";
+        while(value.contains(MENTION_OPEN_SYMBOL)){
+            tmp = value.substring(value.indexOf(MENTION_OPEN_SYMBOL) + 1, value.indexOf(MENTION_CLOSE_SYMBOL));
+            value = value.substring(value.indexOf(MENTION_CLOSE_SYMBOL) + 1, value.length());
+            //check for exist
+            String ele = tmp.substring(0, tmp.indexOf(DELIMITER));
+            tmp = tmp.substring(tmp.indexOf(DELIMITER) + 1, tmp.length());
+            String cat = tmp.substring(0, tmp.indexOf(DELIMITER));
+            String fie = tmp.substring(tmp.indexOf(DELIMITER) + 1, tmp.length());
+
+        }
+    }
     public String getValue() { return value; }
 
     //work with index
