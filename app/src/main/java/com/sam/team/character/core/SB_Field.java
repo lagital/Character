@@ -36,7 +36,8 @@ public class SB_Field<
     @Element(name = "Name") private String name;
     @Element(name = "Value") private String value;
     @Element(name = "Type") private String type;
-    private Map<String, SB_Field> mentionedIn;
+    private Map<String, F> mentionedIn;
+    private Map<String, F> linkedIn;
     private C category;
 
     //constructor to create temporary objects
@@ -49,6 +50,7 @@ public class SB_Field<
         this.type = type.name();
         this.value = "";
         this.mentionedIn = new TreeMap<>();
+        this.linkedIn = new TreeMap<>();
     }
 
     public C getCategory() {
@@ -79,7 +81,23 @@ public class SB_Field<
             //check for exist and add
             try {
                 mentionedIn.put(category.getElement().getSystem().getField(ele, cat, fie).getName(),
-                                category.getElement().getSystem().getField(ele, cat, fie));
+                                (F) category.getElement().getSystem().getField(ele, cat, fie));
+            } catch(FieldExistException e) { throw new FieldExistException("Field doesn't exist"); }
+        }
+        //search links
+        value = this.value;
+        while(value.contains(LINK_OPEN_SYMBOL)){
+            tmp = value.substring(value.indexOf(LINK_OPEN_SYMBOL) + 1, value.indexOf(LINK_CLOSE_SYMBOL));
+            value = value.substring(value.indexOf(LINK_CLOSE_SYMBOL) + 1, value.length());
+            //parse
+            String ele = tmp.substring(0, tmp.indexOf(DELIMITER));
+            tmp = tmp.substring(tmp.indexOf(DELIMITER) + 1, tmp.length());
+            String cat = tmp.substring(0, tmp.indexOf(DELIMITER));
+            String fie = tmp.substring(tmp.indexOf(DELIMITER) + 1, tmp.length());
+            //check for exist and add
+            try {
+                linkedIn.put(category.getElement().getSystem().getField(ele, cat, fie).getName(),
+                        (F) category.getElement().getSystem().getField(ele, cat, fie));
             } catch(FieldExistException e) { throw new FieldExistException("Field doesn't exist"); }
         }
     }
