@@ -4,9 +4,12 @@ import com.sam.team.character.viewmodel.ViewModelField;
 
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -37,7 +40,9 @@ public class SB_Field<
     @Element(name = "Value") private String value;
     @Element(name = "Type") private String type;
     private Map<String, F> mentionedIn;
+    @ElementList(name = "mentionedIn") private List<F> mentionedInXML;
     private Map<String, F> linkedIn;
+    @ElementList(name = "linkedIn") private List<F> linkedInXML;
     private C category;
 
     //constructor to create temporary objects
@@ -51,6 +56,8 @@ public class SB_Field<
         this.value = "";
         this.mentionedIn = new TreeMap<>();
         this.linkedIn = new TreeMap<>();
+        this.mentionedInXML = new ArrayList<>();
+        this.linkedInXML = new ArrayList<>();
     }
 
     public C getCategory() {
@@ -82,6 +89,8 @@ public class SB_Field<
             try {
                 mentionedIn.put(category.getElement().getSystem().getField(ele, cat, fie).getName(),
                                 (F) category.getElement().getSystem().getField(ele, cat, fie));
+                if(!mentionedInXML.contains((F) category.getElement().getSystem().getField(ele, cat, fie)))
+                    mentionedInXML.add((F) category.getElement().getSystem().getField(ele, cat, fie));
             } catch(FieldExistException e) { throw new FieldExistException("Field doesn't exist"); }
         }
         //search links
@@ -98,6 +107,8 @@ public class SB_Field<
             try {
                 linkedIn.put(category.getElement().getSystem().getField(ele, cat, fie).getName(),
                         (F) category.getElement().getSystem().getField(ele, cat, fie));
+                if(!linkedInXML.contains((F) category.getElement().getSystem().getField(ele, cat, fie)))
+                    linkedInXML.add((F) category.getElement().getSystem().getField(ele, cat, fie));
             } catch(FieldExistException e) { throw new FieldExistException("Field doesn't exist"); }
         }
     }
@@ -106,6 +117,21 @@ public class SB_Field<
     //work with index
     public void setIndex(int index) { this.index = index; }
     public int getIndex() { return index; }
+
+    //generate XML
+    public void listToMap() {
+        if(mentionedInXML.size() == 0 && linkedInXML.size() == 0) return;
+        if(mentionedInXML.size() != 0) {
+            mentionedIn.clear();
+            for (F f : mentionedInXML)
+                mentionedIn.put(f.getName(), f);
+        }
+        if(linkedInXML.size() != 0) {
+            linkedIn.clear();
+            for(F f: linkedInXML)
+                linkedIn.put(f.getName(), f);
+        }
+    }
 
     //work with type
     public void setType(FieldType type) { this.type = type.name(); }

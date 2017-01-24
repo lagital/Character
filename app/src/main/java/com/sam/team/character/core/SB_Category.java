@@ -105,6 +105,7 @@ public class SB_Category <
         fields.clear();
         for(F f: fieldsXML) {
             fields.put(f.getName(), f);
+            fields.get(f.getName()).listToMap();
         }
     }
 }
