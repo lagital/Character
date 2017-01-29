@@ -124,6 +124,16 @@ public class Session {
                 rps.getField("Character Sheet", "Additional", "Knowledge").setValue("Test");
                 rps.addField("Character Sheet", "Additional", "Power", CALCULATED);
                 rps.getField("Character Sheet", "Additional", "Power").setValue("[Character Sheet.Main.Age]");
+                rps.addElement("Skills");
+                rps.getElement("Skills").setIsCharacter(false);
+                rps.getElement("Skills").setIsTemplate(true);
+                rps.addElement("Items");
+                rps.getElement("Items").setIsCharacter(false);
+                rps.getElement("Items").setIsTemplate(false);
+                rps.addElement("Tester");
+                rps.getElement("Tester").setIsCharacter(true);
+                rps.getElement("Tester").setIsTemplate(false);
+                rps.getElement("Tester").addDiceBag(new DiceBag(2, 6));
                 systemStorage.add(rps);
             }
             /* DEBUG */

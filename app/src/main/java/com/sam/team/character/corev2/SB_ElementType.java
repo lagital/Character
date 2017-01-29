@@ -14,33 +14,28 @@ import org.simpleframework.xml.*;
  */
 @Root(name = "Element")
 public class SB_ElementType<
-        S extends SB_System,
+        S extends SB_System<S, E, C, F>,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
         F extends SB_Field<S, E, C, F>> {
     
-    @Attribute(name = "index") private int index;
-    @Element(name = "Name") private String name;
-    private Map<String, C> categories;
-    @ElementList(name="Categories") private List<C> categoriesXML;
+    @Attribute(name = "index") private int index = 0;
+    @Element(name = "Name")    private String name = "";
+    private Map<String, C> categories = new TreeMap<>();
+    @ElementList(name="Categories") private List<C> categoriesXML = new ArrayList<>();
     private S system;
-    @Attribute(name = "is_Character") private boolean isCharacter;
-    @Attribute(name = "is_Template") private boolean isTemplate;
+    @Attribute(name = "is_Character") private boolean isCharacter = false;
+    @Attribute(name = "is_Template")  private boolean isTemplate  = false;
     
     //full constructor
     public SB_ElementType(int index, String name, S system) {
         this.index = index;
         this.name = name;
         this.system = system;
-        categories = new TreeMap<>();
-        this.isCharacter = false;
-        this.isTemplate = false;
     }
 
     //dummy constructor
-    public SB_ElementType() {
-        categories = new TreeMap<>();
-    }
+    public SB_ElementType() {}
 
     //work with character flag
     public void setIsCharacter(boolean isCharacter) { this.isCharacter = isCharacter; }
@@ -131,5 +126,14 @@ public class SB_ElementType<
         for(String s : getCategories()){
             categoriesXML.add(categories.get(s));
         };
+    }
+
+    public void listToMap() {
+        if(categoriesXML.size() == 0) return;
+        categories.clear();
+        for (C c : categoriesXML) {
+            categories.put(c.getName(), c);
+            categories.get(c.getName()).listToMap();
+        }
     }
 }

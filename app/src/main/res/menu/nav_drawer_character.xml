@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="@string/drawer_group_pages">
+        <menu>
+            <group android:id="@+id/pages"
+                android:checkableBehavior="single"/>
+        </menu>
+    </item>
+
+    <item android:title="@string/drawer_group_dicebags">
+        <menu>
+            <group android:id="@+id/dicebags"
+            android:checkableBehavior="none"/>
+        </menu>
+    </item>
+ </menu>

@@ -311,5 +311,6 @@ class AdapterSystemElement extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
         }
+        notifyDataSetChanged();
     }
 }

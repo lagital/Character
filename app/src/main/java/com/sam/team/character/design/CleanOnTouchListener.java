@@ -18,22 +18,20 @@ public class CleanOnTouchListener implements View.OnTouchListener{
     private static final String TAG = "CleanOnTouchListener";
 
     private EditText editText;
-    private Context  context;
     private String  dfltText;
 
-    public CleanOnTouchListener (Context context, EditText editText, String dfltText) {
+    public CleanOnTouchListener (EditText editText, String dfltText) {
         this.editText = editText;
-        this.context = context;
         this.dfltText = dfltText;
     }
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        if (editText.getText().toString().equals(dfltText)) {
+        if (editText.getText().toString().equals(dfltText) || dfltText == null) {
             editText.setText("");
             editText.setTextColor(ContextCompat.
-                    getColor(context, R.color.colorPrimaryText));
+                    getColor(editText.getContext(), R.color.colorPrimaryText));
             Log.d(TAG, "Value replaced");
         }
 

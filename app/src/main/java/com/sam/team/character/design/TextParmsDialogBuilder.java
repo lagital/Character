@@ -45,16 +45,13 @@ class TextParmsDialogBuilder extends AlertDialog.Builder{
                 }
 
                 Log.d(TAG, e.getText().toString());
-                e.setOnTouchListener(new CleanOnTouchListener(context, e,
-                        p.getDfltValue()));
+                e.setOnTouchListener(new CleanOnTouchListener(e, p.getDfltValue()));
                 l.addView(e);
             } else {
                 AppCompatSpinner e = (AppCompatSpinner) li.inflate(R.layout.text_parameter_drop_down, null);
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.select_dialog_item, p.getDropDown());
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 e.setAdapter(adapter);
-
-                //Log.d(TAG, e.getgetText().toString());
                 l.addView(e);
             }
         }

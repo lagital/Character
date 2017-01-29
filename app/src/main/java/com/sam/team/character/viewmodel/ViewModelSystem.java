@@ -37,6 +37,10 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
     private transient PropertyChangeRegistry callbacks;
     private String systemFilePath;
 
+    public ViewModelSystem() {
+        super();
+        this.systemFilePath = generateSystemFilePath();
+    }
     public ViewModelSystem (String name, String version, String copyright) {
         super(name, version, copyright);
         this.systemFilePath = generateSystemFilePath();

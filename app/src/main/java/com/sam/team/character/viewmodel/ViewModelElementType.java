@@ -9,9 +9,15 @@ import com.sam.team.character.BR;
 import com.sam.team.character.corev2.SB_ElementType;
 import com.sam.team.character.corev2.SB_Field;
 
+import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.sam.team.character.viewmodel.DrawerItem.DrawerItemType.PAGE;
 
 /**
  * Created by pborisenko on 10/31/2016.
@@ -21,6 +27,7 @@ import java.io.Serializable;
 public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewModelElementType, ViewModelCategory, ViewModelField>
         implements
         ListItem,
+        DrawerItem,
         ViewModelEnvelope,
         Observable,
         Serializable {
@@ -28,6 +35,9 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
     private static final String TAG = "ViewModelElementType";
 
     private transient PropertyChangeRegistry callbacks;
+
+    @ElementList(name="DiceBags")
+    private ArrayList<DiceBag> diceBags = new ArrayList<>();
 
     // dummy constructor, normally not used
     public ViewModelElementType(int index, String name, ViewModelSystem system) {
@@ -83,9 +93,31 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
         }
     }
 
+    public ArrayList<DiceBag> getDiceBags() {
+        return diceBags;
+    }
+
+    public void addDiceBag(DiceBag bag) {
+        diceBags.add(bag);
+    }
+
+    public void removeDiceBag(DiceBag bag) {
+        diceBags.remove(bag);
+    }
+
     @Override
     public int getItemType() {
         return TYPE_ELEMENT;
+    }
+
+    @Override
+    public DrawerItemType getDrawerItemType() {
+        return PAGE;
+    }
+
+    @Override
+    public String getDrawerItemTitle() {
+        return getName();
     }
 
     @Override

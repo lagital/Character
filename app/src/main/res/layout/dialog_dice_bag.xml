@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:id="@+id/dialog_dice_bag">
+
+    <com.sam.team.character.design.EditTextEndCursor
+        android:id="@+id/dice_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="@string/dialog_dice_quantity"
+        android:textAlignment="center" />
+
+    <com.sam.team.character.design.EditTextEndCursor
+        android:id="@+id/dice_power"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:text="@string/dialog_dice_power"
+        android:textAlignment="center"/>
+
+</LinearLayout>

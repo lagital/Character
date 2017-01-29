@@ -51,7 +51,8 @@ public class FragmentEditElement extends Fragment {
         Log.d(TAG, "onCreateView");
 
         setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.edit_sheet_title);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(
+                Session.getInstance().getElementFromCache().getName());
 
         ViewCompat.setNestedScrollingEnabled(mRecyclerView, false);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -61,7 +62,6 @@ public class FragmentEditElement extends Fragment {
             @Override
             public void onRefresh() {
                 mAdapter.renewItems();
-                mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -70,7 +70,6 @@ public class FragmentEditElement extends Fragment {
             public void afterTextChanged(Editable s) {}
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mAdapter.setNamePart(s.toString());
-                mAdapter.notifyDataSetChanged();
                 // change left icon to Clear after the first typed symbol
                 if (start == 0 && before == 0 && count > 0) {
                     searchBox.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_clear_black_36dp, 0, 0, 0);
@@ -117,7 +116,6 @@ public class FragmentEditElement extends Fragment {
                     void applySettings() {
                         Session.getInstance().getElementFromCache().addCategory(getResults().get(0));
                         mAdapter.renewItems();
-                        mAdapter.notifyDataSetChanged();
                     }
                 };
             }

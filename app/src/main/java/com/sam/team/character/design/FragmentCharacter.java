@@ -51,7 +51,6 @@ public class FragmentCharacter extends Fragment {
             @Override
             public void onRefresh() {
                 mAdapter.renewItems();
-                mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });

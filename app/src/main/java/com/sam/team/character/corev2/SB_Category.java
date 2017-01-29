@@ -14,15 +14,15 @@ import org.simpleframework.xml.*;
  */
 @Root(name="Category")
 public class SB_Category <
-        S extends SB_System,
+        S extends SB_System<S, E, C, F>,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
         F extends SB_Field<S, E, C, F>> {
     
-    @Attribute(name = "index") private int index;
-    @Element(name = "Name") private String name;
-    private Map<String, F> fields;
-    @ElementList(name = "Fields") private List<F> fieldsXML;
+    @Attribute(name = "index") private int index = 0;
+    @Element(name = "Name") private String name  = "";
+    private Map<String, F> fields = new TreeMap<>();
+    @ElementList(name = "Fields") private List<F> fieldsXML = new ArrayList<>();
     private E element;
     
     //constructor to create temporary objects
@@ -34,7 +34,6 @@ public class SB_Category <
         this.index = index;
         this.name = name;
         this.element = element;
-        fields = new TreeMap<>();
     }
 
     public E getElement() {
@@ -100,5 +99,14 @@ public class SB_Category <
         for(String s : getFields()){
             fieldsXML.add(fields.get(s));
         };
+    }
+
+    public void listToMap() {
+        if(fieldsXML.size() == 0) return;
+        fields.clear();
+        for(F f: fieldsXML) {
+            fields.put(f.getName(), f);
+            fields.get(f.getName()).listToMap();
+        }
     }
 }

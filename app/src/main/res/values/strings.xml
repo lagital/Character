@@ -6,6 +6,9 @@
     <!-- ActivityContainer -->
     <string name="drawer_open">Open menu</string>
     <string name="drawer_close">Close menu</string>
+    <string name="drawer_group_pages">Pages</string>
+    <string name="drawer_group_dicebags">Dices</string>
+    <string name="drawer_add_dicebag">Add dices</string>
 
     <!-- Settings Dialogs -->
     <string name="dialog_btn_ok">OK</string>
@@ -52,6 +55,7 @@
     <string name="sheet_item_edit_menu_edit">Edit</string>
     <string name="sheet_item_edit_menu_delete">Delete</string>
     <string name="system_picker_go_to_characters">Characters</string>
+    <string name="load_system_failed">Oops, import failed!</string>
 
     <!-- Fragment Edit Element -->
     <string name="edit_sheet_title">Page</string>
@@ -72,6 +76,12 @@
     <string name="edit_field_editable_yes">Yes</string>
     <string name="edit_field_editable_no">No</string>
     <string name="edit_field_dflt_value">Value</string>
+
+    <!-- Fragment Character -->
+    <string name="dialog_add_dicebag">Add dices</string>
+    <string name="dialog_dice_quantity">Quantity</string>
+    <string name="dialog_dice_power">Power</string>
+    <string name="dialog_dismiss_roll">Done</string>
 
     <!-- Toolbar Actions -->
     <string name="action_settings">Settings</string>

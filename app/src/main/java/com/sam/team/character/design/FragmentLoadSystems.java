@@ -55,7 +55,6 @@ public class FragmentLoadSystems extends Fragment {
             @Override
             public void onRefresh() {
                 mAdapter.renewItems();
-                mAdapter.notifyDataSetChanged();
                 listContainer.setRefreshing(false);
             }
         });
@@ -66,7 +65,6 @@ public class FragmentLoadSystems extends Fragment {
         Session.getInstance().collectAvailableSystems(this.getActivity());
 
         mAdapter.renewItems();
-        mAdapter.notifyDataSetChanged();
 
         loaderContainer.setVisibility(View.GONE);
         listContainer.setVisibility(View.VISIBLE);

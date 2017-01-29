@@ -142,5 +142,6 @@ class AdapterSystemCharacter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         }
+        notifyDataSetChanged();
     }
 }

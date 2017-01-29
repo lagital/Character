@@ -23,22 +23,21 @@ public class SB_System <
         C extends SB_Category<S, E, C, F>,
         F extends SB_Field<S, E, C, F>> {
 
-    @Element(name = "Name") private String name;
-    private String version, copyright;
-    private Map<String, E> elements;
-    @ElementList(name = "Elements") private List<E> elementsXML;
+    @Element(name = "Name") private String name = "";
+    @Attribute(name = "Version",   required = false) private String version = "";
+    @Attribute(name = "Copyright", required = false) private String copyright = "";
+    private Map<String, E> elements = new TreeMap<>();
+    @ElementList(name = "Elements") private List<E> elementsXML = new ArrayList<>();
 
     //constructors
+    public SB_System() {}
     public SB_System(String name) {
         this.name = name;
-        version = copyright = null;
-        elements = new TreeMap<>();
     }
     public SB_System(String name, String version, String copyright) {
         this.name = name;
         this.version = version;
         this.copyright = copyright;
-        elements = new TreeMap<>();
     }
 
     //work with name
@@ -218,7 +217,7 @@ public class SB_System <
     }
     
     //genetate XML
-    private void prepateLists() {
+    private void prepareLists() {
         //prepare list of elements
         elementsXML = new ArrayList<E>();
         for(String e : getElements()){
@@ -232,7 +231,7 @@ public class SB_System <
     }
     public String generateXML() {
         //prepare lists
-        prepateLists();
+        prepareLists();
         //generate xml
         Serializer serializer = new Persister();
         StringWriter sw = new StringWriter();
@@ -245,10 +244,40 @@ public class SB_System <
             return null;
         }
     }
+
+    public void fillFromXML(String source) throws Exception{
+        Serializer serializer = new Persister();
+        serializer.read(this, source);
+        listToMap();
+        restoreLinks();
+    }
+
     public static SB_System readXML(String path) throws Exception {
         Serializer serializer = new Persister();
         File source = new File(path);
         return serializer.read(SB_System.class, source);
+    }
+
+    public void listToMap() {
+        if(elementsXML.size() == 0) return;
+        elements.clear();
+        for(E e: elementsXML) {
+            elements.put(e.getName(), e);
+            elements.get(e.getName()).listToMap();
+        }
+    }
+
+    public void restoreLinks() {
+        for (E e : elements.values()) {
+            e.setSystem((S) this);
+            for (String se : e.getCategories()) {
+                C c = e.getCategory(se);
+                c.setElement(e);
+                for (String sf : c.getFields()) {
+                    c.getField(sf).setCategory(c);
+                }
+            }
+        }
     }
 
     //custom comparator

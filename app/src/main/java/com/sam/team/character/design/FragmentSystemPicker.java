@@ -1,6 +1,12 @@
 package com.sam.team.character.design;
 
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
@@ -15,15 +21,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel.Session;
 import com.sam.team.character.viewmodel.ViewModelSystem;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Fragment to work with systems.
@@ -33,6 +48,8 @@ import butterknife.ButterKnife;
 public class FragmentSystemPicker extends Fragment{
 
     private static final String TAG = "FragmentSystemPicker";
+
+    private static final int REQUEST_CODE_PICK_FILE = 10007;
 
     @BindView(R.id.systems_list) RecyclerView mRecyclerView;
     @BindView(R.id.swipeRefreshLayout) SwipeRefreshLayout mSwipeRefreshLayout;
@@ -61,7 +78,6 @@ public class FragmentSystemPicker extends Fragment{
             @Override
             public void onRefresh() {
                 mAdapter.renewItems();
-                mAdapter.notifyDataSetChanged();
                 mSwipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -98,7 +114,6 @@ public class FragmentSystemPicker extends Fragment{
                                 getResults().get(2));
                         Session.getInstance().getSystemStorage().add(tmp);
                         mAdapter.renewItems();
-                        mAdapter.notifyDataSetChanged();
                     }
                 };
             }
@@ -107,8 +122,10 @@ public class FragmentSystemPicker extends Fragment{
         mLoadMiniFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "mLoadMiniFAB - load new game");
-
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("*/*");
+                //intent.addCategory(Intent.CATEGORY_);
+                startActivityForResult(intent, REQUEST_CODE_PICK_FILE);
             }
         });
 
@@ -145,5 +162,39 @@ public class FragmentSystemPicker extends Fragment{
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_CODE_PICK_FILE) {
+                try {
+                    ViewModelSystem tmp = new ViewModelSystem();
+                    Log.d(TAG, readTextFromURI(getActivity(), data.getData()));
+                    tmp.fillFromXML(readTextFromURI(getActivity(), data.getData()));
+                    Session.getInstance().getSystemStorage().add(tmp);
+                    mAdapter.renewItems();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(
+                            FragmentSystemPicker.this.getActivity(),
+                            FragmentSystemPicker.this.getResources()
+                                    .getString(R.string.load_system_failed),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    public String readTextFromURI(Context context, Uri contentUri) throws IOException {
+        InputStream inputStream = context.getContentResolver().openInputStream(contentUri);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder.append(line);
+        }
+        inputStream.close();
+        return stringBuilder.toString();
     }
 }

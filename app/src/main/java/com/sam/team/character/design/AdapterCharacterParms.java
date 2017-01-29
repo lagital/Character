@@ -112,5 +112,6 @@ class AdapterCharacterParms extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 items.add(tmpC.getField(sf));
             }
         };
+        notifyDataSetChanged();
     }
 }

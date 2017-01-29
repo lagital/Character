@@ -14,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ListView;
 
 import com.sam.team.character.R;
+import com.sam.team.character.viewmodel.DrawerItem;
 
 import java.util.Arrays;
 
@@ -36,6 +38,7 @@ public class ActivityContainer extends AppCompatActivity {
     private static final String TAG = "ActivityContainer";
 
     @BindView(R.id.drawer_layout) DrawerLayout mDrawerLayout;
+    @BindView(R.id.drawer) ListView mDrawerList;
     @BindView(R.id.appbar) AppBarLayout mAppBar;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsing;
     @BindView(R.id.toolbar) Toolbar mToolbar;
@@ -48,8 +51,9 @@ public class ActivityContainer extends AppCompatActivity {
     FragmentSystemPicker mFragmentSystemPicker;
     FragmentEditElement mFragmentEditElement;
 
-    private AppBarLayout.LayoutParams mToolbarLayoutParams;
+    private AdapterCharacterDrawer mAdapterCharacterDrawer;
 
+    private AppBarLayout.LayoutParams mToolbarLayoutParams;
     private FragmentType currentFragmentType;
 
     @Override
@@ -80,6 +84,12 @@ public class ActivityContainer extends AppCompatActivity {
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.addDrawerListener(mDrawerToggle);
         mFragmentManager = getSupportFragmentManager();
+
+        mAdapterCharacterDrawer = new AdapterCharacterDrawer(
+                this, R.layout.drawer_item_page, new DrawerItem[] {});
+
+        // Set the adapter for the list view
+        mDrawerList.setAdapter(mAdapterCharacterDrawer);
 
         //Listen for changes in the back stack
         mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -223,6 +233,9 @@ public class ActivityContainer extends AppCompatActivity {
             mDrawerToggle.setDrawerIndicatorEnabled(enabled);
             mDrawerToggle.syncState();
             isDrawerEnabled = enabled;
+        }
+        if (enabled) {
+            mAdapterCharacterDrawer.renewItems();
         }
     }
 

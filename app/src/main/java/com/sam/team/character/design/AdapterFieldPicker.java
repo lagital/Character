@@ -98,11 +98,14 @@ class AdapterFieldPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Log.d(TAG, "renewItems");
         items.clear();
         if (element == null) {
-            for (String e : Session.getInstance().getSystemFromCache().getElements()) {
-                items.add(Session.getInstance().getSystemFromCache().getElement(e));
+            for (String es : Session.getInstance().getSystemFromCache().getElements()) {
+                ViewModelElementType e = Session.getInstance().getSystemFromCache().getElement(es);
+                if (e.isTemplate()) {
+                    items.add(e);
+                }
             }
         } else {
-            // element is not null, need to show catefories in the element
+            // element is not null, need to show categories in the element
             for (String sc : element.getCategories()) {
                 ViewModelCategory tmpC = element.getCategory(sc);
                 items.add(tmpC);
@@ -111,6 +114,7 @@ class AdapterFieldPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             };
         }
+        notifyDataSetChanged();
     }
 
     @Override

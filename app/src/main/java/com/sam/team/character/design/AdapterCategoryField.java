@@ -201,5 +201,6 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 }
             }
         };
+        notifyDataSetChanged();
     }
 }
