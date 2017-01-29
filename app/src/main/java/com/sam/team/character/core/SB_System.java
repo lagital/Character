@@ -258,14 +258,6 @@ public class SB_System <
         File source = new File(path);
         return serializer.read(SB_System.class, source);
     }
-    public void listToMap() {
-        if(elementsXML.size() == 0) return;
-        elements.clear();
-        for(E e: elementsXML) {
-            elements.put(e.getName(), e);
-            elements.get(e.getName()).listToMap();
-        }
-    }
 
     public void listToMap() {
         if(elementsXML.size() == 0) return;
@@ -277,16 +269,18 @@ public class SB_System <
     }
 
     public void restoreLinks() {
-        for (E e : elements.values()) {
-            e.setSystem((S) this);
-            for (String se : e.getCategories()) {
-                C c = e.getCategory(se);
-                c.setElement(e);
-                for (String sf : c.getFields()) {
-                    c.getField(sf).setCategory(c);
+        try {
+            for (E e : elements.values()) {
+                e.setSystem((S) this);
+                for (String se : e.getCategories()) {
+                    C c = e.getCategory(se);
+                    c.setElement(e);
+                    for (String sf : c.getFields()) {
+                        c.getField(sf).setCategory(c);
+                    }
                 }
             }
-        }
+        } catch (Exception e) {}
     }
 
     //custom comparator
