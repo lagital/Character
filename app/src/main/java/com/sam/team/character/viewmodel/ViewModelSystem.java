@@ -158,6 +158,7 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
 
     private String generateSystemFilePath() {
         Log.d(TAG, "generateSystemFilePath");
+        Log.d(TAG, super.getName());
         if (ApplicationMain.getAppExternalStoragePath() != null) {
             return ApplicationMain.getAppExternalStoragePath()
                     + "/"

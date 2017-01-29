@@ -35,14 +35,14 @@ public class SB_Field<
     // only fields of registered types a to be used for typing in formulas
     public static final FieldType[] LINK_COMPATIBLE_TYPES = {FieldType.CALCULATED, FieldType.NUMERIC};
 
-    @Attribute(name = "index") private int index;
-    @Element(name = "Name") private String name;
-    @Element(name = "Value") private String value;
-    @Element(name = "Type") private String type;
-    private Map<String, F> mentionedIn;
-    @ElementList(name = "mentionedIn") private List<F> mentionedInXML;
-    private Map<String, F> linkedIn;
-    @ElementList(name = "linkedIn") private List<F> linkedInXML;
+    @Attribute(name = "index") private int index    = 0;
+    @Element(name = "Name")    private String name  = "";
+    @Element(name = "Value")   private String value = "";
+    @Element(name = "Type")    private String type  = "";
+    private Map<String, F> mentionedIn = new TreeMap<>();
+    @ElementList(name = "mentionedIn") private List<F> mentionedInXML = new ArrayList<>();
+    private Map<String, F> linkedIn = new TreeMap<>();
+    @ElementList(name = "linkedIn") private List<F> linkedInXML = new ArrayList<>();
     private C category;
 
     //constructor to create temporary objects
@@ -53,11 +53,6 @@ public class SB_Field<
         this.name = name;
         this.category = category;
         this.type = type.name();
-        this.value = "";
-        this.mentionedIn = new TreeMap<>();
-        this.linkedIn = new TreeMap<>();
-        this.mentionedInXML = new ArrayList<>();
-        this.linkedInXML = new ArrayList<>();
     }
 
     public C getCategory() {

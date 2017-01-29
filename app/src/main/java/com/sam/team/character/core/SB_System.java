@@ -21,7 +21,7 @@ public class SB_System <
 
     @Element(name = "Name") private String name = "";
     @Attribute(name = "Version",   required = false) private String version = "";
-    @Attribute(name = "Copyright", required = false) private String copyright = "";
+    @Element(name = "Copyright", required = false)   private String copyright = "";
     private Map<String, E> elements = new TreeMap<>();
     @ElementList(name = "Elements") private List<E> elementsXML = new ArrayList<>();
 
