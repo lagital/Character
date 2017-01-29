@@ -107,12 +107,15 @@ class AdapterFieldPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             // element is not null, need to show categories in the element
             for (String sc : element.getCategories()) {
-                ViewModelCategory tmpC = element.getCategory(sc);
-                items.add(tmpC);
-                for (String sf : tmpC.getFields()) {
-                    items.add(tmpC.getField(sf));
-                }
-            };
+                ViewModelCategory tmpC = new ViewModelCategory();
+                try {
+                    tmpC = element.getCategory(sc);
+                    items.add(tmpC);
+                    for (String sf : tmpC.getFields()) {
+                        items.add(tmpC.getField(sf));
+                    }
+                } catch (Exception e) {}
+            }
         }
         notifyDataSetChanged();
     }

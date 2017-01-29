@@ -193,13 +193,17 @@ class AdapterCategoryField extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         items.clear();
         ViewModelElementType tmpE = Session.getInstance().getElementFromCache();
         for (String sc : tmpE.getCategories()) {
-            ViewModelCategory tmpC = tmpE.getCategory(sc);
-            items.add(tmpC);
-            for (String sf : tmpC.getFields()) {
-                if (tmpC.getField(sf).getName().toUpperCase().contains(namePart.toUpperCase())) {
-                    items.add(tmpC.getField(sf));
+            ViewModelCategory tmpC = new ViewModelCategory();
+            try {
+                tmpC = tmpE.getCategory(sc);
+                items.add(tmpC);
+                for (String sf : tmpC.getFields()) {
+                    if (tmpC.getField(sf).getName().toUpperCase().contains(namePart.toUpperCase())) {
+                        items.add(tmpC.getField(sf));
+                    }
                 }
             }
+            catch(Exception e) {}
         };
         notifyDataSetChanged();
     }

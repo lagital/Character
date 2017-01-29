@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.sam.team.character.R;
-import com.sam.team.character.corev2.SB_Field;
+import com.sam.team.character.core.SB_Field;
 import com.sam.team.character.viewmodel.ViewModelElementType;
 import com.sam.team.character.viewmodel.ViewModelField;
 

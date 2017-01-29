@@ -1,4 +1,4 @@
-package com.sam.team.character.corev2;
+package com.sam.team.character.core;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,10 +8,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.simpleframework.xml.*;
 
-/**
- *
- * @author vaize
- */
 @Root(name = "Element")
 public class SB_ElementType<
         S extends SB_System<S, E, C, F>,
@@ -64,10 +60,12 @@ public class SB_ElementType<
         tmp.setElement((E) this);
         categories.put(categoryName, tmp);
     } 
-    public void removeCategory(String categoryName) {
+    public void removeCategory(String categoryName) throws CategoryExistException {
+        if (!categories.containsKey(categoryName)) throw new CategoryExistException("Category doesn't exist");
         categories.remove(categoryName);
     };
-    public C getCategory(String categoryName) {
+    public C getCategory(String categoryName) throws CategoryExistException {
+        if (!categories.containsKey(categoryName)) throw new CategoryExistException("Category doesn't exist");
         return categories.get(categoryName);
     }
     public ArrayList<String> getCategories() {
@@ -84,11 +82,13 @@ public class SB_ElementType<
     public void addField(Class<F> clazz, String categoryName, String fieldName, SB_Field.FieldType type, boolean ... rewrite) throws Exception{
         categories.get(categoryName).addField(clazz, fieldName, type, rewrite);
     } 
-    public void removeField(String categoryName, String fieldName) {
-        categories.get(categoryName).removeField(fieldName);
+    public void removeField(String categoryName, String fieldName) throws FieldExistException {
+        try { categories.get(categoryName).removeField(fieldName); }
+        catch(Exception e) { throw new FieldExistException("Field doesn't exist"); }
     }
-    public F getField(String categoryName, String fieldName) {
-        return categories.get(categoryName).getField(fieldName);
+    public F getField(String categoryName, String fieldName) throws FieldExistException {
+        try { return categories.get(categoryName).getField(fieldName); }
+        catch(Exception e) { throw new FieldExistException("Field doesn't exist"); }
     }
     public ArrayList<String> getFieldsInCategory(String categoryName) {
         return categories.get(categoryName).getFields();

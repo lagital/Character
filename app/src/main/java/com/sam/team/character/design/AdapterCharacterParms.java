@@ -106,12 +106,15 @@ class AdapterCharacterParms extends RecyclerView.Adapter<RecyclerView.ViewHolder
         items.clear();
         ViewModelElementType tmpE = Session.getInstance().getElementFromCache();
         for (String sc : tmpE.getCategories()) {
-            ViewModelCategory tmpC = tmpE.getCategory(sc);
-            items.add(tmpC);
-            for (String sf : tmpC.getFields()) {
-                items.add(tmpC.getField(sf));
-            }
-        };
-        notifyDataSetChanged();
+            ViewModelCategory tmpC = new ViewModelCategory();
+            try {
+                tmpC = tmpE.getCategory(sc);
+                items.add(tmpC);
+                for (String sf : tmpC.getFields()) {
+                    items.add(tmpC.getField(sf));
+                }
+                notifyDataSetChanged();
+            } catch(Exception e) {}
+        }
     }
 }
