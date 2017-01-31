@@ -5,7 +5,6 @@ import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 
 import com.sam.team.character.BR;
 import com.sam.team.character.core.SB_Field;
@@ -20,6 +19,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
+ * View-Model layer for communicating with UI
  * Created by pborisenko on 10/31/2016.
  */
 
@@ -40,12 +40,10 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
 
     public ViewModelSystem() {
         super();
-        this.systemFilePath = generateSystemFilePath();
     }
 
     public ViewModelSystem (String name, String version, String copyright) {
         super(name, version, copyright);
-        this.systemFilePath = generateSystemFilePath();
     }
 
     @Override
@@ -59,7 +57,7 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
     public boolean delete() {
         Log.d(TAG, "delete");
         Session.getInstance().getSystemStorage().remove(this);
-        return new File(systemFilePath).delete();
+        return new File(getSystemFilePath()).delete();
     }
 
     @Bindable
@@ -98,7 +96,7 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
     public File exportSystemXML () {
         Log.d(TAG, "exportSystemXML");
         String xml = generateXML();
-        File tmp = new File(systemFilePath);
+        File tmp = new File(getSystemFilePath());
         try {
             FileOutputStream fos = new FileOutputStream(tmp);
             fos.write(xml.getBytes());
@@ -153,6 +151,9 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
     }
 
     public String getSystemFilePath() {
+        if (systemFilePath == null) {
+            systemFilePath = generateSystemFilePath();
+        }
         return systemFilePath;
     }
 

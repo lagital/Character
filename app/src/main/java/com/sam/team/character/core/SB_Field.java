@@ -39,6 +39,7 @@ public class SB_Field<
     @Element(name = "Name")    private String name  = "";
     @Element(name = "Value")   private String value = "";
     @Element(name = "Type")    private String type  = "";
+
     private Map<String, F> mentionedIn = new TreeMap<>();
     @ElementList(name = "mentionedIn") private List<F> mentionedInXML = new ArrayList<>();
     private Map<String, F> linkedIn = new TreeMap<>();
