@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import org.simpleframework.xml.*;
 import org.simpleframework.xml.core.Persister;
+import org.simpleframework.xml.stream.Format;
 
 @Root(name = "System")
 public class SB_System <
@@ -18,6 +19,8 @@ public class SB_System <
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
         F extends SB_Field<S, E, C, F>> {
+
+    public static final String SYSTEM_XML_PROLOG = "<?xml version=\"1.0\" encoding= \"UTF-8\" ?>";
 
     @Element(name = "Name") private String name = "";
     @Attribute(name = "Version",   required = false) private String version = "";
@@ -234,7 +237,7 @@ public class SB_System <
         //prepare lists
         prepareLists();
         //generate xml
-        Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new Format(SYSTEM_XML_PROLOG));
         StringWriter sw = new StringWriter();
         try {
             serializer.write(this, sw);
@@ -247,14 +250,14 @@ public class SB_System <
     }
 
     public void fillFromXML(String source) throws Exception{
-        Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new Format(SYSTEM_XML_PROLOG));
         serializer.read(this, source);
         listToMap();
         restoreLinks();
     }
 
     public static SB_System readXML(String path) throws Exception {
-        Serializer serializer = new Persister();
+        Serializer serializer = new Persister(new Format(SYSTEM_XML_PROLOG));
         File source = new File(path);
         return serializer.read(SB_System.class, source);
     }

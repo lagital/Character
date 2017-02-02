@@ -3,23 +3,24 @@ package com.sam.team.character.viewmodel;
 import android.databinding.Bindable;
 import android.databinding.Observable;
 import android.databinding.PropertyChangeRegistry;
+import android.net.Uri;
 import android.util.Log;
 
 import com.sam.team.character.BR;
 import com.sam.team.character.core.SB_ElementType;
 import com.sam.team.character.core.SB_Field;
 
+import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;
 import org.simpleframework.xml.Root;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.sam.team.character.viewmodel.DrawerItem.DrawerItemType.PAGE;
 
 /**
+ * View-Model layer for communicating with UI
  * Created by pborisenko on 10/31/2016.
  */
 
@@ -38,6 +39,8 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
 
     @ElementList(name="DiceBags")
     private ArrayList<DiceBag> diceBags = new ArrayList<>();
+
+    @Element(name="PhotoUri", required = false) private String photoUri = "";
 
     // dummy constructor, normally not used
     public ViewModelElementType(int index, String name, ViewModelSystem system) {
@@ -107,6 +110,14 @@ public class ViewModelElementType extends SB_ElementType<ViewModelSystem, ViewMo
 
     public void removeDiceBag(DiceBag bag) {
         diceBags.remove(bag);
+    }
+
+    public Uri getPhotoUri() {
+        return Uri.parse(photoUri);
+    }
+
+    public void setPhotoUri(Uri photoUri) {
+        this.photoUri = photoUri.toString();
     }
 
     @Override

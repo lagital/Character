@@ -1,6 +1,7 @@
 package com.sam.team.character.design;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,10 +15,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.sam.team.character.R;
 import com.sam.team.character.viewmodel.DrawerItem;
+import com.sam.team.character.viewmodel.Session;
 
 import java.util.Arrays;
 
@@ -42,6 +46,10 @@ public class ActivityContainer extends AppCompatActivity {
     @BindView(R.id.appbar) AppBarLayout mAppBar;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsing;
     @BindView(R.id.toolbar) Toolbar mToolbar;
+    @BindView(R.id.btn_collapsing_toolbar_photo) ImageButton btnPhoto;
+    @BindView(R.id.photo) ImageView photo;
+
+    private static final int REQUEST_CODE_PICK_PHOTO = 10007;
 
     private ActionBarDrawerToggle mDrawerToggle;
     boolean isDrawerEnabled = true;
@@ -90,6 +98,24 @@ public class ActivityContainer extends AppCompatActivity {
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(mAdapterCharacterDrawer);
+
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(intent , REQUEST_CODE_PICK_PHOTO);
+            }
+        });
+
+        Uri photoUri = null;
+        try {
+            photoUri = Session.getInstance().getElementFromCache().getPhotoUri();
+            photo.setImageURI(photoUri);
+        } catch (Exception e) {
+            photo.setImageResource(R.drawable.person);
+            e.printStackTrace();
+        }
 
         //Listen for changes in the back stack
         mFragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -254,6 +280,21 @@ public class ActivityContainer extends AppCompatActivity {
             mDrawerLayout.closeDrawer(Gravity.LEFT);
         } else {
             mDrawerLayout.openDrawer(Gravity.LEFT);
+        }
+    }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult");
+        if(resultCode == RESULT_OK){
+            if (requestCode == REQUEST_CODE_PICK_PHOTO) {
+                Uri photoUri = data.getData();
+                photo.setImageURI(photoUri);
+                Session.getInstance().getElementFromCache().setPhotoUri(photoUri);
+                //mCollapsing.invalidate();
+                Log.d(TAG, "Done");
+            }
         }
     }
 }
