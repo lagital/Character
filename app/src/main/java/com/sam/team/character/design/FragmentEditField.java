@@ -326,7 +326,7 @@ public class FragmentEditField extends Fragment {
         Log.d(TAG, "generateElementMenu - " + textAnchor.getText().toString());
         PopupMenu pm = new PopupMenu(getActivity(), textAnchor);
 
-        for (String e : Session.getInstance().getSystemFromCache().getElements()) {
+        for (String e : Session.getInstance().getSystemFromCache().getElementNames()) {
             pm.getMenu().add(e);
         }
 
@@ -341,7 +341,8 @@ public class FragmentEditField extends Fragment {
         eBuf = eBuf.substring(eBuf.lastIndexOf(currentOpenSymbol) + 1, eBuf.lastIndexOf(ViewModelField.DELIMITER));
         Log.d(TAG, "generateCategoryMenu: Element " + eBuf);
 
-        for (String c : Session.getInstance().getSystemFromCache().getElement(eBuf).getCategories()) {
+        for (String c : Session.getInstance().getSystemFromCache()
+        .getElement(eBuf).getCategoryNames()) {
             pm.getMenu().add(c);
         }
 

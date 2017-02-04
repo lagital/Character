@@ -108,8 +108,8 @@ public class ViewModelSystem extends SB_System<ViewModelSystem, ViewModelElement
         }
     }
 
-    public ArrayList<String> getElements () {
-        return super.getElements();
+    public ArrayList<String> getElementNames() {
+        return super.getElementNames();
     }
 
     public void addElement (String name) {

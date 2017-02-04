@@ -195,8 +195,7 @@ public class AdapterCharacterDrawer extends ArrayAdapter<DrawerItem>
             }
         });
         // add additional pages
-        for (String se : Session.getInstance().getSystemFromCache().getElements()) {
-            ViewModelElementType e = Session.getInstance().getSystemFromCache().getElement(se);
+        for (ViewModelElementType e : Session.getInstance().getSystemFromCache().getElements()) {
             if (!e.isCharacter() && !e.isTemplate()) {
                 tmp.add(e);
             }

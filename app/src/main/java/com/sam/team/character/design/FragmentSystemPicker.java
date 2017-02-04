@@ -39,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static android.app.Activity.RESULT_OK;
+import static com.sam.team.character.design.TextParameter.TextParmMode.SINGLE;
 
 /**
  * Fragment to work with systems.
@@ -96,9 +97,9 @@ public class FragmentSystemPicker extends Fragment{
                 Log.d(TAG, "mAddMiniFAB - add new game");
 
                 ArrayList<TextParameter> tpl = new ArrayList<>();
-                tpl.add(new TextParameter(FragmentSystemPicker.this.getResources().getString(R.string.new_system_dflt_name), null, true, null));
-                tpl.add(new TextParameter(FragmentSystemPicker.this.getResources().getString(R.string.new_system_dflt_version), null, false, null));
-                tpl.add(new TextParameter(FragmentSystemPicker.this.getResources().getString(R.string.new_system_dflt_copyright), null, false, null));
+                tpl.add(new TextParameter(FragmentSystemPicker.this.getResources().getString(R.string.new_system_dflt_name), null, true, SINGLE, null));
+                tpl.add(new TextParameter(FragmentSystemPicker.this.getResources().getString(R.string.new_system_dflt_version), null, false, SINGLE, null));
+                tpl.add(new TextParameter(FragmentSystemPicker.this.getResources().getString(R.string.new_system_dflt_copyright), null, false, SINGLE, null));
                 TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                         getActivity(),
                         R.layout.dialog_settings_container,

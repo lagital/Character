@@ -41,6 +41,7 @@ public class SB_Field<
     @Element(name = "Type")    private String type  = "";
 
     private Map<String, F> mentionedIn = new TreeMap<>();
+
     @ElementList(name = "mentionedIn") private List<F> mentionedInXML = new ArrayList<>();
     private Map<String, F> linkedIn = new TreeMap<>();
     @ElementList(name = "linkedIn") private List<F> linkedInXML = new ArrayList<>();
@@ -108,6 +109,23 @@ public class SB_Field<
             } catch(FieldExistException e) { throw new FieldExistException("Field doesn't exist"); }
         }
     }
+
+    Map<String, F> getMentionedIn() {
+        return mentionedIn;
+    }
+
+    Map<String, F> getLinkedIn() {
+        return linkedIn;
+    }
+
+    void setMentionedIn(Map<String, F> mentionedIn) {
+        this.mentionedIn = mentionedIn;
+    }
+
+    void setLinkedIn(Map<String, F> linkedIn) {
+        this.linkedIn = linkedIn;
+    }
+
     public String getValue() { return value; }
 
     //work with index

@@ -31,6 +31,16 @@ public class SB_Category <
         this.name = name;
         this.element = element;
     }
+    //constructor to create clone category
+    public SB_Category(C source, Class<F> fclass) throws Exception {
+        this.name = source.getName();
+        this.element = source.getElement();
+        this.index = element.getAmountOfCategories() + 1;
+
+        for (F f : source.getFields()) {
+            addCloneField(fclass, f);
+        }
+    }
 
     public E getElement() {
         return element;
@@ -51,22 +61,36 @@ public class SB_Category <
     //work with fields
     public void addField(Class<F> clazz, String fieldName, SB_Field.FieldType type, boolean ... rewrite) throws Exception {
         F tmp = clazz.getConstructor().newInstance();
-        tmp.setIndex(getAmountOfFields()+1);
+        tmp.setIndex(getAmountOfFields() + 1);
         tmp.setName(fieldName);
         tmp.setType(type);
         tmp.setCategory((C) this);
         fields.put(fieldName, tmp);
+    }
 
-    } 
+    public void addCloneField(Class<F> clazz, F source) throws Exception {
+        F tmp = clazz.getConstructor().newInstance();
+        tmp.setName(source.getName());
+        tmp.setValue(source.getValue());
+        tmp.setType(source.getType());
+        tmp.setCategory((C) this);
+        tmp.setIndex(getAmountOfFields() + 1);
+        tmp.setMentionedIn(source.getMentionedIn());
+        tmp.setLinkedIn(source.getLinkedIn());
+        fields.put(tmp.getName(), tmp);
+    }
+
     public void removeField(String fieldName) throws FieldExistException {
         if(!fields.containsKey(fieldName)) throw new FieldExistException("Field doesn't exist");
         fields.remove(fieldName);
-    };
+    }
+
     public F getField(String fieldName) throws FieldExistException {
         if(!fields.containsKey(fieldName)) throw new FieldExistException("Field doesn't exist");
         return fields.get(fieldName);
     }
-    public ArrayList<String> getFields() {
+
+    public ArrayList<String> getFieldNames() {
         ArrayList<String> tmp = new ArrayList<>();
         for (String key : fields.keySet()) {
             tmp.add(key);
@@ -74,6 +98,22 @@ public class SB_Category <
         Collections.sort(tmp, SortByIndex(this));
         return tmp;
     }
+
+    public ArrayList<F> getFields() {
+        ArrayList<F> tmp = new ArrayList<>();
+        ArrayList<String> tmps = new ArrayList<>();
+        tmps.addAll(fields.keySet());
+        Collections.sort(tmps, SortByIndex(this));
+        for (String key : tmps) {
+            try {
+                tmp.add(this.getField(key));
+            } catch (FieldExistException e) {
+                e.printStackTrace();
+            }
+        }
+        return tmp;
+    }
+
     public int getAmountOfFields(){ return fields.size(); }
     
     //custom comparator
@@ -95,7 +135,7 @@ public class SB_Category <
     //generateXML
     public void prepareListOfFields() {
         fieldsXML = new ArrayList<F>();
-        for(String s : getFields()){
+        for(String s : getFieldNames()){
             fieldsXML.add(fields.get(s));
         };
     }

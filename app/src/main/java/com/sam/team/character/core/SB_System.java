@@ -149,24 +149,61 @@ public class SB_System <
         tmp.setSystem((S) this);
         elements.put(elementName, tmp);
     }
+
+    public void addCloneElement(Class<E> eclass, Class<C> cclass, Class<F> fclass, E source)
+            throws Exception {
+        E tmp = eclass.getConstructor().newInstance();
+        tmp.setName(source.getName());
+        tmp.setSystem((S) this);
+
+        for (C c : source.getCategories()) {
+            tmp.addCloneCategory(cclass, fclass, c);
+        }
+
+        //check for duplicates
+        int count = 0;
+        for (E e : getElements()) {
+            if (e.getName().contains(source.getName())) {
+                count++;
+            }
+        }
+        tmp.setName(source.getName() + " " + Integer.toString(count));
+
+        elements.put(tmp.getName(), tmp);
+    }
+
     public void removeElement(String elementName) throws ElementExistException {
         if (!elements.containsKey(elementName)) throw new ElementExistException("Element doesn't exist");
         elements.remove(elementName);
     }
+
     public E getElement(String elementName) throws ElementExistException {//throws ElementExistException {
         //if (!elements.containsKey(elementName)) 
         //    throw new ElementExistException("Element does not exist");
         if (!elements.containsKey(elementName)) throw new ElementExistException("Element doesn't exist");
         return elements.get(elementName);
     }
-    public ArrayList<String> getElements() {
-        ArrayList<String> tmp = new ArrayList<>();
-        for (String key : elements.keySet()) {
-            tmp.add(key);
-        }
+
+    public ArrayList<String> getElementNames() {
+        ArrayList<String> tmp = new ArrayList<>(elements.keySet());
         Collections.sort(tmp, SortByIndex(this));
         return tmp;
     }
+
+    public ArrayList<E> getElements() {
+        ArrayList<E> tmp = new ArrayList<>();
+        ArrayList<String> tmps = new ArrayList<>(elements.keySet());
+        Collections.sort(tmps, SortByIndex(this));
+        for (String key : tmps) {
+            try {
+                tmp.add(this.getElement(key));
+            } catch (ElementExistException e) {
+                e.printStackTrace();
+            }
+        }
+        return tmp;
+    }
+
     public int getAmountOfElements() { return elements.size(); }
     
     //work with categories
@@ -181,12 +218,12 @@ public class SB_System <
         try { return elements.get(elementName).getCategory(categoryName); }
         catch(CategoryExistException e) { throw new CategoryExistException("Category doesn't exist"); }
     }
-    public ArrayList<String> getCategories(String elementName) {
-        return elements.get(elementName).getCategories();
+    public ArrayList<String> getCategoryNames(String elementName) {
+        return elements.get(elementName).getCategoryNames();
     }
     public int getAmountOfCategories() {
         int tmp = 0;
-        for(String s : getElements())
+        for(String s : getElementNames())
             tmp += getAmountOfCategoriesInElement(s);
         return tmp;
     }
@@ -211,7 +248,7 @@ public class SB_System <
     }
     public int getAmountOfFields() {
         int tmp = 0;
-        for(String s : getElements())
+        for(String s : getElementNames())
             tmp += getAmountOfFieldsInElement(s);
         return tmp;
     }
@@ -223,16 +260,17 @@ public class SB_System <
     private void prepareLists() {
         //prepare list of elements
         elementsXML = new ArrayList<E>();
-        for(String e : getElements()){
+        for(String e : getElementNames()){
             elementsXML.add(elements.get(e));
             //prepare lists of categories
             elements.get(e).prepareListOfCategories();
-            for(String c : elements.get(e).getCategories()) {
+            for(String c : elements.get(e).getCategoryNames()) {
                 try { elements.get(e).getCategory(c).prepareListOfFields(); }
                 catch(CategoryExistException exp) {}
             }
         }
     }
+
     public String generateXML() {
         //prepare lists
         prepareLists();
@@ -275,10 +313,10 @@ public class SB_System <
         try {
             for (E e : elements.values()) {
                 e.setSystem((S) this);
-                for (String se : e.getCategories()) {
+                for (String se : e.getCategoryNames()) {
                     C c = e.getCategory(se);
                     c.setElement(e);
-                    for (String sf : c.getFields()) {
+                    for (String sf : c.getFieldNames()) {
                         c.getField(sf).setCategory(c);
                     }
                 }

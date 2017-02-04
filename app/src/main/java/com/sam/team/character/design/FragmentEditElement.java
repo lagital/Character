@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.sam.team.character.design.TextParameter.TextParmMode.SINGLE;
+
 /**
  * Created by pborisenko on 10/27/2016.
  */
@@ -105,7 +107,7 @@ public class FragmentEditElement extends Fragment {
                 Log.d(TAG, "Main FAB click");
 
                 ArrayList<TextParameter> tpl = new ArrayList<>();
-                tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true, null));
+                tpl.add(new TextParameter(FragmentEditElement.this.getResources().getString(R.string.new_category_dflt_name), null, true, SINGLE, null));
                 new TextParmsDialogBuilder(
                         getActivity(),
                         R.layout.dialog_settings_container,

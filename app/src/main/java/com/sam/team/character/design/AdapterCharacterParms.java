@@ -105,16 +105,12 @@ class AdapterCharacterParms extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Log.d(TAG, "renewItems");
         items.clear();
         ViewModelElementType tmpE = Session.getInstance().getElementFromCache();
-        for (String sc : tmpE.getCategories()) {
-            ViewModelCategory tmpC = new ViewModelCategory();
-            try {
-                tmpC = tmpE.getCategory(sc);
-                items.add(tmpC);
-                for (String sf : tmpC.getFields()) {
-                    items.add(tmpC.getField(sf));
-                }
-                notifyDataSetChanged();
-            } catch(Exception e) {}
+        for (ViewModelCategory c : tmpE.getCategories()) {
+            items.add(c);
+            for (ViewModelField f : c.getFields()) {
+                items.add(f);
+            }
         }
+        notifyDataSetChanged();
     }
 }

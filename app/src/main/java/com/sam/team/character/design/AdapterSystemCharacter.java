@@ -17,6 +17,8 @@ import com.sam.team.character.viewmodel.ViewModelSystem;
 
 import java.util.ArrayList;
 
+import static com.sam.team.character.design.TextParameter.TextParmMode.SINGLE;
+
 /**
  * Adapter representing Systems and their child Elements.
  * Only Characters (Elements with corresponding type) are shown.
@@ -63,7 +65,7 @@ class AdapterSystemCharacter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     Log.d(TAG, "New character for system " + Integer.toString(position));
                     ArrayList<TextParameter> tpl = new ArrayList<>();
-                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_character_dflt_name), null, true, null));
+                    tpl.add(new TextParameter(fragment.getResources().getString(R.string.new_character_dflt_name), null, true, SINGLE, null));
                     TextParmsDialogBuilder builder = new TextParmsDialogBuilder(
                             fragment.getActivity(),
                             R.layout.dialog_settings_container,
@@ -135,10 +137,9 @@ class AdapterSystemCharacter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         items.clear();
         for (ViewModelSystem s : Session.getInstance().getSystemStorage()) {
             items.add(s);
-            for (String se : s.getElements()) {
-                ViewModelElementType tmp = s.getElement(se);
-                if (tmp.isCharacter() && !tmp.isTemplate()) {
-                    items.add(tmp);
+            for (ViewModelElementType e : s.getElements()) {
+                if (e.isCharacter() && !e.isTemplate()) {
+                    items.add(e);
                 }
             }
         }

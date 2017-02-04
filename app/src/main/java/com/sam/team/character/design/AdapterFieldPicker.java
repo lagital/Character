@@ -98,23 +98,18 @@ class AdapterFieldPicker extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Log.d(TAG, "renewItems");
         items.clear();
         if (element == null) {
-            for (String es : Session.getInstance().getSystemFromCache().getElements()) {
-                ViewModelElementType e = Session.getInstance().getSystemFromCache().getElement(es);
+            for (ViewModelElementType e : Session.getInstance().getSystemFromCache().getElements()) {
                 if (e.isTemplate()) {
                     items.add(e);
                 }
             }
         } else {
             // element is not null, need to show categories in the element
-            for (String sc : element.getCategories()) {
-                ViewModelCategory tmpC = new ViewModelCategory();
-                try {
-                    tmpC = element.getCategory(sc);
-                    items.add(tmpC);
-                    for (String sf : tmpC.getFields()) {
-                        items.add(tmpC.getField(sf));
-                    }
-                } catch (Exception e) {}
+            for (ViewModelCategory c : element.getCategories()) {
+                items.add(c);
+                for (ViewModelField f : c.getFields()) {
+                    items.add(f);
+                }
             }
         }
         notifyDataSetChanged();

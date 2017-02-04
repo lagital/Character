@@ -23,15 +23,24 @@ public class SB_ElementType<
     @Attribute(name = "is_Character") private boolean isCharacter = false;
     @Attribute(name = "is_Template")  private boolean isTemplate  = false;
     
-    //full constructor
+    //constructors
     public SB_ElementType(int index, String name, S system) {
         this.index = index;
         this.name = name;
         this.system = system;
     }
-
-    //dummy constructor
     public SB_ElementType() {}
+    public SB_ElementType(E source) {
+        this.name   = "";
+        this.system = (S) source.getSystem();
+        this.index  = this.system.getAmountOfElements() + 1;
+        this.isTemplate  = false;
+        this.isCharacter = true;
+
+        for (C c : source.getCategories()) {
+
+        }
+    }
 
     //work with character flag
     public void setIsCharacter(boolean isCharacter) { this.isCharacter = isCharacter; }
@@ -39,7 +48,7 @@ public class SB_ElementType<
 
     //work with template flag
     public void setIsTemplate(boolean isTemplate) { this.isTemplate = isTemplate; }
-    public boolean isTemplate() { return isTemplate; };
+    public boolean isTemplate() { return isTemplate; }
 
     //work with name
     public void setName(String name) { this.name = name; }
@@ -59,16 +68,31 @@ public class SB_ElementType<
         tmp.setName(categoryName);
         tmp.setElement((E) this);
         categories.put(categoryName, tmp);
-    } 
+    }
+
+    public void addCloneCategory(Class<C> cclass, Class <F> fclass, C source) throws Exception {
+        C tmp = cclass.getConstructor().newInstance();
+        tmp.setIndex(getAmountOfCategories()+1);
+        tmp.setName(source.getName());
+        tmp.setElement((E) this);
+
+        for (F f : source.getFields()) {
+            tmp.addCloneField(fclass, f);
+        }
+        categories.put(source.getName(), tmp);
+    }
+
     public void removeCategory(String categoryName) throws CategoryExistException {
         if (!categories.containsKey(categoryName)) throw new CategoryExistException("Category doesn't exist");
         categories.remove(categoryName);
-    };
+    }
+
     public C getCategory(String categoryName) throws CategoryExistException {
         if (!categories.containsKey(categoryName)) throw new CategoryExistException("Category doesn't exist");
         return categories.get(categoryName);
     }
-    public ArrayList<String> getCategories() {
+
+    public ArrayList<String> getCategoryNames() {
         ArrayList<String> tmp = new ArrayList<>();
         for (String key : categories.keySet()) {
             tmp.add(key);
@@ -76,6 +100,22 @@ public class SB_ElementType<
         Collections.sort(tmp, SortByIndex(this));
         return tmp;
     }
+
+    public ArrayList<C> getCategories() {
+        ArrayList<C> tmp = new ArrayList<>();
+        ArrayList<String> tmps = new ArrayList<>();
+        tmps.addAll(categories.keySet());
+        Collections.sort(tmps, SortByIndex(this));
+        for (String key : tmps) {
+            try {
+                tmp.add(this.getCategory(key));
+            } catch (CategoryExistException e) {
+                e.printStackTrace();
+            }
+        }
+        return tmp;
+    }
+
     public int getAmountOfCategories(){ return categories.size(); }
     
     //work with fields
@@ -91,16 +131,16 @@ public class SB_ElementType<
         catch(Exception e) { throw new FieldExistException("Field doesn't exist"); }
     }
     public ArrayList<String> getFieldsInCategory(String categoryName) {
-        return categories.get(categoryName).getFields();
+        return categories.get(categoryName).getFieldNames();
     }
     public int getAmountOfFields() {
         int tmp = 0;
-        for(String s : getCategories())
-            tmp += getAmountOfFieldsInCategory(s);
+        for(C c : getCategories())
+            tmp += getAmountOfFieldsInCategory(c);
         return tmp;
     }
-    public int getAmountOfFieldsInCategory(String categoryName) {
-        return categories.get(categoryName).getAmountOfFields();
+    public int getAmountOfFieldsInCategory(C c) {
+        return c.getAmountOfFields();
     }
     
     //custom Comparator
@@ -123,7 +163,7 @@ public class SB_ElementType<
     //generateXML
     public void prepareListOfCategories() {
         categoriesXML = new ArrayList<C>();
-        for(String s : getCategories()){
+        for(String s : getCategoryNames()){
             categoriesXML.add(categories.get(s));
         };
     }
