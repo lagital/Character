@@ -18,7 +18,7 @@ public class SB_Field<
         S extends SB_System<S, E, C, F>,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
-        F extends SB_Field<S, E, C, F>> {
+        F extends SB_Field<S, E, C, F>> implements Cloneable{
 
     /* symbols for typing formulas and values
      * [] - link to field used in formulas
@@ -161,5 +161,11 @@ public class SB_Field<
         NUMERIC,
         CALCULATED,
         UNDEFINED
+    }
+
+    //clone
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
