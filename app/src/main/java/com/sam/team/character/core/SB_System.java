@@ -18,7 +18,7 @@ public class SB_System <
         S extends SB_System<S, E, C, F>,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
-        F extends SB_Field<S, E, C, F>> implements Cloneable{
+        F extends SB_Field<S, E, C, F>> {
 
     public static final String SYSTEM_XML_PROLOG = "<?xml version=\"1.0\" encoding= \"UTF-8\" ?>";
 
@@ -326,7 +326,7 @@ public class SB_System <
 
     //custom comparator
     private Comparator<String> SortByIndex(final SB_System system) {
-        Comparator comp = new Comparator<String>(){
+        return new Comparator<String>(){
             @Override
             public int compare(String s1, String s2)
             {
@@ -338,12 +338,5 @@ public class SB_System <
                 return tmp;
             }        
         };
-        return comp;
-    }
-
-    //clone
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }

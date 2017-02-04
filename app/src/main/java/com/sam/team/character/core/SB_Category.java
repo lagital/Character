@@ -13,7 +13,7 @@ public class SB_Category <
         S extends SB_System<S, E, C, F>,
         E extends SB_ElementType<S, E, C, F>,
         C extends SB_Category<S, E, C, F>,
-        F extends SB_Field<S, E, C, F>> implements  Cloneable{
+        F extends SB_Field<S, E, C, F>> {
     
     @Attribute(name = "index") private int index = 0;
     @Element(name = "Name") private String name  = "";
@@ -147,10 +147,5 @@ public class SB_Category <
             fields.put(f.getName(), f);
             fields.get(f.getName()).listToMap();
         }
-    }
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
     }
 }
